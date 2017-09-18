@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/ind_fname"
+            style="@style/style_get_ch"
+            android:hint="@string/fname"
+            android:inputType="textCapWords"
+            android:textSize="@dimen/txt_14sp" />
+
+        <EditText
+            android:id="@+id/ind_lname"
+            style="@style/style_get_ch"
+            android:hint="@string/lname"
+            android:inputType="textCapWords"
+            android:textSize="@dimen/txt_14sp" />
+
+        <LinearLayout style="@style/linear_h">
+
+            <Spinner
+                android:id="@+id/sel_country_code"
+                style="@style/style_get_ch"
+                android:layout_width="match_parent"
+                android:layout_weight="2" />
+
+            <View
+                android:layout_width="@dimen/pad_20dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/ind_phone"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:hint="@string/phone"
+                android:inputType="number"
+                android:textSize="@dimen/txt_14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@null"
+        android:padding="@dimen/pad_5dp"
+        android:src="@drawable/close_button" />
+
+
+</LinearLayout>

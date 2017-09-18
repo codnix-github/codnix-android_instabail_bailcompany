@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/company_header"
+            style="@style/bail_request"
+            android:layout_width="match_parent"
+            android:padding="@dimen/pad_10dp"
+            android:text="@string/bail_cmpny_detail"
+            android:textColor="@color/bail_rquest_font_bold"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            style="@style/linear_h"
+            android:layout_margin="@dimen/pad_5dp"
+            android:background="@color/req_det_bg"
+            android:paddingBottom="@dimen/pad_30dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                style="@style/linear_h"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/pad_15dp"
+                android:layout_marginTop="@dimen/pad_5dp"
+                android:background="@drawable/bail_image_bg">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/pad_10dp"
+                    android:src="@drawable/company_logo" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/linear_v"
+                android:paddingLeft="@dimen/pad_10dp"
+                android:paddingRight="@dimen/pad_10dp"
+                android:paddingTop="@dimen/pad_5dp">
+
+                <TextView
+                    style="@style/bail_request"
+                    android:text="@string/bail_company"
+                    android:textSize="@dimen/txt_16sp" />
+
+                <LinearLayout
+                    style="@style/linear_h"
+                    android:paddingTop="@dimen/pad_5dp">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:text="@string/email_bail"
+                        android:textColor="@color/bail_rquest_font_bold"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/mail_req_detail"
+                        style="@style/bail_request"
+                        android:text="@string/example"
+                        android:textColor="#65B6F6" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/linear_h"
+                    android:paddingTop="@dimen/pad_5dp">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:text="@string/phone"
+                        android:textColor="@color/bail_rquest_font_bold"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:text="@string/num123"
+                        android:textColor="@color/bail_rquest_font_bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/linear_h"
+                    android:paddingTop="@dimen/pad_5dp">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:text="@string/addr"
+                        android:textColor="@color/bail_rquest_font_bold"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:text="@string/addr_val"
+                        android:textColor="@color/bail_rquest_font_bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sender_company"
+            style="@style/linear_h"
+            android:layout_margin="@dimen/pad_5dp"
+            android:background="@color/req_det_bg"
+            android:gravity="center_vertical"
+            android:padding="@dimen/pad_10dp">
+
+            <LinearLayout
+                android:id="@+id/img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/profile_pic_mask"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_company"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/temp"
+                style="@style/bail_request"
+                android:autoLink="all"
+                android:textSize="@dimen/txt_14sp" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/bail_request"
+            android:layout_width="match_parent"
+            android:padding="@dimen/pad_10dp"
+            android:text="@string/def_detail"
+            android:textColor="@color/bail_rquest_font_bold"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/pad_10dp"
+            android:layout_marginLeft="@dimen/pad_5dp"
+            android:layout_marginRight="@dimen/pad_5dp"
+            android:background="@color/req_det_bg"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/linear_h"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:paddingTop="@dimen/pad_5dp">
+
+                <TextView
+                    android:id="@+id/defName"
+                    style="@style/bail_request"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textSize="@dimen/txt_16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/linear_v"
+                android:paddingLeft="@dimen/pad_10dp"
+                android:paddingRight="@dimen/pad_10dp">
+
+                <TextView
+                    android:id="@+id/defDob"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:text="DOB:"
+                    android:textColor="@color/bail_rquest_font_bold" />
+
+                <TextView
+                    android:id="@+id/defSSN"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:text="Social Security Number:"
+                    android:textColor="@color/bail_rquest_font_bold" />
+
+                <TextView
+                    android:id="@+id/defBookingNumber"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:text="Booking Number:"
+                    android:textColor="@color/bail_rquest_font_bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/linear_h"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:paddingTop="@dimen/pad_5dp">
+
+                <TextView
+                    android:id="@+id/defAddr"
+                    style="@style/bail_request"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/request_detail_location_icon"
+                    android:drawablePadding="@dimen/pad_5dp"
+                    android:padding="@dimen/pad_5dp"
+                    android:textColor="@color/bail_rquest_font_bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/linear_v"
+                android:padding="@dimen/pad_10dp">
+
+                <TextView
+                    style="@style/bail_request"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="@string/warrent"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/wrntReq2"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:textColor="@color/bail_rquest_font_bold" />
+
+                <LinearLayout
+                    android:id="@+id/llWarrant"
+                    style="@style/linear_v"></LinearLayout>
+
+                <TextView
+                    style="@style/bail_request"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="@string/no_ind"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/indemnNum"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/pad_10dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:textColor="@color/bail_rquest_font_bold" />
+
+                <TextView
+                    style="@style/bail_request"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="@string/ind_detail"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <LinearLayout
+                    android:id="@+id/llIndemnitor"
+                    style="@style/linear_v"></LinearLayout>
+
+                <TextView
+                    style="@style/bail_request"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="@string/ppr_needed"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/paperwork"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:textColor="@color/bail_rquest_font_bold" />
+
+                <TextView
+                    style="@style/bail_request"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="@string/insurance2"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/insurance"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:textColor="@color/bail_rquest_font_bold" />
+
+                <TextView
+                    style="@style/bail_request"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="@string/pay_st"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/paymentStatus"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:textColor="@color/bail_rquest_font_bold" />
+
+                <LinearLayout
+                    android:id="@+id/payment"
+                    style="@style/linear_v">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:layout_marginTop="@dimen/pad_10dp"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:text="@string/pay_alr2"
+                        android:textColor="@color/bail_rquest_font_bold"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/saperator_yellow" />
+
+                    <TextView
+                        android:id="@+id/payment_offer"
+                        style="@style/bail_request"
+                        android:layout_width="match_parent"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:paddingTop="@dimen/pad_5dp"
+                        android:textColor="@color/bail_rquest_font_bold" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/bail_request"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="@string/spcl_inst"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/splInstruction"
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:textColor="@color/bail_rquest_font_bold" />
+
+                <Button
+                    android:id="@+id/hire"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/more_btn"
+                    android:gravity="center"
+                    android:text="@string/hire"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/txt_12sp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/hireAnOtherAgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/more_btn"
+                    android:gravity="center"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/hire3"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/txt_12sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/parent_biding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:id="@+id/vBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/theme_black"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/btnMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_message"
+                    android:clickable="false"
+                    android:visibility="invisible" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/btnBiding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_compass"
+                android:clickable="true" />
+        </RelativeLayout>
+
+        <LinearLayout
+            style="@style/linear_h"
+            android:background="@color/theme_black">
+
+            <TextView
+                android:id="@+id/btn_accept"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingBottom="@dimen/pad_10dp"
+                android:paddingTop="@dimen/pad_10dp"
+                android:text="@string/accepted"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

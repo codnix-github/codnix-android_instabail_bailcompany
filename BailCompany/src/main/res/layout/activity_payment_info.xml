@@ -1,0 +1,139 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/pad_20dp" >
+
+        <LinearLayout
+            style="@style/linear_v"
+            android:layout_margin="@dimen/pad_20dp"
+            android:paddingTop="@dimen/pad_10dp" >
+
+            <TextView
+                style="@style/style_get"
+                android:text="@string/pay_in"
+                android:textColor="@color/text_get_agent"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow" />
+
+            <EditText
+                android:id="@+id/name"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/name_on_card"
+                android:inputType="text"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <EditText
+                android:id="@+id/type"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/card_type"
+                android:inputType="text"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <EditText
+                android:id="@+id/card_number"
+                style="@style/style_edit_match"
+                android:hint="@string/credit_num"
+                android:inputType="number"
+                android:maxLength="16" />
+
+            <TextView
+                android:id="@+id/disclaimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_5dp"
+                android:layout_marginRight="@dimen/pad_5dp"
+                android:background="@color/hired_agent_list_bg"
+                android:padding="@dimen/pad_5dp"
+                android:textSize="@dimen/txt_9sp" />
+
+            <LinearLayout style="@style/linear_h" >
+
+                <EditText
+                    android:id="@+id/cvv"
+                    style="@style/style_edit_wrap"
+                    android:hint="@string/cvv"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+                <View
+                    android:layout_width="@dimen/pad_10dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/eod"
+                    style="@style/style_edit_match"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/ex_date"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/linear_v"
+            android:layout_margin="@dimen/pad_20dp"
+            android:paddingTop="@dimen/pad_10dp" >
+
+            <TextView
+                style="@style/style_get"
+                android:text="@string/pay_out"
+                android:textColor="@color/text_get_agent"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow" />
+
+            <EditText
+                android:id="@+id/name_account"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/name_on_account"
+                android:inputType="text"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <EditText
+                android:id="@+id/account_types"
+                style="@style/style_edit_match"
+                android:hint="@string/account_type"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/account_number"
+                style="@style/style_edit_match"
+                android:hint="@string/account_num"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/routing_number"
+                style="@style/style_edit_match"
+                android:hint="@string/routing_num"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_signin_yellow"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_18sp" />
+    </LinearLayout>
+
+</ScrollView>

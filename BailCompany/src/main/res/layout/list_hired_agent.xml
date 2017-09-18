@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white" >
+    
+<TextView 
+    android:id="@+id/header_list"
+    style="@style/style_edit_profile"
+    android:text="@string/list_hired_ag"
+    android:padding="@dimen/pad_10dp"/>
+<View 
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/agent_prof_saperator"/>
+<ListView
+    android:id="@+id/hired_agent_list" 
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    tools:listitem="@layout/hired_agent_item" />
+</LinearLayout>

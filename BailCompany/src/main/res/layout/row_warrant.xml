@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/linear_v"
+    android:paddingLeft="@dimen/pad_5dp">
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_lt" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/pad_5dp"
+        android:paddingTop="@dimen/pad_5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/wrntAmount"
+                style="@style/bail_request"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/pad_5dp"
+                android:textColor="@color/bail_rquest_font_bold" />
+
+            <TextView
+                android:id="@+id/wrntTownship"
+                style="@style/bail_request"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/pad_5dp"
+                android:textColor="@color/bail_rquest_font_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/wrntCaseNum"
+                style="@style/bail_request"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/pad_5dp"
+                android:textColor="@color/bail_rquest_font_bold" />
+
+            <TextView
+                android:id="@+id/wrntPowerNum"
+                style="@style/bail_request"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/pad_5dp"
+                android:textColor="@color/bail_rquest_font_bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

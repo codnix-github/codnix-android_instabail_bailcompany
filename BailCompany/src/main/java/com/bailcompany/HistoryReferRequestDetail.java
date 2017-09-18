@@ -1,0 +1,599 @@
+package com.bailcompany;
+
+import java.util.ArrayList;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bailcompany.custom.CustomActivity;
+import com.bailcompany.model.BailRequestModel;
+import com.bailcompany.model.InsuranceModel;
+import com.bailcompany.model.User;
+import com.bailcompany.model.WarrantModel;
+import com.bailcompany.ui.MainFragment;
+import com.bailcompany.utils.Commons;
+import com.bailcompany.utils.ImageLoader;
+import com.bailcompany.utils.ImageLoader.ImageLoadedListener;
+import com.bailcompany.utils.ImageUtils;
+import com.bailcompany.utils.StaticData;
+import com.bailcompany.utils.Utils;
+import com.bailcompany.web.WebAccess;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+@SuppressLint("InflateParams")
+public class HistoryReferRequestDetail extends CustomActivity {
+    private BailRequestModel bm;
+    String comp;
+    String reqId;
+
+    TextView submit, bail_request, bid;
+    boolean fromNotification = false;
+    MainFragment m = new MainFragment();
+
+    String currentDateTimeString, reqDateTimeString;
+    static ProgressDialog pd;
+    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
+    String message, header = "Bail Company Detail", status = "Accepted",
+            titleDetail = "Bail Request Detail";
+    JSONObject jsonObj;
+    String key;
+    static int getCallTimeout = 50000;
+    int crnthour, reqthour;
+    int crntminute, reqtminute;
+    BailRequestModel mod = new BailRequestModel();
+    static Bitmap bmCompany;
+    ImageView imgCompany;
+    LinearLayout layoutCompany;
+    User user;
+    Button hireAgent;
+    boolean isAccepted;
+    int pos;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_history_refer_request_detail);
+        hireAgent = (Button) findViewById(R.id.hire);
+        String title = getIntent().getStringExtra("title");
+        layoutCompany = (LinearLayout) findViewById(R.id.sender_company);
+        bid = (TextView) findViewById(R.id.btnBiding);
+        if (title.equalsIgnoreCase("My Sent Referral Bail Requests")) {
+            header = "Sender Bail Company Detail";
+            status = "Pending";
+            titleDetail = "My Sent Referral Bail Request Detail";
+            hireAgent.setVisibility(View.GONE);
+        } else if (title.equalsIgnoreCase("My Accepted Referral Bail Requests")) {
+            header = "Referring Company Detail";
+            titleDetail = "My Accepted Referral Bail Request Detail";
+            isAccepted = true;
+        }
+        setActionBar(titleDetail);
+        getDetail();
+
+        bid.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                hideKeyboard();
+                if (bm != null) {
+                    String AgentId = bm.getAgentId();
+                    String accept = "0";
+                    if (!AgentId.equalsIgnoreCase("")) {
+                        accept = "1";
+                    }
+                    Intent intent = new Intent(HistoryReferRequestDetail.this,
+                            BidingBailActivity.class);
+                    intent.putExtra("Accepted", accept);
+                    intent.putExtra("req", bm);
+                    intent.putExtra("position", pos);
+                    startActivity(intent);
+
+                }
+            }
+        });
+        imgCompany.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                hideKeyboard();
+                F1.newInstance().show(getFragmentManager(), null);
+
+            }
+        });
+        layoutCompany.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                hideKeyboard();
+                getCompanyDetail();
+            }
+        });
+        hireAgent.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                hideKeyboard();
+                WebAccess.hireReferBailAgent = true;
+                WebAccess.agentRecord = bm;
+                finish();
+                // getAllAgents();
+            }
+        });
+    }
+
+    void hideKeyboard() {
+        View view = THIS.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) THIS
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void showDetail() {
+
+        if (isAccepted) {
+            if (bm.getAgentId() == null || bm.getAgentId().equalsIgnoreCase("")) {
+                hireAgent.setVisibility(View.VISIBLE);
+
+            } else {
+                if (bm.getIsComplete() != null
+                        && bm.getIsComplete().equalsIgnoreCase("1")) {
+                    status = "Completed";
+                } else if (bm.getIsAbort() != null
+                        && bm.getIsAbort().equalsIgnoreCase("1")) {
+                    status = "Aborted";
+                    if (bm.getIsCancel() != null
+                            && bm.getIsCancel().equalsIgnoreCase("1")) {
+
+                        status = "Canceled";
+                    }
+
+                } else {
+                    if (bm.isIsAccept() != null && bm.isIsAccept().equalsIgnoreCase("1")) {
+                        status = "In Progress";
+                    } else if (bm.isIsAccept() != null && bm.isIsAccept().equalsIgnoreCase("0")) {
+                        status = "Declined";
+                        hireAgent.setVisibility(View.VISIBLE);
+                    } else {
+                        status = "Pending";
+                    }
+                }
+            }
+            ((TextView) findViewById(R.id.btn_accept)).setText(status);
+            ((RelativeLayout) findViewById(R.id.parent_biding))
+                    .setVisibility(View.GONE);
+
+        } else {
+            ((RelativeLayout) findViewById(R.id.parent_biding))
+                    .setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.btn_accept)).setVisibility(View.GONE);
+        }
+        ((TextView) findViewById(R.id.defName)).setText(bm.getDefendantName()
+                + "");
+        ((TextView) findViewById(R.id.defDob)).setText("Date Of Birth : " + (bm.getDefDOB() != null ? Commons.changeDateFormat(bm.getDefDOB()) : "")
+                + "");
+      /*  ((TextView) findViewById(R.id.defSSN)).setText("Social Security Number : " + (bm.getDefSSN() != null ? bm.getDefSSN() : "")
+                + "");
+        ((TextView) findViewById(R.id.defBookingNumber)).setText("Booking Number : " + (bm.getDefBookingNumber() != null ? bm.getDefBookingNumber() : "")
+                + "");
+*/
+
+        ((TextView) findViewById(R.id.compcom)).setText(Utils
+                .getFormattedText("$" + bm.getAmmountForCommission()));
+        if (status.equalsIgnoreCase("Pending")) {
+            if (!(bm.getSenderCompanyId().equalsIgnoreCase(""))
+                    && bm.getSenderCompanyId() != null) {
+                status = "Accepted";
+                if (isAccepted)
+                    header = "Sender Company Detail";
+                else
+                    header = "Receiver Company Detail";
+                ((TextView) findViewById(R.id.temp)).setText(bm
+                        .getSenderCompanyName() + "");
+            }
+        } else {
+            ((TextView) findViewById(R.id.temp)).setText(bm
+                    .getSenderCompanyName() + "");
+        }
+        ((TextView) findViewById(R.id.company_header)).setText(header);
+        ((TextView) findViewById(R.id.defAddr)).setText(Utils
+                .getFormattedText(bm.getLocation()));
+        TextView defAddr = (TextView) findViewById(R.id.defAddr);
+        defAddr.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double latitude = Double.parseDouble(bm.getLocationLatitude());
+                double longitude = Double.parseDouble(bm.getLocationLongitude());
+                String label = Utils.getFormattedText(bm.getLocation());
+                String uriBegin = "geo:" + latitude + "," + longitude;
+                String query = latitude + "," + longitude + "(" + label + ")";
+                String encodedQuery = Uri.encode(query);
+                String uriString = uriBegin + "?q=" + encodedQuery + "&z=16";
+                Uri uri = Uri.parse(uriString);
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+        LinearLayout llWarrant = (LinearLayout) findViewById(R.id.llWarrant);
+
+        ArrayList<WarrantModel> wList = bm.getWarrantList();
+        if (wList != null && wList.size() > 0) {
+            int count = 0;
+            for (WarrantModel wMod : wList) {
+                View v = getLayoutInflater()
+                        .inflate(R.layout.row_warrant, null);
+                if (count == 0)
+                    v.findViewById(R.id.divider).setVisibility(View.GONE);
+                if (wMod != null) {
+                    ((TextView) v.findViewById(R.id.wrntAmount))
+                            .setText("Amount:   $" + wMod.getAmount());
+                    ((TextView) v.findViewById(R.id.wrntTownship))
+                            .setText("Township:   " + wMod.getTownship() + "");
+
+                    Log.e("wMod.getAmount()", "" + wMod.getAmount());
+                    Log.e("wMod.getTownship()", "" + wMod.getTownship());
+
+                    llWarrant.addView(v);
+                }
+                count++;
+            }
+        }
+
+        ArrayList<InsuranceModel> insList = bm.getInsuranceList();
+        String insur = "";
+        if (insList != null && insList.size() > 0) {
+            for (int i = 0; i < insList.size(); i++) {
+                if (i != 0)
+                    insur += "\n";
+                insur += insList.get(i).getName();
+            }
+        }
+
+        ((TextView) findViewById(R.id.insurance)).setText(insur + "");
+
+        ((TextView) findViewById(R.id.indemnNum)).setText(bm
+                .getNumberIndemnitors() + "");
+
+        ((TextView) findViewById(R.id.paymentStatus)).setText("$"
+                + bm.getAmountToCollect());
+        ((TextView) findViewById(R.id.collectral_Text)).setText(bm
+                .getPaymentPlan());
+        ((TextView) findViewById(R.id.splInstruction)).setText(bm
+                .getInstructionForAgent() + "");
+
+        imgCompany = (ImageView) findViewById(R.id.img_company);
+
+        if (!status.equalsIgnoreCase("Pending")) {
+
+            Bitmap bmp = new ImageLoader(StaticData.getDIP(100),
+                    StaticData.getDIP(100), ImageLoader.SCALE_FITXY).loadImage(
+                    bm.getSenderCompanyImage(), new ImageLoadedListener() {
+
+                        @Override
+                        public void imageLoaded(Bitmap bm) {
+                            Log.d("Bitmap", bm == null ? "Null Bitmap"
+                                    : "Valid Bitmap");
+                            if (bm != null) {
+                                bmCompany = ImageUtils.getCircularBitmap(bm);
+                                imgCompany.setImageBitmap(ImageUtils
+                                        .getCircularBitmap(bm));
+                            }
+                        }
+                    });
+            if (bmp != null)
+                imgCompany.setImageBitmap(ImageUtils.getCircularBitmap(bmp));
+            else
+                imgCompany.setImageBitmap(null);
+        } else {
+            LinearLayout senderLayout = (LinearLayout) findViewById(R.id.sender_company);
+            senderLayout.setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.company_header))
+                    .setVisibility(View.GONE);
+        }
+    }
+
+    protected void setActionBar(String title) {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setTitle(title);
+    }
+
+    private void getDetail() {
+        if (Utils.isOnline(HistoryReferRequestDetail.this)) {
+
+            if (getIntent().hasExtra("bail")) {
+                bm = (BailRequestModel) getIntent()
+                        .getSerializableExtra("bail");
+                pos = getIntent().getIntExtra("position", 0);
+                if (bm != null) {
+                    reqId = "" + bm.getAgentRequestId();
+                    WebAccess.agentRequestId = reqId;
+                    // showDetail();
+                } else {
+                    Utils.showDialog(HistoryReferRequestDetail.this,
+                            "No detail found").show();
+                }
+            }
+
+            HistoryReferRequestDetail.this.runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    if (bm != null) {
+                        showDetail();
+                    } else {
+                        Utils.showDialog(HistoryReferRequestDetail.this,
+                                "No detail found").show();
+                    }
+                }
+            });
+
+        } else
+            Utils.noInternetDialog(HistoryReferRequestDetail.this);
+    }
+
+    public static class F1 extends DialogFragment {
+
+        public static F1 newInstance() {
+            F1 f1 = new F1();
+            f1.setStyle(DialogFragment.STYLE_NO_FRAME,
+                    android.R.style.Theme_DeviceDefault_Dialog);
+            return f1;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            // Remove the default background
+            getDialog().getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.TRANSPARENT));
+
+            // Inflate the new view with margins and background
+            View v = inflater.inflate(R.layout.popup_layout, container, false);
+            ImageView bm = (ImageView) v.findViewById(R.id.bm_company);
+
+            bm.setImageBitmap(bmCompany);
+
+            v.findViewById(R.id.popup_root).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dismiss();
+                        }
+                    });
+
+            return v;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideKeyboard();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    private void getCompanyDetail() {
+        showProgressDialog("");
+        RequestParams param = new RequestParams();
+
+        param.put("TemporaryAccessCode", MainActivity.user.getTempAccessCode());
+        param.put("UserName", MainActivity.user.getUsername());
+        param.put("companyid", bm.getSenderCompanyId());
+        String url = WebAccess.MAIN_URL + WebAccess.GET_COMPANY_DETAIL;
+        client.setTimeout(getCallTimeout);
+
+        client.post(this, url, param, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                // TODO Auto-generated method stub
+                super.onStart();
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                dismissProgressDialog();
+                Utils.showDialog(HistoryReferRequestDetail.this,
+                        R.string.err_unexpect);
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                dismissProgressDialog();
+
+                try {
+                    String response2;
+
+                    response2 = new String(responseBody);
+                    JSONObject resObj;
+
+                    resObj = new JSONObject(response2);
+
+                    if (resObj != null) {
+                        if (resObj.optString("status").equalsIgnoreCase("1")) {
+                            user = WebAccess.getCompanyResponse(response2);
+                            startActivity(new Intent(THIS, CompanyProfile.class)
+                                    .putExtra("user", user));
+                        } else if (resObj.optString("status").equalsIgnoreCase(
+                                "3")) {
+                            Toast.makeText(THIS,
+                                    "Session was closed please login again",
+                                    Toast.LENGTH_LONG).show();
+                            MainActivity.sp.edit().putBoolean("isFbLogin",
+                                    false);
+                            MainActivity.sp.edit().putString("user", null)
+                                    .commit();
+                            startActivity(new Intent(
+                                    HistoryReferRequestDetail.this, Login.class));
+                        } else {
+                            Utils.showDialog(HistoryReferRequestDetail.this,
+                                    resObj.optString("message"));
+                        }
+                    }
+                } catch (JSONException e) {
+                    Utils.showDialog(HistoryReferRequestDetail.this,
+                            R.string.err_unexpect);
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
+
+    }
+
+    void getAllAgents() {
+        if (Utils.isOnline()) {
+            showProgressDialog("");
+            RequestParams param = new RequestParams();
+
+            param.put("TransferBondId", reqId);
+            param.put("UserName", MainActivity.user.getUsername());
+            param.put("TemporaryAccessCode",
+                    MainActivity.user.getTempAccessCode());
+
+            param.put("LocationLongitude", "" + bm.getLocationLongitude() + "");
+            param.put("LocationLatitude", "" + bm.getLocationLatitude() + "");
+            if (!MainActivity.user.getInsurance().isEmpty()) {
+                ArrayList<String> insuranceList = MainActivity.user
+                        .getInsurance();
+                for (int i = 0; i < insuranceList.size(); i++) {
+                    param.put("InsuranceId[" + i + "]", insuranceList.get(i)
+                            + "");
+                }
+            }
+            param.put("Page", "0");
+            String url = WebAccess.MAIN_URL + WebAccess.GET_ALL_AGENT;
+            client.setTimeout(getCallTimeout);
+            client.post(this, url, param, new AsyncHttpResponseHandler() {
+
+                @Override
+                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+
+                    dismissProgressDialog();
+                    Utils.showDialog(HistoryReferRequestDetail.this,
+                            R.string.err_unexpect);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                    dismissProgressDialog();
+                    try {
+                        String response2;
+                        response2 = new String(responseBody);
+                        JSONObject resObj = new JSONObject(response2);
+
+                        if (resObj != null) {
+                            message = resObj.optString("message");
+                            if (resObj.optString("status")
+                                    .equalsIgnoreCase("1")) {
+
+                                Toast.makeText(THIS, message, Toast.LENGTH_LONG)
+                                        .show();
+                                JSONArray jArray = resObj
+                                        .getJSONArray("list_of_agents");
+                                MainActivity.agentList = WebAccess
+                                        .parseAgentList(jArray);
+
+                                if (MainActivity.agentList != null
+                                        && MainActivity.agentList.size() > 0) {
+                                    startActivity(new Intent(
+                                            HistoryReferRequestDetail.this,
+                                            FindBestAgent.class)
+                                            .putExtra("agents",
+                                                    MainActivity.agentList)
+                                            .putExtra("reqid",
+                                                    WebAccess.agentRequestId)
+                                            .putExtra("locLatt",
+                                                    bm.getLocationLatitude())
+                                            .putExtra("locLng",
+                                                    bm.getLocationLongitude()));
+
+                                } else {
+                                    Utils.showDialog(
+                                            HistoryReferRequestDetail.this,
+                                            "No Agent Found Near this location");
+                                    dismissProgressDialog();
+                                }
+                            } else if (resObj.optString("status")
+                                    .equalsIgnoreCase("3")) {
+                                Toast.makeText(
+                                        THIS,
+                                        "Session was closed please login again",
+                                        Toast.LENGTH_LONG).show();
+                                MainActivity.sp.edit().putBoolean("isFbLogin",
+                                        false);
+                                MainActivity.sp.edit().putString("user", null)
+                                        .commit();
+                                startActivity(new Intent(
+                                        HistoryReferRequestDetail.this,
+                                        Launcher.class));
+                            } else {
+                                Utils.showDialog(
+                                        HistoryReferRequestDetail.this, message);
+                            }
+                        }
+                    } catch (JSONException e) {
+                        Utils.showDialog(HistoryReferRequestDetail.this,
+                                R.string.err_unexpect);
+                        e.printStackTrace();
+                    }
+                }
+
+            });
+        } else {
+            Utils.noInternetDialog(THIS);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            finish();
+        return super.onOptionsItemSelected(item);
+    }
+}

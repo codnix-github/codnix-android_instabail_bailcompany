@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        style="@style/linear_v"
+        android:padding="@dimen/pad_20dp" >
+
+        <Spinner
+            android:id="@+id/state_sel"
+            style="@style/style_get_ch" />
+
+        <Spinner
+            android:id="@+id/Insur_sel"
+            style="@style/style_get_ch" />
+
+        <EditText
+            android:id="@+id/def_fname"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/def_fname"
+            android:textSize="@dimen/txt_transfer_bigger"
+           android:inputType="textCapWords" />
+        <EditText
+            android:id="@+id/def_lname"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/def_lname"
+            android:textSize="@dimen/txt_transfer_bigger"
+            android:inputType="textCapWords"/>
+
+        <EditText
+            android:id="@+id/dob"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:focusableInTouchMode="false"
+            android:hint="@string/dob"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <EditText
+            android:id="@+id/ssn"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/socl_sec"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <EditText
+            android:id="@+id/bkng_num"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/book_num"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <AutoCompleteTextView
+            android:id="@+id/location_def"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/ic_location"
+            android:hint="@string/loc_def"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/entr_warr"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <LinearLayout style="@style/linear_h" >
+
+            <CheckBox
+                android:id="@+id/chk1"
+                style="@style/style_get"
+                android:button="@drawable/check_selector" />
+
+            <TextView
+                android:id="@+id/txt1"
+                style="@style/style_get"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/pad_10dp"
+                android:text="@string/crt_filling"
+                android:textColor="@color/text_get_agent"
+                android:textSize="@dimen/txt_transfer_bigger" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/linear_h" >
+
+            <CheckBox
+                android:id="@+id/chk2"
+                style="@style/style_get"
+                android:button="@drawable/check_selector" />
+
+            <TextView
+                android:id="@+id/txt2"
+                style="@style/style_get"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/pad_10dp"
+                android:text="@string/bail_src"
+                android:textColor="@color/text_get_agent"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <CheckBox
+                android:id="@+id/chk3"
+                style="@style/style_edit_wrap"
+                android:button="@drawable/check_selector" />
+
+            <TextView
+                android:id="@+id/txt3"
+                style="@style/style_get"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/pad_10dp"
+                android:text="@string/cal_agency"
+                android:textColor="@color/text_get_agent"
+                android:textSize="@dimen/txt_transfer_bigger" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/linear_h" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/warrent_layout"
+            style="@style/linear_v" >
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/add_more"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/more_btn"
+            android:gravity="center"
+            android:text="@string/add_more"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_12sp" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/ind_contact"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <LinearLayout
+            android:id="@+id/ind_details"
+            style="@style/linear_v" >
+
+            <LinearLayout style="@style/linear_h" >
+
+                <LinearLayout style="@style/linear_v" >
+
+                    <EditText
+                        android:id="@+id/ind_fname"
+                        style="@style/style_get_ch"
+                        android:layout_weight="1"
+                        android:hint="@string/indem_fname"
+                        android:textSize="@dimen/txt_14sp" />
+                    <EditText
+                        android:id="@+id/ind_lname"
+                        style="@style/style_get_ch"
+                        android:layout_weight="1"
+                        android:hint="@string/indem_lname"
+                        android:textSize="@dimen/txt_14sp" />
+                    <LinearLayout style="@style/linear_h" >
+
+                        <Spinner
+                            android:id="@+id/sel_country_code"
+                            style="@style/style_get_ch"
+                            android:layout_width="match_parent"
+                            android:layout_weight="2" />
+
+                        <View
+                            android:layout_width="@dimen/pad_20dp"
+                            android:layout_height="match_parent" />
+
+                        <EditText
+                            android:id="@+id/ind_phone"
+                            style="@style/style_get_ch"
+                            android:layout_weight="1"
+                            android:hint="@string/phone"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:textSize="@dimen/txt_14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/add_more_ind"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_gravity="right"
+            android:background="@drawable/more_btn"
+            android:text="@string/add_more"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_12sp" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/ppr_wrk"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <LinearLayout style="@style/linear_h" >
+
+            <CheckBox
+                android:id="@+id/txt5"
+                style="@style/style_get"
+                android:button="@drawable/check_selector"
+                android:text="	No Paperwork - Post &amp; Go" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/linear_h" >
+
+            <CheckBox
+                android:id="@+id/txt6"
+                style="@style/style_get"
+                android:button="@drawable/check_selector"
+                android:text="@string/ind_ppr" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/linear_h" >
+
+            <CheckBox
+                android:id="@+id/txt7"
+                style="@style/style_get"
+                android:button="@drawable/check_selector"
+                android:text="@string/def_ppr" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/pay_st"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/radio1"
+                style="@style/style_get"
+                android:button="@drawable/radio_selector"
+                android:checked="false"
+                android:paddingLeft="@dimen/pad_10dp"
+                android:text="@string/pay_alr"
+                android:textColor="@color/text_get_agent"
+                android:textSize="@dimen/txt_14sp" />
+
+            <RadioButton
+                android:id="@+id/radio2"
+                style="@style/style_get"
+                android:button="@drawable/radio_selector"
+                android:paddingLeft="@dimen/pad_10dp"
+                android:text="@string/pay_to_be"
+                android:textColor="@color/text_get_agent"
+                android:textSize="@dimen/txt_14sp" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/edit_amount_to"
+            style="@style/style_get_ch"
+            android:layout_marginLeft="@dimen/pad_20dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:layout_weight="1"
+            android:hint="@string/amt_to"
+            android:inputType="numberDecimal"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <EditText
+            android:id="@+id/edit_payment_plan"
+            style="@style/style_get_ch"
+            android:layout_marginLeft="@dimen/pad_20dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:layout_weight="1"
+            android:hint="@string/pay_plan"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/pay_alr2"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <EditText
+            android:id="@+id/companyOffer"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/amt_of"
+            android:inputType="numberDecimal"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/spcl_inst"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <EditText
+            android:id="@+id/instructions"
+            style="@style/style_get_ch"
+            android:layout_height="@dimen/instrution_box"
+            android:background="@drawable/message_box"
+            android:gravity="top"
+            android:hint="@string/wrt_inst"
+            android:padding="@dimen/pad_5dp"
+            android:singleLine="false"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad_20dp"
+            android:background="@drawable/btn_signin_yellow"
+            android:text="@string/submit"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</ScrollView>

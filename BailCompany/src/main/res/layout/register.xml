@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout style="@style/linear_v" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/hired_agent_list_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/pad_15dp" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/profile_pic_mask"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/add_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_registration_add_photo"
+                    android:scaleType="fitXY" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/agent_prof_saperator" />
+
+        <LinearLayout
+            style="@style/linear_v"
+            android:padding="@dimen/pad_20dp" >
+
+            <LinearLayout style="@style/linear_h" >
+
+                <EditText
+                    android:id="@+id/fname"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="@string/fname"
+                    android:inputType="textCapWords"/>
+
+                <View
+                    android:layout_width="@dimen/pad_40dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/lname"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="@string/lname"
+                    android:inputType="textCapWords"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/cname"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/cname" />
+
+            <EditText
+                android:id="@+id/uname"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/uname" />
+
+            <EditText
+                android:id="@+id/email"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/email" />
+
+            <EditText
+                android:id="@+id/pass"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/pass"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/address"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/addr_normal" />
+
+            <EditText
+                android:id="@+id/town"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/town" />
+
+            <LinearLayout style="@style/linear_h" >
+
+                <Spinner
+                    android:id="@+id/state"
+                    style="@style/style_get_ch"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="@dimen/pad_20dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/zip_code"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="@string/zip"
+                    android:inputType="number"
+                    android:maxLength="5" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_h" >
+
+                <Spinner
+                    android:id="@+id/sel_country_code_register"
+                    style="@style/style_get_ch"
+                    android:layout_width="match_parent"
+                    android:layout_weight="2" />
+
+                <View
+                    android:layout_width="@dimen/pad_20dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/phone_number"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="@string/phone"
+                    android:inputType="phone"
+                    android:maxLength="10" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/agency_license_num"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/agency_license" />
+
+            <EditText
+                android:id="@+id/sel_state"
+                style="@style/style_edit_match"
+                android:focusableInTouchMode="false"
+                android:hint="@string/sel_state_bail" />
+
+            <EditText
+                android:id="@+id/sel_insur_register"
+                style="@style/style_edit_match"
+                android:focusableInTouchMode="false"
+                android:hint="@string/sel_insur" />
+
+            <TextView
+                android:id="@+id/btn_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/pad_15dp"
+                android:background="@drawable/btn_signin_yellow"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/register"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/or_line_bg" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/pad_10dp"
+                    android:text="@string/or"
+                    android:textColor="@color/text_signin_reg"
+                    android:textSize="@dimen/txt_16sp"
+                    android:textStyle="italic" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/or_line_bg" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/authButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/pad_15dp"
+                android:background="@drawable/btn_facebook"
+                android:clickable="true"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

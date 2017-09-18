@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:background="@color/white"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/pad_20dp"
+        android:paddingRight="@dimen/pad_20dp"
+        android:paddingTop="@dimen/pad_20dp">
+
+        <LinearLayout
+            style="@style/linear_v"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/receipt_bg">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/pad_20dp"
+                android:layout_marginRight="@dimen/pad_20dp"
+                android:layout_marginTop="@dimen/pad_30dp"
+                android:background="@drawable/receipt_hline" />
+
+            <LinearLayout
+                style="@style/linear_h"
+                android:paddingLeft="@dimen/pad_30dp"
+                android:paddingRight="@dimen/pad_20dp">
+
+                <LinearLayout
+                    style="@style/linear_v"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
+
+                        <TextView
+                            style="@style/receipt"
+                            android:text="@string/receipt"
+                            android:textSize="@dimen/txt_20sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/post_name"
+                        style="@style/receipt"
+                        android:text="@string/posted_by" />
+
+                    <TextView
+                        style="@style/receipt"
+                        android:text="@string/license_no" />
+
+                    <TextView
+                        style="@style/receipt"
+                        android:text="@string/srvc_typ" />
+
+                    <TextView
+                        android:id="@+id/pwr_no"
+                        style="@style/receipt"
+                        android:text="@string/pwr_used"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/linear_v"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/pad_10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
+
+                        <TextView
+                            android:id="@+id/txtTime"
+                            style="@style/receipt"
+                            android:layout_marginTop="0dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtName"
+                        style="@style/receipt" />
+
+                    <TextView
+                        android:id="@+id/txtLicense"
+                        style="@style/receipt" />
+
+                    <TextView
+                        android:id="@+id/txtServiceType"
+                        style="@style/receipt"
+                        android:text="Recovery" />
+
+                    <TextView
+                        android:id="@+id/txtPowerNo"
+                        style="@style/receipt"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Editing -->
+
+            <LinearLayout
+                style="@style/linear_h"
+                android:paddingLeft="@dimen/pad_30dp"
+                android:paddingRight="@dimen/pad_20dp">
+
+                <TextView
+                    android:id="@+id/office"
+                    style="@style/receipt"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/amount_collected" />
+
+                <TextView
+                    android:id="@+id/txtInsamt"
+                    style="@style/receipt"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/pad_10dp" />
+            </LinearLayout>
+
+            <!-- Editing -->
+
+            <LinearLayout
+                style="@style/linear_h"
+                android:paddingLeft="@dimen/pad_30dp"
+                android:paddingRight="@dimen/pad_20dp">
+
+                <TextView
+                    style="@style/receipt"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/insur_comp" />
+
+                <TextView
+                    android:id="@+id/txtInsComp"
+                    style="@style/receipt"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/pad_10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/linear_h"
+                android:paddingLeft="@dimen/pad_30dp"
+                android:paddingRight="@dimen/pad_20dp">
+
+                <TextView
+                    style="@style/receipt"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/comp_name" />
+
+                <TextView
+                    android:id="@+id/txtCompName"
+                    style="@style/receipt"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/pad_10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/linear_h"
+                android:paddingLeft="@dimen/pad_30dp"
+                android:paddingRight="@dimen/pad_20dp">
+
+                <TextView
+                    style="@style/receipt"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/pay_by_crd" />
+
+                <ImageButton
+                    android:id="@+id/btnCardType"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:paddingLeft="@dimen/pad_10dp"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/ic_visa" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/pad_20dp"
+                android:background="@drawable/receipt_submit_btn_bg"
+                android:drawableLeft="@drawable/ic_cart_submit"
+                android:drawablePadding="@dimen/pad_5dp"
+                android:paddingLeft="@dimen/pad_15dp"
+                android:paddingRight="@dimen/pad_20dp"
+                android:text="@string/submit"
+                android:textColor="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/pad_20dp"
+                android:layout_marginRight="@dimen/pad_20dp"
+                android:layout_marginTop="@dimen/pad_10dp"
+                android:background="@drawable/receipt_hline" />
+
+            <TextView
+                android:id="@+id/txtReceiptNum"
+                style="@style/receipt"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/pad_20dp"
+                android:text="@string/recpt_num" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pad_13dp" />
+
+            <TextView
+                android:id="@+id/receipt"
+                style="@style/receipt"
+                android:layout_gravity="center_horizontal"
+                android:text="123456789258963"
+                android:textSize="@dimen/txt_10sp" />
+
+            <TextView
+                style="@style/receipt"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/pad_10dp"
+                android:text="@string/thank_you"
+                android:textSize="@dimen/txt_9sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/pad_15dp"
+        android:background="#f8f8f8"
+        android:gravity="center"
+        android:padding="@dimen/pad_20dp"
+        android:text="@string/cancel"
+        android:textColor="@color/black" />
+
+</LinearLayout>

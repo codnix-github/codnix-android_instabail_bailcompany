@@ -1,0 +1,120 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/pad_20dp"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/pad_30dp" >
+
+        <EditText
+            android:id="@+id/email_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/uname"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pad_10dp" />
+
+        <EditText
+            android:id="@+id/pass_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pass"
+            android:inputType="textPassword"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pad_60dp" />
+
+        <TextView
+            android:id="@+id/signin_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_signin_yellow"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/signin"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/or_line_bg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_10dp"
+                android:text="@string/or"
+                android:textColor="@color/text_signin_reg"
+                android:textSize="@dimen/txt_16sp"
+                android:textStyle="italic" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/or_line_bg" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/authButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/pad_15dp"
+            android:background="@drawable/btn_login_facebook"
+            android:clickable="true"
+            android:gravity="center" />
+        <!--
+             <TextView
+            android:id="@+id/signin_login_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_facebook_bg_vline"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_facebook"
+            android:gravity="center"
+            android:paddingLeft="@dimen/pad_10dp"
+            android:text="@string/signin_fb"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_15sp" />
+        -->
+
+        <TextView
+            android:id="@+id/forgot_pass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="@dimen/pad_20dp"
+            android:text="@string/forgot"
+            android:textColor="@color/forgot_pass_text"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="150dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:background="@color/forgot_pass_text" />
+    </LinearLayout>
+
+</LinearLayout>

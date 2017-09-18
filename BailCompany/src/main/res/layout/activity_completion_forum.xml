@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/bail_request"
+            android:layout_width="match_parent"
+            android:padding="@dimen/pad_10dp"
+            android:text="@string/attach_req"
+            android:textColor="@color/bail_rquest_font_bold"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bail_rquest_font_bold" />
+
+        <LinearLayout
+            android:id="@+id/preFixedViewLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/pwrNum2"
+            style="@style/style_edit_match"
+            android:visibility="gone"
+            android:layout_margin="@dimen/pad_10dp"
+            android:hint="@string/entr_pwr"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/payment"
+            style="@style/style_edit_match"
+            android:layout_margin="@dimen/pad_10dp"
+            android:hint="Amount received by agent"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            style="@style/bail_request"
+            android:layout_marginTop="@dimen/pad_10dp"
+            android:paddingLeft="@dimen/pad_5dp"
+            android:text="@string/def_and_co"
+            android:textColor="@color/bail_rquest_font_bold"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <LinearLayout
+            style="@style/linear_h"
+            android:background="@color/bg_complete"
+            android:baselineAligned="false"
+            android:paddingBottom="@dimen/pad_10dp">
+
+            <LinearLayout
+                style="@style/linear_v"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingTop="@dimen/pad_15dp">
+
+                <LinearLayout
+                    style="@style/linear_v"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/completion_form_add_photo_rounded"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/add_defendant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/completion_form_add_photo_btn"
+                        android:tag="1" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:text="@string/def"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/co_sign_container"
+                style="@style/linear_v"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingTop="@dimen/pad_15dp">
+
+                <LinearLayout
+                    style="@style/linear_v"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/completion_form_add_photo_rounded"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/add_co_signer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/completion_form_add_photo_btn"
+                        android:tag="1" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/bail_request"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/pad_5dp"
+                    android:text="@string/co"
+                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            style="@style/bail_request"
+            android:layout_marginTop="@dimen/pad_20dp"
+            android:padding="@dimen/pad_5dp"
+            android:paddingLeft="@dimen/pad_5dp"
+            android:text="@string/photo_of"
+            android:textColor="@color/bail_rquest_font_bold"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/saperator_yellow" />
+
+        <TextView
+            android:id="@+id/total_size"
+            style="@style/bail_request"
+            android:layout_width="match_parent"
+            android:padding="@dimen/pad_5dp"
+            android:text="@string/attach_doc_size"
+            android:textColor="@color/bail_rquest_font_bold"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <com.bailcompany.custom.CustomGridView
+            android:id="@+id/my_grid_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:columnWidth="@dimen/col_width"
+            android:gravity="center"
+            android:horizontalSpacing="3dp"
+            android:numColumns="3"
+            android:paddingBottom="@dimen/pad_5dp"
+            android:paddingLeft="@dimen/pad_5dp"
+            android:paddingRight="@dimen/pad_5dp"
+            android:paddingTop="@dimen/pad_5dp"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="3dp" />
+
+        <TextView
+            style="@style/bail_request"
+            android:paddingLeft="@dimen/pad_5dp"
+            android:paddingTop="@dimen/pad_15dp"
+            android:text="@string/wrt_comment"
+            android:textColor="@color/bail_rquest_font_bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <EditText
+            android:id="@+id/comments"
+            style="@style/style_get_ch"
+            android:layout_margin="@dimen/pad_10dp"
+            android:background="@drawable/message_box"
+            android:gravity="top"
+            android:hint="@string/wrt_comment"
+            android:maxLines="4"
+            android:padding="@dimen/pad_5dp"
+            android:singleLine="false"
+            android:textSize="@dimen/txt_14sp" />
+
+        <TextView
+            android:id="@+id/btn_complete"
+            style="@style/btn_completion"
+            android:background="@drawable/btn_complete_bg"
+            android:text="@string/complete" />
+
+        <TextView
+            android:id="@+id/btn_abort"
+            style="@style/btn_completion"
+            android:background="@drawable/btn_abort_bg"
+            android:text="@string/abort" />
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            style="@style/btn_completion"
+            android:layout_marginBottom="@dimen/pad_20dp"
+            android:background="@drawable/btn_cancel_bg"
+            android:text="@string/cancel" />
+    </LinearLayout>
+
+</ScrollView>

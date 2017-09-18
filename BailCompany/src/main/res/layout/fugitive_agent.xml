@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout style="@style/linear_v" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/hired_agent_list_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/pad_15dp" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/profile_pic_mask"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/add_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_registration_add_photo"
+                    android:scaleType="fitXY" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/agent_prof_saperator" />
+
+        <LinearLayout
+            style="@style/linear_v"
+            android:padding="@dimen/pad_20dp" >
+
+            <Spinner
+                android:id="@+id/state_sel"
+                style="@style/style_get_ch" />
+
+            <EditText
+                android:id="@+id/def_fname"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:hint="@string/def_fname"
+                android:textSize="@dimen/txt_14sp"
+                android:inputType="textCapWords"/>
+            <EditText
+                android:id="@+id/def_lname"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:hint="@string/def_lname"
+                android:textSize="@dimen/txt_14sp"
+                android:inputType="textCapWords"/>
+
+            <EditText
+                android:id="@+id/dob"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:focusableInTouchMode="false"
+                android:hint="@string/dob"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <EditText
+                android:id="@+id/ssn"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:hint="@string/socl_sec"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <AutoCompleteTextView
+                android:id="@+id/location_def"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_location"
+                android:hint="@string/loc_def_lka"
+                android:textSize="@dimen/txt_14sp" />
+
+            <LinearLayout style="@style/linear_h" >
+
+                <Spinner
+                    android:id="@+id/sel_country_code"
+                    style="@style/style_get_ch"
+                    android:layout_width="match_parent"
+                    android:layout_weight="2" />
+
+                <View
+                    android:layout_width="@dimen/pad_20dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/home_number"
+                    style="@style/style_get_ch"
+                    android:layout_weight="1"
+                    android:hint="@string/home_num"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:textSize="@dimen/txt_14sp" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_h" >
+
+                <Spinner
+                    android:id="@+id/sel_country_code2"
+                    style="@style/style_get_ch"
+                    android:layout_width="match_parent"
+                    android:layout_weight="2" />
+
+                <View
+                    android:layout_width="@dimen/pad_20dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/cell_number"
+                    style="@style/style_get_ch"
+                    android:layout_weight="1"
+                    android:hint="@string/cell_num"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:textSize="@dimen/txt_14sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/bail"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:hint="@string/bail_seized"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <TextView
+                style="@style/style_get"
+                android:text="@string/entr_forfeited"
+                android:textColor="@color/text_get_agent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow" />
+
+            <LinearLayout
+                android:id="@+id/warrent_layout"
+                style="@style/linear_v" >
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/add_more_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:background="@drawable/more_btn"
+                android:text="@string/add_more"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_12sp" />
+
+            <EditText
+                android:id="@+id/bkng_num"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:hint="@string/warrant_num"
+                android:inputType="text"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <Spinner
+                android:id="@+id/gender_sel2"
+                style="@style/style_get_ch" />
+
+            <TextView
+                style="@style/style_get"
+                android:text="@string/pay_ty"
+                android:textColor="@color/text_get_agent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/radio1"
+                    style="@style/style_get"
+                    android:button="@drawable/radio_selector"
+                    android:checked="false"
+                    android:paddingLeft="@dimen/pad_10dp"
+                    android:text="@string/pay_alr3"
+                    android:textColor="@color/text_get_agent"
+                    android:textSize="@dimen/txt_14sp" />
+
+                <RadioButton
+                    android:id="@+id/radio2"
+                    style="@style/style_get"
+                    android:button="@drawable/radio_selector"
+                    android:paddingLeft="@dimen/pad_10dp"
+                    android:text="@string/pay_to_be3"
+                    android:textColor="@color/text_get_agent"
+                    android:textSize="@dimen/txt_14sp" />
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/edit_amount_to"
+                style="@style/style_get_ch"
+                android:layout_marginLeft="@dimen/pad_20dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:hint="@string/amt_to2"
+                android:inputType="numberDecimal"
+                android:textSize="@dimen/txt_14sp" />
+
+            <TextView
+                style="@style/style_get"
+                android:text="@string/spcl_inst"
+                android:textColor="@color/text_get_agent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow" />
+
+            <EditText
+                android:id="@+id/instructions"
+                style="@style/style_get_ch"
+                android:background="@drawable/message_box"
+                android:gravity="top"
+                android:hint="@string/wrt_inst"
+                android:lines="4"
+                android:padding="@dimen/pad_5dp"
+                android:singleLine="false"
+                android:textSize="@dimen/txt_14sp" />
+
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/pad_20dp"
+                android:background="@drawable/btn_signin_yellow"
+                android:text="@string/submit"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

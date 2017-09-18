@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_list_hired"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="@dimen/pad_10dp">
+    <LinearLayout 
+        android:id="@+id/pic_mask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+    <ImageView 
+        android:id="@+id/hired_agent_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/hired_agent_pic1"/>
+    </LinearLayout>
+    <TextView 
+        android:id="@+id/hired_agent_name"
+        style="@style/style_edit_profile"
+        android:text="@string/name"
+        android:drawableRight="@drawable/gray_arrow_hire_agent"
+        android:layout_marginLeft="@dimen/pad_20dp"/>
+    
+
+</LinearLayout>

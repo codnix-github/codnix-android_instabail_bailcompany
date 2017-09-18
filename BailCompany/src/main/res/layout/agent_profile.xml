@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <RelativeLayout
+        android:id="@+id/sda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            style="@style/linear_v"
+            android:layout_height="wrap_content" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_smoke"
+                android:gravity="center_horizontal"
+                android:paddingTop="@dimen/pad_15dp" >
+
+                <LinearLayout
+                    android:id="@+id/img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/profile_pic_mask"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/img_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/profile_pic" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/img"
+                    android:layout_alignRight="@+id/img"
+                    android:paddingBottom="@dimen/pad_10dp"
+                    android:paddingRight="@dimen/pad_5dp"
+                    android:src="@drawable/agent_profile_green" />
+
+                <TextView
+                    android:id="@+id/av"
+                    style="@style/style_edit_wrap"
+                    android:layout_below="@id/img"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/available"
+                    android:textSize="@dimen/txt_14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/av"
+                    android:layout_marginTop="@dimen/pad_5dp"
+                    android:background="@color/agent_prof_saperator" />
+            </RelativeLayout>
+
+            <LinearLayout
+                style="@style/linear_v"
+                android:padding="@dimen/pad_20dp" >
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/name"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_name"
+                    style="@style/style_agent"
+                    android:text="@string/name"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/email"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_email"
+                    style="@style/style_agent"
+                    android:text="@string/email"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/uname"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_uname"
+                    style="@style/style_agent"
+                    android:text="@string/uname"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/addr"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_address"
+                    style="@style/style_agent"
+                    android:maxLines="3"
+                    android:text="@string/addr"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/p_number"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_phone"
+                    style="@style/style_agent"
+                    android:maxLines="3"
+                    android:text="@string/p_number"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/ag_num"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_lic_no"
+                    style="@style/style_agent"
+                    android:maxLines="3"
+                    android:text="@string/ag_num"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/ag_lic_st"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_state_expire"
+                    style="@style/style_agent"
+                    android:maxLines="3"
+                    android:text="@string/ag_lic_st"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/ag_appr"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_approval"
+                    style="@style/style_agent"
+                    android:maxLines="3"
+                    android:text="@string/ag_appr"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/ag_insur"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_insure"
+                    style="@style/style_agent"
+                    android:singleLine="false"
+                    android:text="@string/ag_insur"
+                    android:textColor="@color/text_get_agent" />
+
+                <TextView
+                    style="@style/style_get"
+                    android:text="@string/st_appli"
+                    android:textColor="@color/text_get_agent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/saperator_yellow" />
+
+                <TextView
+                    android:id="@+id/ag_states_applicable"
+                    style="@style/style_agent"
+                    android:singleLine="false"
+                    android:text="@string/st_appli"
+                    android:textColor="@color/text_get_agent" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/vBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/theme_black"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp" >
+
+                <TextView
+                    android:id="@+id/btnMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_message"
+                    android:clickable="true"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/btnCall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/ic_call"
+                    android:clickable="true"
+                    android:visibility="invisible" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btn_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/chat_icon2"
+            android:clickable="true" />
+    </RelativeLayout>
+
+</ScrollView>

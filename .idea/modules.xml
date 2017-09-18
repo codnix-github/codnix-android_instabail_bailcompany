@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BailCompany/bailCompany.iml" filepath="$PROJECT_DIR$/BailCompany/bailCompany.iml" />
+      <module fileurl="file://$PROJECT_DIR$/curiologix-android_instabail_bailcompany-93df1eff8512.iml" filepath="$PROJECT_DIR$/curiologix-android_instabail_bailcompany-93df1eff8512.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bailcompany.SearchBadDebt" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/req_det_bg"
+        android:orientation="vertical"
+        android:paddingBottom="10dp" >
+
+        <EditText
+            android:id="@+id/name"
+            style="@style/style_edit_match"
+            android:layout_weight="1"
+            android:hint="@string/name" />
+
+        <EditText
+            android:id="@+id/city"
+            style="@style/style_edit_match"
+            android:layout_weight="1"
+            android:hint="@string/city" />
+
+        <EditText
+            android:id="@+id/dob"
+            style="@style/style_edit_match"
+            android:layout_weight="1"
+            android:hint="@string/dob" />
+
+        <TextView
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/pad_15dp"
+            android:background="@drawable/btn_signin_yellow"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/search"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_18sp" />
+    </LinearLayout>
+
+</RelativeLayout>

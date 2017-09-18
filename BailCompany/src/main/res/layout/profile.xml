@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/white">
+
+    <LinearLayout
+        style="@style/linear_v"
+        android:layout_height="wrap_content" >
+
+      <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_smoke"
+        android:gravity="center_horizontal">   
+
+    <LinearLayout
+        android:id="@+id/img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/pad_20dp"
+        android:background="@drawable/profile_pic_mask"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/img_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@drawable/profile_pic"
+             />
+	</LinearLayout>
+<View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                 android:layout_below="@id/img"
+                android:background="@color/agent_prof_saperator"
+                android:layout_marginTop="@dimen/pad_5dp"/>
+    </RelativeLayout>
+     <LinearLayout 
+            style="@style/linear_v"
+            android:padding="@dimen/pad_20dp">
+<TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="@string/name"
+                />
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+
+        <TextView
+            android:id="@+id/company_owner_name"
+            style="@style/style_agent"
+            android:text="@string/name"
+            android:textColor="@color/text_get_agent" />
+
+        <TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="@string/cname"
+                />
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+
+        <TextView
+            android:id="@+id/company_name"
+            style="@style/style_agent"
+            android:text="@string/cname"
+            android:textColor="@color/text_get_agent" />
+
+        <TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="@string/email"
+                />
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+
+        <TextView
+            android:id="@+id/company_email"
+            style="@style/style_agent"
+            android:text="@string/email"
+            android:textColor="@color/text_get_agent" />
+
+        <TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="@string/pass"
+                />
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+
+        <TextView
+            android:id="@+id/company_pass"
+            style="@style/style_agent"
+            android:maxLines="3"
+            android:text="@string/pass"
+            android:textColor="@color/text_get_agent" />
+
+         <TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="@string/addr"
+                />
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+
+        <TextView
+            android:id="@+id/company_addr"
+            style="@style/style_agent"
+            android:maxLines="3"
+            android:text="@string/addr"
+            android:textColor="@color/text_get_agent" />
+
+         <TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="@string/agency_license"
+                />
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+
+        <TextView
+            android:id="@+id/company_licence"
+            style="@style/style_agent"
+            android:maxLines="3"
+            android:text="@string/agency_license"
+            android:textColor="@color/text_get_agent" />
+
+        <TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="@string/p_number"
+                />
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+
+        <TextView
+            android:id="@+id/company_phone"
+            style="@style/style_agent"
+            android:maxLines="3"
+            android:text="@string/p_number"
+            android:textColor="@color/text_get_agent" />
+
+        <TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="@string/insur"
+                />
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+
+        <TextView
+            android:id="@+id/company_insur"
+            style="@style/style_agent"
+            android:singleLine="false"
+            android:text="@string/insur"
+            android:textColor="@color/text_get_agent" />
+        
+       
+        
+        
+        
+        
+         <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+          
+<TextView 
+                style="@style/style_get"
+                android:textColor="@color/text_get_agent"
+                android:text="States Applicable To You"
+                />
+       
+        <View 
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/saperator_yellow"/>
+        <TextView
+            android:id="@+id/company_state"
+            style="@style/style_agent"
+            android:singleLine="false"
+            android:text="@string/compstate"
+            android:textColor="@color/text_get_agent" />
+
+</LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

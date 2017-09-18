@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bail Company</string>
+    <string name="app_id">1197871810239050</string>
+    <string name="call">Call</string>
+    <string name="txt_progress">Processing, Please Wait&#8230;</string>
+    <string name="err_fb_login">Facebook login failed due to following reason:\n</string>
+    <string name="alert_wait">Please wait...</string>
+    <string name="sender">Sender</string>
+    <string name="reciever">Receiver</string>
+    <string name="accept">Accept</string>
+    <string name="chat">Chat</string>
+    <string name="add">Add New Bad Debt Member</string>
+    <string name="search">Search</string>
+    <string name="try_again">Try again</string>
+    <string name="alert_loading">Loading...</string>
+    <string name="cmplte_frm">Completion Form</string>
+    <string name="msg_fb_login">Logged in to Facebook successfully.</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="signin">Sign In</string>
+    <string name="subscribe">Subscriber</string>
+    <string name="package2">Welcome</string>
+    <string name="attach_req">Attach The Required Documents To Complete Form</string>
+    <string name="attach_doc_size">Total Attachments Size: 0.00 KB</string>
+    <string name="entr_pwr">Enter Power Number</string>
+    <string name="def_and_co">Defendant and Co-Signer Picture</string>
+    <string name="co">Co-signer</string>
+    <string name="photo_of">Photo Of Body Receipt And Other Documents</string>
+    <string name="status">Status</string>
+    <string name="wrt_comment">Write your comments</string>
+    <string name="def">Defendant</string>
+    <string name="package_detail">Subscription Packages</string>
+    <string name="package_txt">The dispatching feature "GET AN AGENT" , whether you dispatch your own our Inst-Bail agents,is free to access.There is a.99 cent per dispatch transaction.So PAY AS USE!\nThe aditional feature of TRANSFER BOND,REFER BAIL,BLACK LIST BAD DEBT,FUGITIVE RECOVERY and HISTORY has fee of $20.00 per month to access</string>
+    <string name="hire2">Hire</string>
+    <string name="plan">Do you plan on dispatching more than 50 times per month?</string>
+    <string name="signin_fb">Sign In with facebook</string>
+    <string name="signup_fb">Signup with facebook</string>
+    <string name="register">Register</string>
+    <string name="save">Save</string>
+    <string name="sub2">Subscription</string>
+    <string name="email">Email</string>
+    <string name="pass">Password</string>
+    <string name="defendent">Defendant Or Cosigner</string>
+    <string name="amount_owed">AmountOwed </string>
+    <string name="amount_forfeited">Amount Forfeited </string>
+    <string name="signin_login">Sign In</string>
+    <string name="forgot">Forgot Password?</string>
+    <string name="forgot_title">Forgot Password</string>
+    <string name="or">Or</string>
+    <string name="agent_bid">Bid Amount</string>
+    <string name="complete">Complete</string>
+    <string name="abort">Abort</string>
+    <string name="msg">Type a message</string>
+    <string name="cancel">Cancel</string>
+    <string name="decline">Decline</string>
+    <string name="fname">First Name</string>
+    <string name="lname">Last Name</string>
+    <string name="insurance">Insurances</string>
+    <string name="insurance2">Insurance</string>
+    <string name="Amnt_percent">Amount or Percentage company will to pay</string>
+    <string name="bail_company">Bail Company</string>
+    <string name="cname">Company Name</string>
+    <string name="addr">Address :</string>
+    <string name="date_format">00/00/00 00/00 am</string>
+    <string name="addr_normal">Address</string>
+    <string name="town">Town</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="zip">Zip Code</string>
+    <string name="phone">Phone number</string>
+    <string name="agency_license">Agency License Number</string>
+    <string name="sel_insur">Select Insurance</string>
+    <string name="sel_state">Select State</string>
+    <string name="sel_state_bail">States which you perform bail</string>
+    <string name="next">Next</string>
+    <string name="add_btn">Add</string>
+    <string name="credit_detail">Credit Card Details</string>
+    <string name="credit_num">Credit Card Number</string>
+    <string name="account_num">Account Number</string>
+    <string name="account_type">Account Type</string>
+    <string name="routing_num">Routing Number</string>
+    <string name="disclaimer">All fees will be deducted automatically from this card being presented. The monthle fees will be a recurring fee as the fees to pay for the agent services will be "as-requested" transactions</string>
+    <string name="mm">MM</string>
+    <string name="yy">YYYY</string>
+    <string name="cvv">CVV</string>
+    <string name="ex_date">Card Expired Date</string>
+    <string name="name_on_card">Name On Card</string>
+    <string name="card_type">Card Type</string>
+    <string name="name_on_account">Name on Account</string>
+    <string name="enter_email">Enter your email</string>
+    <string name="track_hired">Track Hired Agent</string>
+    <string name="show_all">Show all on map</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="get_agnt">Get An Agent</string>
+    <string name="trck_agnt">Track Agents</string>
+    <string name="cntct_us">Contact Us</string>
+    <string name="trns_bond">Transfer Bond</string>
+    <string name="ass_req">Self Assigned Transaction Detail</string>
+    <string name="fugitive_agent">Fugitive Agent</string>
+    <string name="sent_fugitve_req">Sent Fugitve Request</string>
+    <string name="incmng_req">Incoming Request</string>
+    <string name="incmng_req2">Incoming Tranfer Bond Request</string>
+    <string name="logout">Logout</string>
+    <string name="ag_profile">Agent Profile</string>
+    <string name="available">Available</string>
+    <string name="uname">Username</string>
+    <string name="search2">Search by name,city or dob</string>
+    <string name="p_number">Phone Number</string>
+    <string name="ag_lic_st">Agent License State And Expiration Date</string>
+    <string name="ag_appr">Agent Approval Status</string>
+    <string name="ag_num">Agent License Number</string>
+    <string name="ag_insur">Agent Insurances List</string>
+    <string name="st_appli">States Applicable To Agent</string>
+    <string name="ag_near">Agent Nearest Location</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="inst_group_msg">Instant Group Messages</string>
+    <string name="instant_chat">Instant Messaging</string>
+    <string name="refer_bail">Refer Bail</string>
+    <string name="incoming_refer_bail_request">Incoming Bail Referral Request</string>
+    <string name="bad_debt_members">Bad Debt Members </string>
+    <string name="black_list_members">Black List Members </string>
+    <string name="history">History</string>
+    <string name="txt_contact">“Please feel free to Ask a Question, Note A Concern, Rate An Agent, Request A Feature or Just Say Hello”</string>
+    <string name="wrte_here">Write here...</string>
+    <string name="send">Send</string>
+    <string name="def_name">Defendant Name</string>
+    <string name="def_fname">Defendant First Name</string>
+    <string name="def_lname">Defendant Last Name</string>
+    <string name="indem_fname">Indemnitor First Name</string>
+    <string name="indem_lname">Indemnitor Last Name</string>
+    <string name="no_signer">Number of Cosigner</string>
+    <string name="loc_def">Location of Defendant</string>
+    <string name="loc_def_lka">Location of Defendant or LKA</string>
+    <string name="entr_warr">Enter Warrant</string>
+    <string name="pay_in">Pay-In Method</string>
+    <string name="pay_out">Pay-Out Method</string>
+    <string name="entr_forfeited">Enter Forfeited Bail Amounts and Township</string>
+    <string name="add_more">ADD MORE</string>
+    <string name="hire3">Hire Another Agent</string>
+    <string name="hire">Hire Agent</string>
+    <string name="crt_filling">Court Filing Fee Needed</string>
+    <string name="bail_src">Bail Source Needed</string>
+    <string name="cal_agency">Call Agency</string>
+    <string name="default_amount">0.00</string>
+    <string name="charging_twn">Charging Township</string>
+    <string name="number_ind">Number Of Indemnitors Required To Post This Bail</string>
+    <string name="ind_contact">Indemnitor\'s Contact Name And Phone Number</string>
+    <string name="name">Name</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="ppr_wrk">Paperwork Needed</string>
+    <string name="no_ppr">     No Paperwork - Post &amp; Go</string>
+    <string name="ind_ppr">Indemnitor Paperwork</string>
+    <string name="def_ppr">Defendant Paperwork</string>
+    <string name="pay_st">Payment Status</string>
+    <string name="amnt_cosigner">Amount Cosigners have for premium</string>
+    <string name="pay_ty">Payment Type</string>
+    <string name="Amount_percentage">Amount or Percentage agent requested</string>
+    <string name="co_sig">Amount of Co-Signors</string>
+    <string name="pay_alr">Payment Already Received by Company</string>
+    <string name="premium">Premium</string>
+    <string name="enter_here">Enter here</string>
+    <string name="collateral">Collateral</string>
+    <string name="pay_alr2">Amount company offers to pay for Transfer bond</string>
+    <string name="pay_comm">Amount I Request as Commission</string>
+    <string name="pay_alr3">Amount company offers to pay</string>
+    <string name="pay_to_be3">Percentage of amount offered</string>
+    <string name="pay1">Subscription Company and/or Subagent</string>
+    <string name="pay2">Dispatch Company and/or Subagent</string>
+    <string name="pay3">Add-On Package 1” for $7.50 mo.</string>
+    <string name="pay4">Add-On Package 2” for $7.50 mo.</string>
+    <string name="pay5">The Flat Fee 50 </string>
+    <string name="pay6">The Flat Fee 100 </string>
+    <string name="package_1">Complimentary Free Access</string>
+    <string name="package_1_detail">a. We will give you full access to the application for a period of time and then you can elect to cancel your “free membership” or continue seamlessly without interruption.\nb. Once the free service period is over you will automatically be charged the $24.99 per month plus a $0.99 “Per Bond” Fee for using the Dispatch feature.\nc. The card will just be charged each month on the 1st prior to the month of service.
+</string>
+    <string name="package_2">Subscription + Pay Per Bond</string>
+    <string name="package_3">Flat Fee Option</string>
+    <string name="package_2_detail">a. This will allow the company to pay a low monthly subscription fee and then pay $0.99 per bond request that is completed.This company may not do a lot of bonds and only want to pay if they use the application.\nb. The main Feature of the application will be\n\u0020\u0020\u0020\u0020\u0020i. Get A Posting  Agent\n\u0020\u0020\u0020\u0020\u0020ii. Track an Agent\n\u0020\u0020\u0020\u0020\u0020iii. History Feature\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u00201. This feature will be $10.00 per month, but will also cost $0.99 each time they “HIRE” an agent regardless of the outcome unless “Cancelled”.(when I mean hire,send information to an agent)\nc.	Additional “ADD-ON” features will be\n\u0020\u0020\u0020\u0020\u0020i.“Add-On Package 1” for $7.50 mo.  This will include…\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u00201. Transfer Bond Feature\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020a. An additional $0.99 per bond fee will be charged once another company has accepted.\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u00202. Bail Referral\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020a. An additional $0.99 per bond fee will be charged once the company has REFFERED, regardless of acceptance.(This charge will be enacted upon SENDING THE REFERRAL)\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u00203. Fugitive Recovery\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020a.	An additional $0.99 per recovery fee will be charged once the Fugitive Agent has accepted the task.\n\u0020\u0020\u0020\u0020\u0020ii.	“Add-On Package 2” for $7.50 mo.  This will include\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u00201.	Blacklist\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u00202. Bad Debt\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020a.There will be no additional fees to add or search the database\n \u0020\u0020\u0020\u0020\u0020iii.	The total package will cost $25.00 mo, plus $0.99 per bond request completed. 
+</string>
+    <string name="package_3_detail">3.Flat Fee Option\n\u0020\u0020\u0020\u0020\u0020a. This will allow (1) company to pay a flat monthly fee  to have access to all the features and get 50 or 100 bonds per month.\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020i. The Flat Fee 50 – up to 50 Bonds &amp; full access for $60.00 mo plus $0.99 every bond after 50. (a 20% discount)\n\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020ii.	The Flat Fee 100 – up to 100 Bonds &amp; full access for $80.00 plus $0.99 every bond after 100.</string>
+    <string name="pay_to_be">Payment to be collected from Indemnitor</string>
+    <string name="pay_to_be2">Percentage of bond amount offered</string>
+    <string name="amt_to">Amount to collect</string>
+    <string name="amt_to_pre">Amount for Premium</string>
+    <string name="amt_of">Amount offered by company</string>
+    <string name="amt_of_com">Amount for Commission</string>
+    <string name="amt_to2">Amount or percentage</string>
+    <string name="pay_plan">Payment Plan (Enter Amount and Frequency)</string>
+    <string name="spcl_inst">Special Instruction To Agent</string>
+    <string name="power_no">Power No.</string>
+    <string name="amount_received">Amount Received</string>
+    <string name="comments">Comments</string>
+    <string name="quotes">Quotes From Agent</string>
+    <string name="wrt_inst">Write your instruction here...</string>
+    <string name="find_bst">Find Best Agent</string>
+    <string name="self_ass">Self Assign</string>
+    <string name="self_ass2">Self Assigned</string>
+    <string name="arrived">Arrived</string>
+    <string name="pls_conf">Please confirm</string>
+    <string name="are_you">Are you sure you want to choose this?</string>
+    <string name="ok">Ok</string>
+    <string name="hired_ag">Hire Agent</string>
+    <string name="list_hired_ag">List Of Hired Agents</string>
+    <string name="ag_cur_st">Agent Current Status</string>
+    <string name="run_time">Run time</string>
+    <string name="what_state">(What state do you need a Bond)</string>
+    <string name="wat_insure">(What Insurance do you write with)</string>
+    <string name="dob">Date Of Birth</string>
+    <string name="socl_sec">Social Security Number</string>
+    <string name="warrant_num">Warrant Number</string>
+    <string name="book_num">Booking Number</string>
+    <string name="bail_seized">Days left before bail seized</string>
+    <string name="township">Township</string>
+    <string name="forfeiture_amount">Forfeiture Amount</string>
+    <string name="home_num">Home number</string>
+    <string name="days_left">Days left before bail seized</string>
+    <string name="tel_num">Telephone number</string>
+    <string name="cell_num">Cell number</string>
+    <string name="tax_free">Tax Free</string>
+    <string name="submit">Submit</string>
+    <string name="receipt">Receipt</string>
+    <string name="posted_by">Posted By</string>
+    <string name="srvc_typ">Service Type</string>
+    <string name="license_no">License No.</string>
+    <string name="location_surrend">Location Surrendered</string>
+    <string name="pwr_no">Power No.</string>
+    <string name="pwr_used">Power Used</string>
+    <string name="amount_collected">Amount Collected</string>
+    <string name="insur_comp">Insurance Company</string>
+    <string name="comp_name">Company Name</string>
+    <string name="pay_by_crd">Payment By Card</string>
+    <string name="recpt_num">Receipt Number</string>
+    <string name="thank_you">Thank you for choosing us</string>
+    <string name="comp">Companies</string>
+    <string name="list_of_comp">List Of Companies</string>
+    <string name="send_req">Send Request</string>
+    <string name="bail_req_detail">Bail Request Detail</string>
+    <string name="instant">Instant Messages</string>
+    <string name="date_format2">00/00/00</string>
+    <string name="search_bad">Search baddebt Member</string>
+    <string name="search_black">Search blacklist Member</string>
+    <string name="defundant_detail">Defandant Detail</string>
+    <string name="bail_debt_detail">Bail Debt Detail</string>
+    <string name="bad_deb_detail">Bad Debt Detail</string>
+    <string name="bad_debt_detail">New Bad Debt</string>
+    <string name="payment_info">Payment Info</string>
+    <string name="black_list">New Blacklist</string>
+    <string name="fugitive_detail">Fugitive Request Detail</string>
+    <string name="black_list_detail">Black List Detail</string>
+    <string name="bail_cmpny_detail">Bail Company Detail</string>
+    <string name="agent_detail">Agent Detail</string>
+    <string name="fugitive_agent_detail">Fugitive Agent Detail</string>
+    <string name="black_list_by">Black Listed by Bail Company</string>
+    <string name="phone_cap">Phone :</string>
+    <string name="email_bail">Email :</string>
+    <string name="example">example@example.com</string>
+    <string name="num123">1234567</string>
+    <string name="addr_val">4150 sydney place Washington , DC 20521-4150</string>
+    <string name="def_detail">Defendant Detail</string>
+    <string name="detail">Detail</string>
+    <string name="john">John</string>
+    <string name="warrent">Warrant</string>
+    <string name="zip2">Zip</string>
+    <string name="state2">State</string>
+    <string name="biding">Bidding Details</string>
+    <string name="tel">Telephone</string>
+    <string name="dob2">DOB</string>
+    <string name="def_co">Defendant or Cosigner</string>
+    <string name="dof">DOF</string>
+    <string name="amount_owned">Amount Owned</string>
+    <string name="note">Note</string>
+    <string name="crt_fill">Court Filling Fee Needed , Bail Source Needed</string>
+    <string name="amount">Amount : $25.00</string>
+    <string name="chrgng_town">Charging Township</string>
+    <string name="no_ind">No. Of Indemnitors</string>
+    <string name="no_co">No. Of Cosigners</string>
+    <string name="ind_detail">Indemnitor\'s Details</string>
+    <string name="peter">Peter Anderson</string>
+    <string name="num_phone">+91-123-7891</string>
+    <string name="ppr_needed">Paperwork Needed</string>
+    <string name="gender">Gender</string>
+    <string name="txt_spcl">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ...</string>
+    <string name="insur">Insurance</string>
+    <string name="compstate">State</string>
+
+    <string-array name="state_num">
+        <item>Select State</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="state_value">
+        <item>Select State</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="insurence_num">
+        <item>Select insurance</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="sel_number">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string name="accepted">Accepted</string>
+    <string name="date_time">11:50 AM , 04-12-14</string>
+    <string name="date">Date and Time</string>
+    <string name="pass_sent">Your password has been sent your email !</string>
+    <string name="pass_invalid">Invalid email address !</string>
+    <string name="err_unexpect">Sorry, An unexpected error occurred.</string>
+    <string name="api_key">AIzaSyAtStC31TB8Fx7j241dBQgNFgD4ZdBci5k</string>
+    <string name="sender_id">511912945344</string>
+    <string name="permission_not_granted">Unable to perform selected action because permissions were not granted.</string>
+    <string name="title_activity_incoming_refer_bail_request_detail">IncomingReferBailRequestDetail</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="subscribe_package">How will you use Insta-Bail?</string>
+    <string name="pick">Pick Your Package</string>
+    <string name="paying_subscribe">PAYING SUBSCRIBERS/COMPANY TYPES</string>
+    <string name="continue2">Continue</string>
+    <string name="pay_info">Payment Info</string>
+    <string name="payment">Payment with Paypal</string>
+    <string name="subscribe2">Subscribe</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_history_request_list">HistoryRequestList</string>
+    <string name="title_activity_history_request_detail">HistoryRequestDetail</string>
+    <string name="title_activity_bad_debt_detail">BadDebtDetail</string>
+    <string name="title_activity_bad_detail">BadDetail</string>
+    <string name="title_activity_black_list">BlackList</string>
+    <string name="title_activity_fugitive_request_detail">FugitiveRequestDetail</string>
+    <string name="title_activity_fugitive_detail">Fugitive_detail</string>
+    <string name="title_activity_biding">BidingActivity</string>
+    <string name="title_activity_add_bad_bebt">AddBadBebt</string>
+    <string name="title_activity_add_black_list">AddBlackList</string>
+    <string name="title_activity_search_bad_debt">SearchBadDebt</string>
+    <string name="title_activity_search_blacklist">SearchBlacklist</string>
+    <string name="title_activity_company_profile">CompanyProfile</string>
+    <string name="title_activity_history_refer_request_detail">HistoryReferRequestDetail</string>
+    <string name="title_activity_subscription">SubscriptionActivity</string>
+    <string name="title_activity_subscription2">SubscriptionPart2Activity</string>
+    <string name="title_activity_subscription_part3">SubscriptionPart3Activity</string>
+    <string name="title_activity_history_bond_request_detail">HistoryBondRequestDetail</string>
+    <string name="title_activity_biding_bail">BidingBailActivity</string>
+    <string name="title_activity_payment_info">PaymentInfo</string>
+    <string name="title_activity_self_assigned_detail">SelfAssignedDetailActivity</string>
+    <string name="title_activity_individual_chat">IndividualChatActivity</string>
+    <string name="title_activity_group_chat">GroupChatActivity</string>
+    <string name="title_activity_completion_forum">CompletionForum</string>
+    <string name="title_activity_dropbox_download">DropboxDownload</string>
+
+</resources>

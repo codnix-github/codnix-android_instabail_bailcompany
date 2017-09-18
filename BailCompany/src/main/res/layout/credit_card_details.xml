@@ -1,0 +1,94 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        style="@style/linear_v"
+        android:layout_margin="@dimen/pad_20dp"
+        android:paddingTop="@dimen/pad_30dp" >
+
+        <EditText
+            android:id="@+id/card_number"
+            style="@style/style_edit_match"
+            android:hint="@string/credit_num"
+            android:maxLength="16"
+            android:inputType="number" />
+        <TextView 
+            android:id="@+id/disclaimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/hired_agent_list_bg"
+            android:textSize="@dimen/txt_9sp"
+            android:layout_marginLeft="@dimen/pad_5dp"
+            android:layout_marginRight="@dimen/pad_5dp"
+            android:padding="@dimen/pad_5dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pad_10dp" />
+
+        <LinearLayout style="@style/linear_h" >
+
+            <EditText
+                android:id="@+id/mm"
+                style="@style/style_edit_wrap"
+                android:hint="@string/mm"
+                android:maxLength="2"
+                android:inputType="number" />
+
+            <View
+                android:layout_width="@dimen/pad_20dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/yyyy"
+                style="@style/style_edit_wrap"
+                android:hint="@string/yy"
+                android:maxLength="4"
+                android:inputType="number" />
+
+            <View
+                android:layout_width="@dimen/pad_10dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/cvv"
+                style="@style/style_edit_match"
+                android:hint="@string/cvv"
+                android:maxLength="3"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pad_10dp" />
+
+        <EditText
+            android:id="@+id/name_on_card"
+            style="@style/style_edit_match"
+            android:layout_weight="1"
+            android:hint="@string/name_on_card" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pad_60dp" />
+    </LinearLayout>
+
+    <TextView 
+    android:id="@+id/btn_register"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/register"
+    android:textColor="@color/white"
+    android:clickable="true"
+     android:gravity="center"
+    android:textSize="@dimen/txt_18sp"
+    android:background="@drawable/btn_signin_yellow"
+    android:layout_gravity="center"/>
+
+</LinearLayout>
+</ScrollView>

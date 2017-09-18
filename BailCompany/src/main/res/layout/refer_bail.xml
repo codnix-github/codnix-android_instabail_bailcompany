@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        style="@style/linear_v"
+        android:padding="@dimen/pad_20dp" >
+
+        <EditText
+            android:id="@+id/def_fname"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/def_fname"
+            android:textSize="@dimen/txt_transfer_bigger"
+            android:inputType="textCapWords"/>
+        <EditText
+            android:id="@+id/def_lname"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/def_lname"
+            android:textSize="@dimen/txt_transfer_bigger"
+            android:inputType="textCapWords"/>
+        <EditText
+            android:id="@+id/dob"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:focusableInTouchMode="false"
+            android:hint="@string/dob"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <EditText
+            android:id="@+id/no_cosigner"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/no_signer"
+            android:inputType="number"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <AutoCompleteTextView
+            android:id="@+id/location_def"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/ic_location"
+            android:hint="@string/loc_def"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/entr_warr"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <LinearLayout style="@style/linear_h" >
+        </LinearLayout>
+
+        <LinearLayout style="@style/linear_h" >
+        </LinearLayout>
+
+        <LinearLayout style="@style/linear_h" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/warrent_layout"
+            style="@style/linear_v" >
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/add_more"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_gravity="right"
+            android:background="@drawable/more_btn"
+            android:gravity="center"
+            android:text="@string/add_more"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_12sp" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/amnt_cosigner"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <EditText
+            android:id="@+id/edit_amount_to"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/amt_to_pre"
+            android:inputType="numberDecimal"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/pay_comm"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <EditText
+            android:id="@+id/companyComm"
+            style="@style/style_get_ch"
+            android:layout_weight="1"
+            android:hint="@string/amt_of_com"
+            android:inputType="numberDecimal"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/collateral"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <EditText
+            android:id="@+id/multiline_text"
+            style="@style/style_get_ch"
+            android:layout_height="@dimen/instrution_box"
+            android:background="@drawable/message_box"
+            android:gravity="top"
+            android:hint="@string/enter_here"
+            android:padding="@dimen/pad_5dp"
+            android:singleLine="false"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <TextView
+            style="@style/style_get"
+            android:text="@string/spcl_inst"
+            android:textColor="@color/text_get_agent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <EditText
+            android:id="@+id/instructions"
+            style="@style/style_get_ch"
+            android:layout_height="@dimen/instrution_box"
+            android:background="@drawable/message_box"
+            android:gravity="top"
+            android:hint="@string/wrt_inst"
+            android:padding="@dimen/pad_5dp"
+            android:singleLine="false"
+            android:textSize="@dimen/txt_transfer_bigger" />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad_20dp"
+            android:background="@drawable/btn_signin_yellow"
+            android:text="@string/submit"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</ScrollView>

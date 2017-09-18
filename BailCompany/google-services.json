@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "553775031511",
+    "firebase_url": "https://insta-bail.firebaseio.com",
+    "project_id": "insta-bail",
+    "storage_bucket": "insta-bail.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553775031511:android:794a04d84c07b33b",
+        "android_client_info": {
+          "package_name": "com.bailcompany"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553775031511-numlshg7qh8p7mvu52tf3miivph8oelm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bailcompany",
+            "certificate_hash": "d0001b76bb9828860d4790b81d831bde6ac19119"
+          }
+        },
+        {
+          "client_id": "553775031511-emtbt8iflt3t5h0roh6jm70rjllj6iq1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bailcompany",
+            "certificate_hash": "8936dd3c3b0ea72811d754f7135c6080d2a0028d"
+          }
+        },
+        {
+          "client_id": "553775031511-4iv6socvkci81m7kog17i9ufc8tcubea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9oNkS3tq0RSClSiJk9NiOMPsCgTrjbyg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553775031511-4iv6socvkci81m7kog17i9ufc8tcubea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

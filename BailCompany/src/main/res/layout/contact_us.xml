@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        style="@style/linear_v"
+        android:padding="@dimen/pad_20dp" >
+
+        <EditText
+            android:id="@+id/contact_name"
+            style="@style/style_edit_match"
+            android:layout_weight="1"
+            android:hint="@string/name" />
+
+        <EditText
+            android:id="@+id/contact_email"
+            style="@style/style_edit_match"
+            android:layout_weight="1"
+            android:hint="@string/email" />
+
+        <LinearLayout style="@style/linear_h" >
+
+            <Spinner
+                android:id="@+id/sel_country_code"
+                style="@style/style_get_ch"
+                android:layout_width="match_parent"
+                android:layout_weight="2" />
+
+            <View
+                android:layout_width="@dimen/pad_20dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/tel_number"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:hint="@string/tel_num"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:textSize="@dimen/txt_14sp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/query"
+            style="@style/style_get_ch"
+            android:layout_height="@dimen/instrution_box"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/message_box"
+            android:gravity="top"
+            android:hint="@string/comments"
+            android:padding="10dp"
+            android:singleLine="false"
+            android:textSize="@dimen/txt_16sp" />
+
+        <Button
+            android:id="@+id/send_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad_40dp"
+            android:background="@drawable/btn_signin_yellow"
+            android:text="@string/send"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/theme_black"
+        android:gravity="right" >
+
+        <TextView
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_call"
+            android:paddingBottom="@dimen/pad_10dp"
+            android:paddingLeft="@dimen/pad_20dp"
+            android:paddingRight="@dimen/pad_20dp"
+            android:paddingTop="@dimen/pad_10dp" />
+    </LinearLayout>
+
+</RelativeLayout>

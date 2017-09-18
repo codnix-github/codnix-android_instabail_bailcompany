@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout style="@style/linear_v" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/hired_agent_list_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/pad_15dp" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/profile_pic_mask"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/add_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_registration_add_photo"
+                    android:scaleType="fitXY" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/agent_prof_saperator" />
+
+        <LinearLayout
+            style="@style/linear_v"
+            android:padding="@dimen/pad_20dp" >
+
+            <LinearLayout style="@style/linear_h" >
+
+                <EditText
+                    android:id="@+id/fname"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="@string/fname"
+                    android:inputType="textCapWords"/>
+
+                <View
+                    android:layout_width="@dimen/pad_40dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/lname"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="@string/lname"
+                    android:inputType="textCapWords"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/dob_txt"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:focusableInTouchMode="false"
+                android:hint="@string/dob"
+                android:textSize="@dimen/txt_transfer_bigger" />
+
+            <AutoCompleteTextView
+                android:id="@+id/location_def"
+                style="@style/style_get_ch"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_location"
+                android:hint="@string/addr_normal"
+                android:textSize="@dimen/txt_14sp" />
+
+            <LinearLayout style="@style/linear_h" >
+
+                <View
+                    android:layout_width="@dimen/pad_20dp"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_h" >
+
+                <Spinner
+                    android:id="@+id/sel_country_code_register"
+                    style="@style/style_get_ch"
+                    android:layout_width="match_parent"
+                    android:layout_weight="2" />
+
+                <View
+                    android:layout_width="@dimen/pad_20dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/phone_number"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="@string/phone"
+                    android:inputType="phone"
+                    android:maxLength="10" />
+            </LinearLayout>
+
+            
+
+            <Spinner
+                android:id="@+id/defendant"
+                style="@style/style_get_ch" 
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/amount_owned"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="@string/amount_owed"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/btn_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/pad_15dp"
+                android:background="@drawable/btn_signin_yellow"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/add_btn"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_18sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

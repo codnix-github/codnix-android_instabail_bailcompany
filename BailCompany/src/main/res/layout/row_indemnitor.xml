@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/linear_v"
+    android:paddingLeft="@dimen/pad_5dp" >
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_lt" />
+
+    <LinearLayout
+        style="@style/linear_h"
+        android:paddingBottom="@dimen/pad_5dp"
+        android:paddingTop="@dimen/pad_5dp" >
+
+        <TextView
+            android:id="@+id/indemnName"
+            style="@style/bail_request"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/bail_rquest_font_bold" />
+
+        <TextView
+            android:id="@+id/indemnPhone"
+            style="@style/bail_request"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/request_detail_call_icon"
+            android:drawablePadding="@dimen/pad_5dp"
+            android:paddingLeft="@dimen/pad_5dp"
+            android:textColor="@color/bail_rquest_font_bold" />
+    </LinearLayout>
+
+</LinearLayout>

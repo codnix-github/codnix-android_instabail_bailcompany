@@ -1,0 +1,195 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bailcompany.SubscriptionPart3Activity" >
+
+    <RelativeLayout
+        android:id="@+id/parent"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:background="@color/white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"
+            android:contentDescription="@string/Amnt_percent"
+            android:src="@drawable/subscription_logo" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/package_txt" />
+
+        <TextView
+            android:id="@+id/header"
+            style="@style/style_get"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="14dp"
+            android:text="@string/pick"
+            android:textColor="@color/subcription_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/header"
+            android:background="@color/black" />
+
+        <RadioButton
+            android:id="@+id/radio_btn"
+            style="@style/style_get"
+            android:layout_below="@+id/view1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:button="@drawable/radio_selector_green"
+            android:checked="false"
+            android:paddingLeft="@dimen/pad_10dp"
+            android:text="@string/package_2"
+            android:textColor="@color/subcription_text"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/radio_btn"
+            android:text="$20"
+            android:textColor="@color/subcription_text"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/radio_btn"
+            android:layout_alignRight="@+id/textView2"
+            android:layout_below="@+id/radio_btn"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="5dp"
+            android:text="Dummy"
+            android:textColor="@color/text_get_agent" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/radio_btn"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="14dp"
+            android:text="@string/plan"
+            android:textColor="@color/subcription_text"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/radio_btn2"
+            style="@style/style_get"
+            android:layout_below="@+id/textView4"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:button="@drawable/radio_selector_green"
+            android:checked="false"
+            android:paddingLeft="@dimen/pad_10dp"
+            android:text="@string/package_2"
+            android:textColor="@color/subcription_text"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/amnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/radio_btn2"
+            android:text="$20"
+            android:textColor="@color/subcription_text"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/radio_btn2"
+            android:layout_alignRight="@+id/textView2"
+            android:layout_below="@+id/radio_btn2"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="5dp"
+            android:text="Dummy"
+            android:textColor="@color/text_get_agent" />
+
+        <RadioButton
+            android:id="@+id/radio_btn3"
+            style="@style/style_get"
+            android:layout_below="@+id/detail"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:button="@drawable/radio_selector_green"
+            android:checked="false"
+            android:paddingLeft="@dimen/pad_10dp"
+            android:text="@string/package_2"
+            android:textColor="@color/subcription_text"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/amnt2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/radio_btn3"
+            android:text="$20"
+            android:textColor="@color/subcription_text"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/detail2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/radio_btn3"
+            android:layout_alignRight="@+id/textView2"
+            android:layout_below="@+id/radio_btn3"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="5dp"
+            android:text="Dummy"
+            android:textColor="@color/text_get_agent" />
+
+        <Button
+            android:id="@+id/subscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail2"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:background="@drawable/green_btn"
+            android:paddingBottom="15dp"
+            android:paddingLeft="45dp"
+            android:paddingRight="45dp"
+            android:paddingTop="15dp"
+            android:text="@string/subscribe2"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+</ScrollView>
