@@ -75,7 +75,7 @@ public class MainFragment extends CustomFragment {
     AgentModel agModel;
     int i;
     String response2;
-    static AsyncHttpClient client = new AsyncHttpClient(true,80,443);
+    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     String message;
     JSONObject jsonObj;
     String key;
