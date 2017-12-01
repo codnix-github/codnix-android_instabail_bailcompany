@@ -40,4 +40,21 @@
     <color name="req_det_bg">#f6f6f6</color>
     <color name="bail_request_font_normal">#939393</color>
 
+
+
+
+    <!--Defendant Profile 1-->
+    <color name="color_facebook">#3b5998</color>
+    <color name="color_google">#ab4242</color>
+    <color name="color_twitter">#0084b4</color>
+    <color name="profile1colorPrimary">#8f26aa</color>
+    <color name="profile1colorPrimaryDark">#7824a1</color>
+    <color name="profile1colorAccent">#8f26aa</color>
+
+    <!--style 2-->
+    <color name="profile2colorPrimary">#8f26aa</color>
+    <color name="profile2colorPrimaryDark">#7824a1</color>
+    <color name="profile2colorAccent">#8f26aa</color>
+
+
 </resources>

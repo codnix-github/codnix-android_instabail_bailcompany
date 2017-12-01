@@ -720,6 +720,7 @@ public class CompletionForum extends CustomActivity {
                             JSONArray preFixArr = resObj.optJSONArray("pre_fixes");
 
                             if (warrantArr != null) {
+
                                 for (int wIndex = 0; wIndex < warrantArr.length(); wIndex++) {
                                     JSONObject warrantObj = warrantArr.getJSONObject(wIndex);
 
@@ -732,6 +733,7 @@ public class CompletionForum extends CustomActivity {
                             }
 
                             if (preFixArr != null) {
+                                dropDownValuesList.add("Select Pre-fix");
                                 for (int pIndex = 0; pIndex < preFixArr.length(); pIndex++) {
                                     JSONObject preFixObj = preFixArr.getJSONObject(pIndex);
 

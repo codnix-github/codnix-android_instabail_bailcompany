@@ -64,12 +64,12 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/mail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="example@gmail.com"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+    android:id="@+id/mail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="example@gmail.com"
+    android:textColor="@color/white"
+    android:textSize="14sp" />
 
 
 </LinearLayout>

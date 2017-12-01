@@ -48,6 +48,7 @@ import com.bailcompany.ui.AgentList;
 import com.bailcompany.ui.BadDebtMembers;
 import com.bailcompany.ui.BlackListMembers;
 import com.bailcompany.ui.ContactUs;
+import com.bailcompany.ui.Defendant;
 import com.bailcompany.ui.FugitiveAgent;
 import com.bailcompany.ui.GetAnAgent;
 import com.bailcompany.ui.History;
@@ -353,6 +354,10 @@ public class MainActivity extends CustomActivity {
 		al.add(new Feed("Sent Fugitive Request", null,
 				R.drawable.incoming_fugitive_agent_sel,
 				R.drawable.incoming_fugitive_agent));
+
+		al.add(new Feed("Defendant", null, R.drawable.ic_agent_normal,
+				R.drawable.ic_agent_selected));
+
 		al.add(new Feed("History", null, R.drawable.history,
 				R.drawable.history_white));
 		al.add(new Feed("Instant Chat", null, R.drawable.ic_contact_normal,
@@ -487,10 +492,14 @@ public class MainActivity extends CustomActivity {
 			break;
 
 		case 12:
+				f = new Defendant();
+				title = getString(R.string.defendant);
+				break;
+		case 13:
 			f = new History();
 			title = getString(R.string.history);
 			break;
-		case 13:
+		case 14:
 			f = new InstantChat();
 			title = getString(R.string.instant_chat);
 			SharedPreferences.Editor editor4 = prefs.edit();
@@ -498,7 +507,7 @@ public class MainActivity extends CustomActivity {
 			WebAccess.instant = prefs.getBoolean("instant", false);
 			drawerLeft.setAdapter(adp);
 			break;
-		case 14:
+		case 15:
 			f = new InstantGroupChat();
 			title = getString(R.string.inst_group_msg);
 			SharedPreferences.Editor editor5 = prefs.edit();
@@ -506,11 +515,11 @@ public class MainActivity extends CustomActivity {
 			WebAccess.instantGroup = prefs.getBoolean("instantGroup", false);
 			drawerLeft.setAdapter(adp);
 			break;
-		case 15:
+		case 16:
 			f = new ContactUs();
 			title = getString(R.string.contact_us);
 			break;
-		case 16:
+		case 17:
 			sp.edit().putBoolean("isFbLogin", false);
 			sp.edit().putString("user", null).commit();
 			finish();

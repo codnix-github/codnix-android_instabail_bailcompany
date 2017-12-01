@@ -124,6 +124,7 @@
     <string name="bad_debt_members">Bad Debt Members </string>
     <string name="black_list_members">Black List Members </string>
     <string name="history">History</string>
+    <string name="defendant">Defendant</string>
     <string name="txt_contact">“Please feel free to Ask a Question, Note A Concern, Rate An Agent, Request A Feature or Just Say Hello”</string>
     <string name="wrte_here">Write here...</string>
     <string name="send">Send</string>
@@ -370,5 +371,6 @@
     <string name="title_activity_group_chat">GroupChatActivity</string>
     <string name="title_activity_completion_forum">CompletionForum</string>
     <string name="title_activity_dropbox_download">DropboxDownload</string>
+    <string name="defendant_address">San Fransisco, CA</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.bailcompany.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class WarrantModel implements Serializable {
 
@@ -8,17 +9,31 @@ public class WarrantModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	String Township, Amount,case_no,PowerNo;
+	int id;
+	String Township, Amount,case_no,PowerNo,Notes;
+	String CourtDate,Status;
+	ArrayList<CourtDateModel> courtDates;
 
 	public WarrantModel() {
 		this.Township = "";
 		this.Amount = "";
 		this.case_no = "";
 		this.PowerNo = "";
+		this.Notes = "";
+		this.CourtDate="";
+		this.courtDates=null;
 	}
 
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getTownship() {
@@ -51,5 +66,37 @@ public class WarrantModel implements Serializable {
 
 	public void setPowerNo(String powerNo) {
 		PowerNo = powerNo;
+	}
+
+	public String getCourtDate() {
+		return CourtDate;
+	}
+
+	public void setCourtDate(String courtDate) {
+		CourtDate = courtDate;
+	}
+
+	public String getNotes() {
+		return Notes;
+	}
+
+	public void setNotes(String notes) {
+		Notes = notes;
+	}
+
+	public ArrayList<CourtDateModel> getCourtDates() {
+		return courtDates;
+	}
+
+	public String getStatus() {
+		return Status;
+	}
+
+	public void setStatus(String status) {
+		Status = status;
+	}
+
+	public void setCourtDates(ArrayList<CourtDateModel> courtDates) {
+		this.courtDates = courtDates;
 	}
 }

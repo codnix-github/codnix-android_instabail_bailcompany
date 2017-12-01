@@ -22,6 +22,7 @@ public class BailRequestModel implements Serializable {
 			PaymentAlreadyReceived;
 	String AmountToCollect;
 	ArrayList<WarrantModel> WarrantList;
+	ArrayList<CourtDateModel> CourtDates;
 	ArrayList<IndemnitorModel> IndemnitorsList;
 	ArrayList<InsuranceModel> InsuranceList;
 	String SenderCompanyId, SenderCompanyName, SenderCompanyImage,
@@ -202,6 +203,14 @@ public class BailRequestModel implements Serializable {
 
 	public void setWarrantList(ArrayList<WarrantModel> warrantList) {
 		WarrantList = warrantList;
+	}
+
+	public ArrayList<CourtDateModel> getCourtDates() {
+		return CourtDates;
+	}
+
+	public void setCourtDates(ArrayList<CourtDateModel> courtDates) {
+		CourtDates = courtDates;
 	}
 
 	public ArrayList<IndemnitorModel> getIndemnitorsList() {
