@@ -3,6 +3,8 @@ package com.bailcompany;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -23,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,14 +37,19 @@ import android.widget.Toast;
 import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.custom.LocationImpl;
 import com.bailcompany.model.BailRequestModel;
-import com.bailcompany.model.CompanyBidingModel;
 import com.bailcompany.model.CourtDateModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.User;
 import com.bailcompany.model.WarrantModel;
 import com.bailcompany.ui.MainFragment;
+import com.bailcompany.utils.Const;
+import com.bailcompany.utils.ImageLoader;
+import com.bailcompany.utils.ImageUtils;
+import com.bailcompany.utils.StaticData;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -50,7 +58,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 @SuppressLint("InflateParams")
 public class DefendantBondDetails extends CustomActivity {
@@ -80,9 +91,28 @@ public class DefendantBondDetails extends CustomActivity {
     WarrantModel selectedWarrentModel = null;
     JSONArray preFixArr;
     int defId = 1;
+    ArrayList<CourtDateModel> warrantCourtDates = new ArrayList<CourtDateModel>();
+    ArrayList<WarrantCourtDatesHolder> warrantCourtDatesHolders = new ArrayList<>();
     private BailRequestModel bm;
     private LinearLayout preFixedViewLL;
-    ArrayList<CourtDateModel> warrantCourtDates=new ArrayList<CourtDateModel>();
+    private LinearLayout warrantCourtDatesLL;
+    private LinearLayout llDefendantDocuments;
+    private LinearLayout llCosignerDocuments;
+    private LinearLayout llOtherDocuments;
+    private SlideDateTimeListener listener = new SlideDateTimeListener() {
+
+
+        @Override
+        public void onDateTimeSet(Date date) {
+            // Do something with the date. This Date object contains
+            // the date and time that the user has selected.
+        }
+
+        @Override
+        public void onDateTimeCancel() {
+            // Overriding onDateTimeCancel() is optional.
+        }
+    };
 
     public static AlertDialog showDialog(Context ctx, String msg,
                                          DialogInterface.OnClickListener listener) {
@@ -148,13 +178,14 @@ public class DefendantBondDetails extends CustomActivity {
 
         getDropDownValues();
 
-        ((TextView) findViewById(R.id.compcom)).setText(Utils
-                .getFormattedText("$" + bm.getAmmountForCommission()));
 
         LinearLayout llWarrant = (LinearLayout) findViewById(R.id.llWarrant);
+        llDefendantDocuments = (LinearLayout) findViewById(R.id.llDocumentsDefendant);
+        llCosignerDocuments = (LinearLayout) findViewById(R.id.llDocumentsCosigner);
+        llOtherDocuments = (LinearLayout) findViewById(R.id.llDocumentsOther);
 
         ArrayList<WarrantModel> wList = bm.getWarrantList();
-       final ArrayList<CourtDateModel> allCourtDates=bm.getCourtDates();
+        final ArrayList<CourtDateModel> allCourtDates = bm.getCourtDates();
 
         if (wList != null && wList.size() > 0) {
             int count = 0;
@@ -167,7 +198,6 @@ public class DefendantBondDetails extends CustomActivity {
                     ((TextView) v.findViewById(R.id.wrntAmount))
                             .setText("Amount:   $" + wMod.getAmount());
 
-
                     ((TextView) v.findViewById(R.id.wrntAmount)).setOnClickListener(new OnClickListener() {
 
                         @Override
@@ -176,13 +206,12 @@ public class DefendantBondDetails extends CustomActivity {
                             selectedWarrentModel = wMod;
                             warrantCourtDates.clear();
                             for (final CourtDateModel wCourtDate : allCourtDates) {
-                                if(wCourtDate.getWarrantId()==selectedWarrentId){
+                                if (wCourtDate.getWarrantId() == selectedWarrentId) {
                                     warrantCourtDates.add(wCourtDate);
                                 }
 
                             }
-
-                            Log.d("TotalCourtDate=",""+warrantCourtDates.size());
+                            Log.d("TotalCourtDate=", "" + warrantCourtDates.size());
 
                             AlertDialog dialog;
                             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -190,6 +219,7 @@ public class DefendantBondDetails extends CustomActivity {
                             final LinearLayout loginContainer = (LinearLayout) dialogForm.findViewById(R.id.loginContainer);
                             final LinearLayout signupContainer = (LinearLayout) dialogForm.findViewById(R.id.signupContainer);
                             TextView buttonTabLogin = (TextView) dialogForm.findViewById(R.id.buttonTabLogin);
+                            Button buttonAddMoreCourtDate = (Button) dialogForm.findViewById(R.id.add_more_courtdate);
                             buttonTabLogin.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -205,9 +235,18 @@ public class DefendantBondDetails extends CustomActivity {
                                     signupContainer.setVisibility(View.VISIBLE);
                                 }
                             });
+                            buttonAddMoreCourtDate.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    addCourtDateView("");
+                                }
+                            });
+
 
                             preFixedViewLL = (LinearLayout) dialogForm.findViewById(R.id.preFixedViewLL);
+                            warrantCourtDatesLL = (LinearLayout) dialogForm.findViewById(R.id.warrantCourtDatesLL);
 
+                            warrantCourtDatesHolders.clear();
                             addDropDownViews(wMod);
 
 
@@ -254,54 +293,84 @@ public class DefendantBondDetails extends CustomActivity {
         ((TextView) findViewById(R.id.indemnNum)).setText(bm
                 .getNumberIndemnitors() + "");
 
-        ((TextView) findViewById(R.id.paymentStatus)).setText("$"
-                + bm.getAmountToCollect());
-        ((TextView) findViewById(R.id.collectral_Text)).setText(bm
-                .getPaymentPlan());
+
         ((TextView) findViewById(R.id.splInstruction)).setText(bm
                 .getInstructionForAgent() + "");
 
+        Log.d("BCosigner=", "" + bm.getBondDocuments().getCosignerPhoto().size());
+        Log.d("BDef=", "" + bm.getBondDocuments().getDefendantPhoto().size());
+        Log.d("BOther=", "" + bm.getBondDocuments().getOtherDocuments().size());
+
+        ArrayList<String> docOtherDoc = bm.getBondDocuments().getOtherDocuments();
+        if (docOtherDoc != null && docOtherDoc.size() > 0) {
+
+            for (final String url : docOtherDoc) {
+                //tvDocument
+                View v = getLayoutInflater()
+                        .inflate(R.layout.row_document, null);
+
+                TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
+                final ImageView ivPic = (ImageView) v.findViewById(R.id.ivPic);
+                tvDocument.setText(url);
+
+                Log.d("DocUrlS=",url);
+
+                if(url.toLowerCase().endsWith("jpg") || url.toLowerCase().endsWith("png") || url.toLowerCase().endsWith("jpeg"))
+                {
+                    Bitmap bm = new ImageLoader(StaticData.getDIP(60),
+                            StaticData.getDIP(60), ImageLoader.SCALE_FITXY).loadImage(url, new ImageLoader.ImageLoadedListener() {
+
+                        @Override
+                        public void imageLoaded(Bitmap bm) {
+                            if (bm != null)
+                                ivPic.setImageBitmap(ImageUtils
+                                        .getCircularBitmap(bm));
+
+                        }
+                    });
+                    if (bm != null) {
+                        ivPic.setImageBitmap(ImageUtils.getCircularBitmap(bm));
+                    }
+
+                }
+
+                llOtherDocuments.addView(v);
+            }
+        }
+
+        ArrayList<String> docDefenant = bm.getBondDocuments().getDefendantPhoto();
+        if (docDefenant != null && docDefenant.size() > 0) {
+
+            for (final String url : docDefenant) {
+                //tvDocument
+                View v = getLayoutInflater()
+                        .inflate(R.layout.row_document, null);
+
+                TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
+                tvDocument.setText(url);
+
+                llDefendantDocuments.addView(v);
+            }
+        }
+
+        ArrayList<String> docCosigner = bm.getBondDocuments().getCosignerPhoto();
+        if (docCosigner != null && docCosigner.size() > 0) {
+
+            for (final String url : docCosigner) {
+                //tvDocument
+                View v = getLayoutInflater()
+                        .inflate(R.layout.row_document, null);
+
+                TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
+                tvDocument.setText(url);
+
+                llCosignerDocuments.addView(v);
+            }
+        }
 
         RelativeLayout enter = (RelativeLayout) findViewById(R.id.enter);
         RelativeLayout view = (RelativeLayout) findViewById(R.id.view);
 
-        if (WebAccess.AllBidListCompany != null
-                && !WebAccess.AllBidListCompany.isEmpty()) {
-            if (getIntent().hasExtra("position")) {
-                int i = getIntent().getIntExtra("position", 0);
-                ArrayList<CompanyBidingModel> agentBidList = WebAccess.AllBidListCompany
-                        .get(i);
-                if (agentBidList != null && !agentBidList.isEmpty()) {
-                    view.setVisibility(View.VISIBLE);
-                    enter.setVisibility(View.GONE);
-                    CompanyBidingModel companyBid = agentBidList.get(0);
-                    amountReqText.setText(companyBid.getAmount());
-                    quotesText.setText(companyBid.getDescription());
-                    if (companyBid.getAcceptedStatus().equalsIgnoreCase("1")) {
-                        status.setText("Your bid is accepted against this request");
-                        submit.setText("Submitted");
-                    } else {
-                        status.setText("Your bid is not accepted yet against this request");
-                        submit.setText("Submitted");
-                    }
-
-                } else {
-                    enter.setVisibility(View.VISIBLE);
-                    view.setVisibility(View.GONE);
-                    submit.setText("Submit");
-                }
-
-            } else {
-                enter.setVisibility(View.VISIBLE);
-                view.setVisibility(View.GONE);
-                submit.setText("Submit");
-            }
-
-        } else {
-            enter.setVisibility(View.VISIBLE);
-            view.setVisibility(View.GONE);
-            submit.setText("Submit");
-        }
     }
 
     protected void setActionBar() {
@@ -339,9 +408,13 @@ public class DefendantBondDetails extends CustomActivity {
                         if (resObj != null) {
                             if (resObj.optString("status")
                                     .equalsIgnoreCase("1")) {
-                                JSONObject dObj;
+
                                 Utils.showDialog(DefendantBondDetails.this,
                                         resObj.getString("message"));
+                                Intent intent = new Intent();
+                                intent.putExtra(Const.RETURN_FLAG, Const.BOND_DETAILS_UPDATED);
+                                setResult(RESULT_OK, intent);
+                                finish();
 
                             } else if (resObj.optString("status")
                                     .equalsIgnoreCase("3")) {
@@ -393,9 +466,13 @@ public class DefendantBondDetails extends CustomActivity {
         param.put("bondstatus", "A");
         if (holder.spinnerStatus.getSelectedItemPosition() != 0)
             param.put("bondstatus", holder.spinnerStatus.getSelectedItem().toString().trim());
+        Log.d("CourtDateSize", "" + warrantCourtDatesHolders.size());
+        for (int i = 0; i < warrantCourtDatesHolders.size(); i++) {
+            param.put("courtdate[" + i + "]", warrantCourtDatesHolders.get(i).edtCourtDate.getText().toString());
+        }
+
         return param;
     }
-
 
     @Override
     public void onClick(View v) {
@@ -825,13 +902,73 @@ public class DefendantBondDetails extends CustomActivity {
         holder.spinnerStatus.setSelection(1);
         if (selectedWarrentModel.getStatus().equals("D")) {
             holder.spinnerStatus.setSelection(2);
-        }
-        else if (selectedWarrentModel.getStatus().equals("F")) {
+        } else if (selectedWarrentModel.getStatus().equals("F")) {
             holder.spinnerStatus.setSelection(3);
         }
 
+        if (warrantCourtDates.size() > 0) {
+            for (int i = 0; i < warrantCourtDates.size(); i++) {
+                addCourtDateView(warrantCourtDates.get(i).getCourtDate());
+            }
+        } else {
+            addCourtDateView("");
+        }
+
+
         preFixedViewLL.addView(child);
         preFixesHolders.add(holder);
+
+    }
+
+    void addCourtDateView(String date) {
+        View viewCourtdate = getLayoutInflater().inflate(R.layout.row_courtdates, null);
+        final WarrantCourtDatesHolder warrantCourtDates = new WarrantCourtDatesHolder();
+
+        warrantCourtDates.edtCourtDate = (EditText) viewCourtdate.findViewById(R.id.edtCourtDate);
+
+
+        warrantCourtDates.edtCourtDate.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date convertedDate = new Date();
+                try {
+                    convertedDate = dateFormat.parse(warrantCourtDates.edtCourtDate.getText().toString());
+                } catch (Exception e) {
+
+                }
+                new SlideDateTimePicker.Builder(getSupportFragmentManager())
+                        .setListener(new SlideDateTimeListener() {
+
+
+                            @Override
+                            public void onDateTimeSet(Date date) {
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                String dateString = sdf.format(date);
+                                warrantCourtDates.edtCourtDate.setText(dateString);
+
+                            }
+
+                            @Override
+                            public void onDateTimeCancel() {
+                                // Overriding onDateTimeCancel() is optional.
+                            }
+                        })
+                        .setIs24HourTime(true)
+                        .setTheme(SlideDateTimePicker.HOLO_LIGHT)
+                        .setInitialDate(convertedDate)
+                        .build()
+                        .show();
+
+                //   android.support.v4.app.DialogFragment newFragment = new DatePickerFragment();
+                // newFragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+
+
+        warrantCourtDates.edtCourtDate.setText(date);
+        warrantCourtDatesHolders.add(warrantCourtDates);
+        warrantCourtDatesLL.addView(viewCourtdate);
 
     }
 
@@ -1038,6 +1175,39 @@ public class DefendantBondDetails extends CustomActivity {
 
     }
 
+    public static class DatePickerFragment extends android.support.v4.app.DialogFragment implements
+            DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, 1990, 0, 1);
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            int selectedYear, month, day;
+            selectedYear = year;
+            month = monthOfYear;
+            day = dayOfMonth;
+
+            String date = pad(month + 1) + "/" + pad(day) + "/" + selectedYear;
+            //dateOfBirth.setText(date);
+        }
+
+        private String pad(int c) {
+            return c >= 10 ? "" + c : "0" + c;
+        }
+
+    }
+
     public static class F1 extends DialogFragment {
 
         public static F1 newInstance() {
@@ -1077,6 +1247,13 @@ public class DefendantBondDetails extends CustomActivity {
         int id;
         String title;
     }
+
+    public class WarrantCourtDatesHolder {
+        int id;
+        int warrantId;
+        EditText edtCourtDate;
+    }
+
 
     public class PreFixesHolder {
         Spinner spinner;
