@@ -2,6 +2,7 @@ package com.bailcompany;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -14,6 +15,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -23,7 +26,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -35,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bailcompany.custom.CustomActivity;
+import com.bailcompany.custom.CustomGridView;
 import com.bailcompany.custom.LocationImpl;
 import com.bailcompany.model.BailRequestModel;
 import com.bailcompany.model.CourtDateModel;
@@ -42,12 +48,18 @@ import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.User;
 import com.bailcompany.model.WarrantModel;
 import com.bailcompany.ui.MainFragment;
+import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
+import com.bailcompany.utils.FilePath;
 import com.bailcompany.utils.ImageLoader;
+import com.bailcompany.utils.ImageSelector;
 import com.bailcompany.utils.ImageUtils;
 import com.bailcompany.utils.StaticData;
+import com.bailcompany.utils.Utility;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.loopj.android.http.AsyncHttpClient;
@@ -58,6 +70,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -93,12 +106,20 @@ public class DefendantBondDetails extends CustomActivity {
     int defId = 1;
     ArrayList<CourtDateModel> warrantCourtDates = new ArrayList<CourtDateModel>();
     ArrayList<WarrantCourtDatesHolder> warrantCourtDatesHolders = new ArrayList<>();
+    ArrayList<String> imgPathList, docImgPaths;
+    ArrayList<Uri> uriArrayList;
+    int adpaterPosition = 0;
     private BailRequestModel bm;
     private LinearLayout preFixedViewLL;
     private LinearLayout warrantCourtDatesLL;
     private LinearLayout llDefendantDocuments;
     private LinearLayout llCosignerDocuments;
     private LinearLayout llOtherDocuments;
+    private CustomGridView photoGrid;
+    private PhotoAdapter adapter;
+    private File file;
+    private static final int Take_DROPBOX = 2;
+
     private SlideDateTimeListener listener = new SlideDateTimeListener() {
 
 
@@ -184,8 +205,82 @@ public class DefendantBondDetails extends CustomActivity {
         llCosignerDocuments = (LinearLayout) findViewById(R.id.llDocumentsCosigner);
         llOtherDocuments = (LinearLayout) findViewById(R.id.llDocumentsOther);
 
+
         ArrayList<WarrantModel> wList = bm.getWarrantList();
         final ArrayList<CourtDateModel> allCourtDates = bm.getCourtDates();
+
+        ((ImageView) findViewById(R.id.btnAddDocuments)).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog dialog;
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View dialogForm = inflater.inflate(R.layout.dialog_add_bond_documents, null, false);
+                final LinearLayout loginContainer = (LinearLayout) dialogForm.findViewById(R.id.lladddocument);
+
+                photoGrid = (CustomGridView) dialogForm.findViewById(R.id.my_grid_view);
+
+                imgPathList = new ArrayList<String>();
+                uriArrayList = new ArrayList<>();
+                docImgPaths = new ArrayList<String>();
+                adapter = new PhotoAdapter();
+                photoGrid.setAdapter(adapter);
+                photoGrid.setExpanded(true);
+
+                photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            final int position, long id) {
+
+                        adpaterPosition = position;
+                        file = new File(Const.TEMP_PHOTO + Const.getUniqueIdforImage()
+                                + ".png");
+                        ImageView iv = (ImageView) view.findViewById(R.id.my_image);
+                        boolean result = Utility.checkPermission(THIS);
+                        if (result) {
+                            if (iv.getTag().equals("1")) {
+
+                                openChooser(THIS, file, null);
+                            } else {
+                                openChooser(THIS, file, new ImageSelector.RemoveListener() {
+
+                                    @Override
+                                    public void onRemove() {
+                                        if (position >= imgPathList.size())
+                                            return;
+                                        File f = new File(imgPathList.get(position));
+                                        float size = f.length() / 1024f;
+                                        //String sizeStr = getDecrToatSize(size);
+                                        // totalSizeTV.setText(sizeStr);
+                                        imgPathList.remove(position);
+                                        if (position >= uriArrayList.size())
+                                            uriArrayList.remove(position);
+
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                        }
+
+                    }
+                });
+                final Button btnUploadDoc = (Button) dialogForm.findViewById(R.id.btnUploadDoc);
+                btnUploadDoc.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        uploadDocuments();
+                    }
+                });
+                AlertDialog.Builder builder = new AlertDialog.Builder(DefendantBondDetails.this);
+                builder.setView(dialogForm);
+                builder.create();
+                dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+
 
         if (wList != null && wList.size() > 0) {
             int count = 0;
@@ -198,10 +293,14 @@ public class DefendantBondDetails extends CustomActivity {
                     ((TextView) v.findViewById(R.id.wrntAmount))
                             .setText("Amount:   $" + wMod.getAmount());
 
-                    ((TextView) v.findViewById(R.id.wrntAmount)).setOnClickListener(new OnClickListener() {
+
+                    ((LinearLayout) v.findViewById(R.id.llRowWarrant)).setOnClickListener(new OnClickListener() {
 
                         @Override
                         public void onClick(View view) {
+
+                            if (wMod.getPowerNo().trim().equalsIgnoreCase(""))
+                                return;
                             selectedWarrentId = wMod.getId();
                             selectedWarrentModel = wMod;
                             warrantCourtDates.clear();
@@ -211,7 +310,6 @@ public class DefendantBondDetails extends CustomActivity {
                                 }
 
                             }
-                            Log.d("TotalCourtDate=", "" + warrantCourtDates.size());
 
                             AlertDialog dialog;
                             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -250,13 +348,13 @@ public class DefendantBondDetails extends CustomActivity {
                             addDropDownViews(wMod);
 
 
-                            Button buttonLogin = (Button) dialogForm.findViewById(R.id.btnUpdateWarrantDetails);
-                            buttonLogin.setOnClickListener(new View.OnClickListener() {
+                            Button buttonUpdateWarrant = (Button) dialogForm.findViewById(R.id.btnUpdateWarrantDetails);
+                            buttonUpdateWarrant.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
 
                                     updateWarrantDetails();
-                                    Toast.makeText(DefendantBondDetails.this, "" + wMod.getId(), Toast.LENGTH_SHORT).show();
+
                                 }
                             });
                             AlertDialog.Builder builder = new AlertDialog.Builder(DefendantBondDetails.this);
@@ -309,14 +407,63 @@ public class DefendantBondDetails extends CustomActivity {
                 View v = getLayoutInflater()
                         .inflate(R.layout.row_document, null);
 
-                TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
+
                 final ImageView ivPic = (ImageView) v.findViewById(R.id.ivPic);
-                tvDocument.setText(url);
+                if (url.toLowerCase().endsWith("jpg") || url.toLowerCase().endsWith("png") || url.toLowerCase().endsWith("jpeg")) {
+                    Bitmap bm = new ImageLoader(StaticData.getDIP(60),
+                            StaticData.getDIP(60), ImageLoader.SCALE_FITXY).loadImage(url, new ImageLoader.ImageLoadedListener() {
 
-                Log.d("DocUrlS=",url);
+                        @Override
+                        public void imageLoaded(Bitmap bm) {
+                            if (bm != null)
+                                ivPic.setImageBitmap(ImageUtils
+                                        .getCircularBitmap(bm));
 
-                if(url.toLowerCase().endsWith("jpg") || url.toLowerCase().endsWith("png") || url.toLowerCase().endsWith("jpeg"))
-                {
+                        }
+                    });
+                    if (bm != null) {
+                        ivPic.setImageBitmap(ImageUtils.getCircularBitmap(bm));
+
+                    }
+                    ivPic.setOnClickListener(new OnClickListener() {
+
+                        @Override
+                        public void onClick(View arg0) {
+
+                            DefendantBondDetails.F1.newInstance(url).show(getFragmentManager(), null);
+
+                        }
+                    });
+
+                } else {
+                    TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
+                    tvDocument.setText(url.substring(url.lastIndexOf("/") + 1));
+                    ivPic.setVisibility(View.GONE);
+                    tvDocument.setVisibility(View.VISIBLE);
+                    tvDocument.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        }
+                    });
+                }
+
+                llOtherDocuments.addView(v);
+            }
+        }
+
+        ArrayList<String> docDefenant = bm.getBondDocuments().getDefendantPhoto();
+        if (docDefenant != null && docDefenant.size() > 0) {
+
+            for (final String url : docDefenant) {
+                //tvDocument
+                View v = getLayoutInflater()
+                        .inflate(R.layout.row_document, null);
+
+                final ImageView ivPic = (ImageView) v.findViewById(R.id.ivPic);
+                if (url.toLowerCase().endsWith("jpg") || url.toLowerCase().endsWith("png") || url.toLowerCase().endsWith("jpeg")) {
                     Bitmap bm = new ImageLoader(StaticData.getDIP(60),
                             StaticData.getDIP(60), ImageLoader.SCALE_FITXY).loadImage(url, new ImageLoader.ImageLoadedListener() {
 
@@ -332,22 +479,28 @@ public class DefendantBondDetails extends CustomActivity {
                         ivPic.setImageBitmap(ImageUtils.getCircularBitmap(bm));
                     }
 
+                    ivPic.setOnClickListener(new OnClickListener() {
+
+                        @Override
+                        public void onClick(View arg0) {
+
+                            DefendantBondDetails.F1.newInstance(url).show(getFragmentManager(), null);
+
+                        }
+                    });
+
+                } else {
+                    TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
+                    tvDocument.setText(url.substring(url.lastIndexOf("/") + 1));
+                    tvDocument.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        }
+                    });
                 }
-
-                llOtherDocuments.addView(v);
-            }
-        }
-
-        ArrayList<String> docDefenant = bm.getBondDocuments().getDefendantPhoto();
-        if (docDefenant != null && docDefenant.size() > 0) {
-
-            for (final String url : docDefenant) {
-                //tvDocument
-                View v = getLayoutInflater()
-                        .inflate(R.layout.row_document, null);
-
-                TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
-                tvDocument.setText(url);
 
                 llDefendantDocuments.addView(v);
             }
@@ -361,8 +514,46 @@ public class DefendantBondDetails extends CustomActivity {
                 View v = getLayoutInflater()
                         .inflate(R.layout.row_document, null);
 
-                TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
-                tvDocument.setText(url);
+                final ImageView ivPic = (ImageView) v.findViewById(R.id.ivPic);
+                if (url.toLowerCase().endsWith("jpg") || url.toLowerCase().endsWith("png") || url.toLowerCase().endsWith("jpeg")) {
+                    Bitmap bm = new ImageLoader(StaticData.getDIP(60),
+                            StaticData.getDIP(60), ImageLoader.SCALE_FITXY).loadImage(url, new ImageLoader.ImageLoadedListener() {
+
+                        @Override
+                        public void imageLoaded(Bitmap bm) {
+                            if (bm != null)
+                                ivPic.setImageBitmap(ImageUtils
+                                        .getCircularBitmap(bm));
+
+                        }
+                    });
+                    if (bm != null) {
+                        ivPic.setImageBitmap(ImageUtils.getCircularBitmap(bm));
+                    }
+                    ivPic.setOnClickListener(new OnClickListener() {
+
+                        @Override
+                        public void onClick(View arg0) {
+
+                            DefendantBondDetails.F1.newInstance(url).show(getFragmentManager(), null);
+
+                        }
+                    });
+
+                } else {
+                    TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
+                    tvDocument.setText(url.substring(url.lastIndexOf("/") + 1));
+                    tvDocument.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        }
+                    });
+
+
+                }
 
                 llCosignerDocuments.addView(v);
             }
@@ -373,6 +564,123 @@ public class DefendantBondDetails extends CustomActivity {
 
     }
 
+    public void uploadDocuments(){
+        try {
+            RequestParams param = new RequestParams();
+            String url = WebAccess.MAIN_URL + WebAccess.UPLOAD_BOND_DOCUMENTS;
+            client.setTimeout(getCallTimeout);
+
+            param.put("TemporaryAccessCode",
+                    MainActivity.user.getTempAccessCode());
+            param.put("UserName", MainActivity.user.getUsername());
+            param.put("DefId", defId);
+            param.put("RequestId",reqId);
+
+           for (int i = 0; i < imgPathList.size(); i++) {
+                String type;
+                String DocPhotos = "DocPhotos[" + i + "]";
+
+                String path = imgPathList.get(i);
+
+                type = null;
+                if (path.lastIndexOf(".") != -1) {
+                    type = path.substring(path.lastIndexOf(".") + 1);
+
+                }
+                if (type != null) {
+                    if (type.equalsIgnoreCase("pdf")
+                            || type.equalsIgnoreCase("pdf")) {
+                        File file1 = new File(path);
+                        param.put(DocPhotos, file1);
+                    }
+                    if (type.equalsIgnoreCase("doc")
+                            || type.equalsIgnoreCase("doc")) {
+                        File file2 = new File(path);
+                        param.put(DocPhotos, file2);
+                    } else {
+                        File file3 = new File(path);
+                        param.put(DocPhotos, file3);
+                    }
+                } else {
+                    File file4 = new File(path);
+                    param.put(DocPhotos, file4, DocPhotos + ".jpg", "image/jpg");
+                }
+            }
+
+            Log.d("DocToUpload=",""+imgPathList.size());
+
+            client.post(this, url, param, new AsyncHttpResponseHandler() {
+
+                @Override
+                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                    pd.dismiss();
+
+                    Utils.showDialog(_activity,
+                            R.string.err_unexpect);
+                    removeDropboxTempFiles();
+                }
+
+                @Override
+                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+
+                    pd.dismiss();
+                    try {
+                        String response2;
+                        response2 = new String(responseBody);
+                        JSONObject resObj;
+                        resObj = new JSONObject(response2);
+                        if (resObj != null) {
+                            if (resObj.optString("status")
+                                    .equalsIgnoreCase("1")) {
+                                // setCompleteStatus();
+                                message = resObj.optString("message");
+                                if (!Commons.isEmpty(message)
+                                        || message.equalsIgnoreCase("success")) {
+
+                                                Log.d("Res=",message);
+
+                                    Utils.showDialog(DefendantBondDetails.this,message);
+                                    /*
+                                    Intent intent = new Intent();
+                                    intent.putExtra(Const.RETURN_FLAG, Const.BOND_DOCUMENT_UPLOADED);
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+*/
+                                }
+
+                            } else if (resObj.optString("status")
+                                    .equalsIgnoreCase("3")) {
+                                Toast.makeText(
+                                        THIS,
+                                        "Session was closed please login again",
+                                        Toast.LENGTH_LONG).show();
+                                MainActivity.sp.edit().putBoolean("isFbLogin",
+                                        false);
+                                MainActivity.sp.edit().putString("user", null)
+                                        .commit();
+                                startActivity(new Intent(_activity,
+                                        Launcher.class));
+                            } else {
+
+                                Utils.showDialog(_activity,
+                                        resObj.optString("message"));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        Utils.showDialog(_activity, "Error occurs");
+                        e.printStackTrace();
+                    }
+
+                    removeDropboxTempFiles();
+                }
+
+            });
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     protected void setActionBar() {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -986,185 +1294,85 @@ public class DefendantBondDetails extends CustomActivity {
 
     }
 
-    void getAllAgents(final boolean accept) {
-        if (Utils.isOnline()) {
 
-            RequestParams param = new RequestParams();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) { // popop
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri uri = null;
+        if (resultCode == RESULT_OK) {
 
-            param.put("TransferBondId", reqId);
-            param.put("UserName", MainActivity.user.getUsername());
-            param.put("TemporaryAccessCode",
-                    MainActivity.user.getTempAccessCode());
-            final double[] loc = LocationImpl.getAvailableLocation();
-            param.put("LocationLongitude", "" + loc[1] + "");
-            param.put("LocationLatitude", "" + loc[0] + "");
-            if (!MainActivity.user.getInsurance().isEmpty()) {
-                ArrayList<String> insuranceList = MainActivity.user
-                        .getInsurance();
-                for (int i = 0; i < insuranceList.size(); i++) {
-                    param.put("InsuranceId[" + i + "]", insuranceList.get(i)
-                            + "");
+            String path = "";
+            if (requestCode == 111) {
+                if (Utils.isOnline()) {
+
+                } else {
+                    Utils.noInternetDialog(THIS);
                 }
-            }
-            param.put("Page", "0");
-            String url = WebAccess.MAIN_URL + WebAccess.GET_ALL_AGENT;
-            client.setTimeout(getCallTimeout);
-            client.post(this, url, param, new AsyncHttpResponseHandler() {
+            } else {
+                if (requestCode == ImageSelector.IMAGE_CAPTURE) {
+                    uri = data.getData();
 
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-                    dismissProgressDialog();
-                    Utils.showDialog(DefendantBondDetails.this,
-                            R.string.err_unexpect);
-                }
+                    if (uri == null) {
+                        Bundle extras = data.getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        uri = ImageUtils.getImageUri(THIS, imageBitmap);
 
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                        path = FilePath.getPath(THIS, uri);
+                    } else {
+                        path = FilePath.getPath(THIS, uri);
+                    }
+                } else if (requestCode == Take_DROPBOX) {
+                    path = data.getStringExtra("path");
+                    uri = Uri.fromFile(new File(path));
 
-                    dismissProgressDialog();
-                    try {
-                        String response2;
-                        response2 = new String(responseBody);
-                        JSONObject resObj = new JSONObject(response2);
 
-                        if (resObj != null) {
-                            message = resObj.optString("message");
-                            if (resObj.optString("status")
-                                    .equalsIgnoreCase("1")) {
+                } else {
+                    uri = data.getData();
 
-                                Toast.makeText(THIS, message, Toast.LENGTH_LONG)
-                                        .show();
-                                JSONArray jArray = resObj
-                                        .getJSONArray("list_of_agents");
-                                MainActivity.agentList = WebAccess
-                                        .parseAgentList(jArray);
-                                if (fromNotification) {
-                                    Intent i = new Intent(
-                                            DefendantBondDetails.this,
-                                            MainActivity.class);
-                                    i.putExtra("not", true);
-                                    i.putExtra("bail", bm);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(i);
+                    if (uri == null) {
+                        Bundle extras = data.getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        uri = ImageUtils.getImageUri(THIS, imageBitmap);
+                    }
 
-                                } else if (accept) {
-                                    setResult(
-                                            RESULT_OK,
-                                            new Intent()
-                                                    .putExtra("bail", bm)
-                                                    .putExtra("locLatt",
-                                                            "" + loc[0] + "")
-                                                    .putExtra("locLng",
-                                                            "" + loc[1] + ""));
+                    path = FilePath.getPath(THIS, uri);
+                    if (uri.toString().contains("com.dropbox")) {
 
-                                } else {
-                                    setResult(RESULT_OK);
-                                }
-                                finish();
-                            } else if (resObj.optString("status")
-                                    .equalsIgnoreCase("3")) {
-                                Toast.makeText(
-                                        THIS,
-                                        "Session was closed please login again",
-                                        Toast.LENGTH_LONG).show();
-                                MainActivity.sp.edit().putBoolean("isFbLogin",
-                                        false);
-                                MainActivity.sp.edit().putString("user", null)
-                                        .commit();
-                                startActivity(new Intent(
-                                        DefendantBondDetails.this,
-                                        Launcher.class));
-                            } else {
-                                Utils.showDialog(
-                                        DefendantBondDetails.this,
-                                        message);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        Utils.showDialog(DefendantBondDetails.this,
-                                R.string.err_unexpect);
-                        e.printStackTrace();
                     }
                 }
+                String sizeStr = "Total Attachments Size: 0.00 KB";
+                if (path != null) {
+                    if (!imgPathList.isEmpty()) {
+                        if (adpaterPosition < imgPathList.size()) {
+                            File f = new File(imgPathList.get(adpaterPosition));
+                            float size1 = f.length() / 1024f;
+                            //sizeStr = getDecrToatSize(size1);
 
-            });
-        } else {
-            Utils.noInternetDialog(THIS);
+                            imgPathList.remove(adpaterPosition);
+                            if (adpaterPosition < uriArrayList.size())
+                                uriArrayList.remove(adpaterPosition);
+                        }
+
+                    }
+                    File file = new File(path);
+                    float size = file.length() / 1024f;
+                   // sizeStr = getToatSize(size);
+                    if (sizeStr != null) {
+                        imgPathList.add(path);
+                        uriArrayList.add(uri);
+                        adapter.notifyDataSetChanged();
+                    //    totalSizeTV.setText(sizeStr);
+                    } else {
+                        Utils.showDialog(this,
+                                "Too Big!  All attachments \"combined\" can not exceed 24mb");
+                    }
+
+                    return;
+                }
+
+            }
+
         }
-    }
-
-    private void getCompanyDetail() {
-        showProgressDialog("");
-        RequestParams param = new RequestParams();
-
-        param.put("TemporaryAccessCode", MainActivity.user.getTempAccessCode());
-        param.put("UserName", MainActivity.user.getUsername());
-        param.put("companyid", bm.getSenderCompanyId());
-        String url = WebAccess.MAIN_URL + WebAccess.GET_COMPANY_DETAIL;
-        client.setTimeout(getCallTimeout);
-
-        client.post(this, url, param, new AsyncHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-                // TODO Auto-generated method stub
-                super.onStart();
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-                dismissProgressDialog();
-                Utils.showDialog(DefendantBondDetails.this,
-                        R.string.err_unexpect);
-
-            }
-
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-
-                dismissProgressDialog();
-
-                try {
-                    String response2;
-
-                    response2 = new String(responseBody);
-                    JSONObject resObj;
-
-                    resObj = new JSONObject(response2);
-
-                    if (resObj != null) {
-                        if (resObj.optString("status").equalsIgnoreCase("1")) {
-                            user = WebAccess.getCompanyResponse(response2);
-                            startActivity(new Intent(THIS, CompanyProfile.class)
-                                    .putExtra("user", user));
-                        } else if (resObj.optString("status").equalsIgnoreCase(
-                                "3")) {
-                            Toast.makeText(THIS,
-                                    "Session was closed please login again",
-                                    Toast.LENGTH_LONG).show();
-                            MainActivity.sp.edit().putBoolean("isFbLogin",
-                                    false);
-                            MainActivity.sp.edit().putString("user", null)
-                                    .commit();
-                            startActivity(new Intent(
-                                    DefendantBondDetails.this,
-                                    Login.class));
-                        } else {
-                            Utils.showDialog(
-                                    DefendantBondDetails.this,
-                                    resObj.optString("message"));
-                        }
-                    }
-                } catch (JSONException e) {
-                    Utils.showDialog(DefendantBondDetails.this,
-                            R.string.err_unexpect);
-                    e.printStackTrace();
-                }
-
-            }
-
-        });
-
     }
 
     @Override
@@ -1173,6 +1381,47 @@ public class DefendantBondDetails extends CustomActivity {
             finish();
         return super.onOptionsItemSelected(item);
 
+    }
+
+    public void openChooser(final Activity act, final File file,
+                            final ImageSelector.RemoveListener listener) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(act);
+        builder.setTitle("Select Picture");
+        builder.setItems(listener == null ? ImageSelector.DIALOG_OPTIONS1
+                        : ImageSelector.DIALOG_OPTIONS,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int position) {
+
+                        if (position == 0)
+                            ImageSelector.openGallary(act);
+                        else if (position == 1)
+                            ImageSelector.openCamera(act, file);
+
+                        else if (position == 2 && listener != null)
+                            listener.onRemove();
+
+                    }
+                });
+        builder.create().show();
+    }
+    public void removeDropboxTempFiles() {
+        for (int i = 0; i < imgPathList.size(); i++) {
+            String path = imgPathList.get(i);
+            if (path.contains("dropbox_content_")) {
+                File file = new File(path);
+                boolean deleted = file.delete();
+            }
+        }
+    }
+
+    private Bitmap compressFilePhoto(String path) {
+        File f = new File(path);
+        Bitmap bm = ImageUtils.getOrientationFixedImage(f,
+                (StaticData.width / 2) - 50, StaticData.height,
+                ImageUtils.SCALE_FITXY);
+        return bm;
     }
 
     public static class DatePickerFragment extends android.support.v4.app.DialogFragment implements
@@ -1209,12 +1458,15 @@ public class DefendantBondDetails extends CustomActivity {
     }
 
     public static class F1 extends DialogFragment {
+        static String url;
 
-        public static F1 newInstance() {
+        public static F1 newInstance(String imgurl) {
+            url = imgurl;
             F1 f1 = new F1();
             f1.setStyle(DialogFragment.STYLE_NO_FRAME,
                     android.R.style.Theme_DeviceDefault_Dialog);
             return f1;
+
         }
 
         @Override
@@ -1229,8 +1481,18 @@ public class DefendantBondDetails extends CustomActivity {
             View v = inflater.inflate(R.layout.popup_layout, container, false);
             ImageView bm = (ImageView) v.findViewById(R.id.bm_company);
 
-            bm.setImageBitmap(bmCompany);
+            Log.d("ImgURL-", url);
+            Glide.with(getActivity()).load(url).placeholder(R.drawable.ic_action_name).into(bm);
+            //  bm.setImageBitmap(bmCompany);
 
+            bm.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
             v.findViewById(R.id.popup_root).setOnClickListener(
                     new OnClickListener() {
                         @Override
@@ -1254,7 +1516,6 @@ public class DefendantBondDetails extends CustomActivity {
         EditText edtCourtDate;
     }
 
-
     public class PreFixesHolder {
         Spinner spinner;
         TextView titleTV;
@@ -1268,5 +1529,71 @@ public class DefendantBondDetails extends CustomActivity {
 
         int warrantID;
     }
+
+    private class PhotoAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return imgPathList.size() + 1;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null)
+                convertView = getLayoutInflater().inflate(
+                        R.layout.document_item, null);
+            ImageView iv = (ImageView) convertView.findViewById(R.id.my_image);
+
+            if (position >= imgPathList.size()) {
+                iv.setImageResource(R.drawable.add_photo_square);
+                iv.setTag("1");
+                iv.setScaleType(ImageView.ScaleType.FIT_XY);
+            } else if (!imgPathList.isEmpty()) {
+                iv.setTag("0");
+                String url = imgPathList.get(position);
+                String type = null;
+                if (url.lastIndexOf(".") != -1) {
+                    type = url.substring(url.lastIndexOf(".") + 1);
+                    // MimeTypeMap mime = MimeTypeMap.getSingleton();
+                    // type = mime.getMimeTypeFromExtension(ext);
+                } else {
+                    type = "png";
+                }
+                if (type.equalsIgnoreCase("pdf")) {
+                    Drawable res = getResources().getDrawable(R.drawable.pdf);
+                    iv.setImageDrawable(res);
+                } else if (type.equalsIgnoreCase("docx") || type.equalsIgnoreCase("doc")) {
+                    Drawable res = getResources().getDrawable(R.drawable.docs);
+                    iv.setImageDrawable(res);
+                } else {
+                    Bitmap bitmap = compressFilePhoto(imgPathList.get(position));
+
+                    if (bitmap == null) {
+                        iv.setImageURI(uriArrayList.get(position));
+                    } else {
+                        iv.setImageBitmap(bitmap);
+                    }
+
+                }
+                iv.setScaleType(ImageView.ScaleType.FIT_XY);
+            }
+            return convertView;
+        }
+
+    }
+
 
 }

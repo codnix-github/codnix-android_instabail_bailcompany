@@ -1,17 +1,5 @@
 package com.bailcompany.web;
 
-import java.util.ArrayList;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
@@ -27,8 +15,10 @@ import com.bailcompany.model.AgentModel;
 import com.bailcompany.model.BadDebtMember;
 import com.bailcompany.model.BailRequestModel;
 import com.bailcompany.model.BlackListMember;
+import com.bailcompany.model.BondDocuments;
 import com.bailcompany.model.ChatUser;
 import com.bailcompany.model.CompanyBidingModel;
+import com.bailcompany.model.CourtDateModel;
 import com.bailcompany.model.FugitiveRequestModel;
 import com.bailcompany.model.IndemnitorModel;
 import com.bailcompany.model.InsuranceModel;
@@ -40,6 +30,7 @@ import com.bailcompany.model.User;
 import com.bailcompany.model.WarrantModel;
 import com.bailcompany.ui.BadDebtMembers;
 import com.bailcompany.ui.BlackListMembers;
+import com.bailcompany.ui.Defendant;
 import com.bailcompany.ui.IncomingBailRequest;
 import com.bailcompany.ui.IncomingFugitveRequest;
 import com.bailcompany.ui.IncomingRequest;
@@ -52,12 +43,24 @@ import com.dropbox.client2.session.Session.AccessType;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class WebAccess {
     // private static final String MAIN_URL =
     // "http://service.wadlinstabail.com/taxiwcf.svc/";
     // public static final String MAIN_URL =
     // "http://curio.webdesigninhoustontexas.com/instabail/services/";
-    // public static final String MAIN_URL = "http://74.208.70.149/services/";
+    // public static final String MAIN_URL = "http://localhost/services/";
     public static final String MAIN_URL = "https://instabailapp.com/web/services/";
     // private static final String LOGIN_URL ="CompanyLogin";
     public static final String LOGIN_URL = "company-login";
@@ -110,25 +113,30 @@ public class WebAccess {
     public static final String CONTACT_US = "contact-us";
     public static final String GET_AGENT_LOCATION = "get-agent-location";
     public static final String FORGOT_PASSWORD = "forgot-password";
-    public static RequestParams params = new RequestParams();
-    ;
-    public static boolean mLoggedIn = false;
     public static final String PHOTO = "http://web.instabailapp.com/";
-    public static String agentRequestId;
+    ;
     public static final String GET_REQUEST_DETAIL = "get-request-details";
-    private static User u;
-    static int getCallTimeout = 50000;
-    int i;
+    public static final String GET_DEFENDANT_DETAIL = "get-defendant-profile";
+    public static final String GET_DEFENDANT_BOND_DETAIL = "getDefendantBondDetails";
+    public static final String UPDATE_BOND_DETAILS = "updateWarrant";
+    public static final String UPLOAD_BOND_DOCUMENTS = "uploadBondDocuments";
+
+    public static final String GCM_SENDER_ID = "432754724650";
+    public final static String Key_Push_Message = "message";
+    public final static String Pkey_DEVICE_ID = "Device_ID";
+    public static final String OVERRIDEMSG = "File name with this name already exists.Do you want to replace this file?";
+    final static public String DROPBOX_APP_KEY = "80tofnlrsdv2a31";
+    final static public String DROPBOX_APP_SECRET = "uyxq0n8wji67ucx";
+    final static public AccessType ACCESS_TYPE = AccessType.DROPBOX;
+    public static final String SUBMIT_COMPLETION_FORM = "submit-completion-form";
+    public static final String SET_COMPLETE_STATUS = "set-complete-status";
+    public static final String ABORT_REQUEST = "abort-request";
+    public static RequestParams params = new RequestParams();
+    public static boolean mLoggedIn = false;
+    public static String agentRequestId;
     public static ArrayList<ArrayList<CompanyBidingModel>> AllBidListCompany = new ArrayList<ArrayList<CompanyBidingModel>>();
     public static ArrayList<ArrayList<AgentBidingModel>> AllBidList = new ArrayList<ArrayList<AgentBidingModel>>();
-    static String response;
     public static boolean agentHire;
-    static ProgressDialog pd;
-    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
-    String message;
-    JSONObject jsonObj;
-    String key;
-    static Context context;
     public static boolean hireReferBailAgent;
     public static boolean hireBailAgent;
     public static boolean selfAssignAgent;
@@ -139,22 +147,22 @@ public class WebAccess {
     public static String indUserId;
     public static String grpReqId;
     public static BailRequestModel agentRecord;
-    public static final String GCM_SENDER_ID = "432754724650";
-    public final static String Key_Push_Message = "message";
-    public final static String Pkey_DEVICE_ID = "Device_ID";
     public static boolean hireReq;
     public static boolean loginUser, fromFindMe, fromHistory;
     public static String type = null;
     public static boolean tranferBondBadge, referBailBadge, fugitiveBadge,
             instant, instantGroup;
-    public static final String OVERRIDEMSG = "File name with this name already exists.Do you want to replace this file?";
-    final static public String DROPBOX_APP_KEY = "80tofnlrsdv2a31";
-    final static public String DROPBOX_APP_SECRET = "uyxq0n8wji67ucx";
     public static boolean selectedFile;
-    final static public AccessType ACCESS_TYPE = AccessType.DROPBOX;
-    public static final String SUBMIT_COMPLETION_FORM = "submit-completion-form";
-    public static final String SET_COMPLETE_STATUS = "set-complete-status";
-    public static final String ABORT_REQUEST = "abort-request";
+    static int getCallTimeout = 50000;
+    static String response;
+    static ProgressDialog pd;
+    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
+    static Context context;
+    private static User u;
+    int i;
+    String message;
+    JSONObject jsonObj;
+    String key;
 
     private static String executePostRequest(String restUrl,
                                              ArrayList<NameValuePair> param, boolean save) {
@@ -282,15 +290,52 @@ public class WebAccess {
         return null;
     }
 
+    public static ArrayList<BailRequestModel> getAllDefendantBonds(String stRes) {
+        ArrayList<BailRequestModel> bailReqList = new ArrayList<BailRequestModel>();
+        try {
+            if (!Commons.isEmpty(stRes)) {
+                JSONObject resObj = new JSONObject(stRes);
+                Log.d("ResObj", resObj.toString());
+                if (resObj != null) {
+                    if (resObj.optString("status").equalsIgnoreCase("1")) {
+                        JSONArray dataArr = resObj
+                                .getJSONArray("list_of_requests");
+
+
+                        if (dataArr != null && dataArr.length() > 0) {
+                            for (int i = 0; i < dataArr.length(); i++) {
+                                JSONObject dObj = dataArr.getJSONObject(i);
+                                BailRequestModel mod = parseDefendantRequestDetail(dObj);
+
+                                if (mod != null) {
+                                    Defendant.bailReqList.add(mod);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bailReqList;
+
+    }
+
     public static ArrayList<BailRequestModel> getALLRequest(String stRes) {
         ArrayList<BailRequestModel> bailReqList = new ArrayList<BailRequestModel>();
         try {
             if (!Commons.isEmpty(stRes)) {
                 JSONObject resObj = new JSONObject(stRes);
+                Log.d("ResObj", resObj.toString());
                 if (resObj != null) {
                     if (resObj.optString("status").equalsIgnoreCase("1")) {
                         JSONArray dataArr = resObj
                                 .getJSONArray("list_of_requests");
+
+
                         if (dataArr != null && dataArr.length() > 0) {
                             for (int i = 0; i < dataArr.length(); i++) {
                                 JSONObject dObj = dataArr.getJSONObject(i);
@@ -300,6 +345,43 @@ public class WebAccess {
                                     IncomingBailRequest.bailReqList.add(mod);
                                     IncomingRequest.bailReqList.add(mod);
                                     HistoryRequestList.bailReqList.add(mod);
+                                    Defendant.bailReqList.add(mod);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bailReqList;
+
+    }
+
+
+    public static ArrayList<BailRequestModel> getDefendantBonds(String stRes) {
+        ArrayList<BailRequestModel> bailReqList = new ArrayList<BailRequestModel>();
+        try {
+            if (!Commons.isEmpty(stRes)) {
+                JSONObject resObj = new JSONObject(stRes);
+                Log.d("ResObj", resObj.toString());
+                if (resObj != null) {
+                    if (resObj.optString("status").equalsIgnoreCase("1")) {
+                        JSONArray dataArr = resObj
+                                .getJSONArray("list_of_requests");
+
+
+                        if (dataArr != null && dataArr.length() > 0) {
+                            for (int i = 0; i < dataArr.length(); i++) {
+                                JSONObject dObj = dataArr.getJSONObject(i);
+                                BailRequestModel mod = parseDefendantRequestDetail(dObj);
+
+
+                                if (mod != null) {
+                                    Defendant.bailReqList.add(mod);
                                 }
 
                             }
@@ -778,6 +860,224 @@ public class WebAccess {
 
         return insList;
     }
+
+    public static BailRequestModel parseDefendantRequestDetail(JSONObject dObj) {
+        try {
+
+            if (dObj != null) {
+                BailRequestModel mod = new BailRequestModel();
+                mod.setAgentRequestId(dObj.getInt("Id"));
+                // mod.setId(dObj.getInt("Id"));
+                mod.setDefendantName(dObj.getString("DefendantName"));
+                mod.setDefDOB(dObj.getString("DefDOB"));
+                mod.setDefSSN(dObj.getString("DefSSN"));
+
+                mod.setSenderCompanyImage(PHOTO
+                        + dObj.getString("CompanyImage"));
+                mod.setSenderCompanyName(dObj.optString("CompanyName"));
+                mod.setSenderCompanyId(dObj.optString("CompanyId"));
+                mod.setSelfAssigned(dObj.optString("SelfAssigned") + "");
+                mod.setPowerNo(dObj.optString("PowerNumber") + "");
+                mod.setAmountReceived(dObj.optString("AmountReceived") + "");
+                mod.setComments(dObj.optString("agent_comments") + "");
+
+                mod.setIsAccept(dObj.getString("IsAccept"));
+                mod.setIsComplete(dObj.getString("IsComplete"));
+                mod.setIsAbort(dObj.getString("IsAborted"));
+                mod.setIsCancel(dObj.getString("IsCancel"));
+
+                mod.setRead(dObj.getString("Read"));
+                mod.setDefBookingNumber(dObj.getString("DefBookingNumber"));
+                mod.setLocationLongitude(dObj.getString("LocationLongitude"));
+                mod.setLocationLatitude(dObj.getString("LocationLatitude"));
+
+                mod.setLocation(dObj.getString("Location"));
+                mod.setPaymentPlan(dObj.getString("PaymentPlan"));
+                mod.setCreatedDate(dObj.getString("CreatedDate"));
+                mod.setInstructionForAgent(dObj
+                        .getString("InstructionForAgent"));
+                mod.setNumberIndemnitors(dObj.getString("NumberIndemnitors"));
+                mod.setAmountToCollect(dObj.getString("AmountToCollect"));
+                mod.setAgentImage(PHOTO + dObj.getString("AgentImage"));
+                mod.setAgentName(dObj.getString("Name"));
+                mod.setAgentId(dObj.getString("AgentId"));
+                String temp;
+                temp = dObj.getString("NeedCourtFee");
+                if (temp.equalsIgnoreCase("1")) {
+                    mod.setNeedCourtFee(true);
+                } else {
+                    mod.setNeedCourtFee(false);
+                }
+                temp = dObj.getString("NeedBailSource");
+                if (temp.equalsIgnoreCase("1")) {
+                    mod.setNeedBailSource(true);
+                } else {
+                    mod.setNeedBailSource(false);
+                }
+                temp = dObj.getString("IsCallAgency");
+                if (temp.equalsIgnoreCase("1")) {
+                    mod.setIsCallAgency(true);
+                } else {
+                    mod.setIsCallAgency(false);
+                }
+                temp = dObj.getString("NeedPaperWork");
+                if (temp.equalsIgnoreCase("1")) {
+                    mod.setNeedPaperWork(true);
+                } else {
+                    mod.setNeedPaperWork(false);
+                }
+                temp = dObj.getString("NeedIndemnitorPaperwork");
+                if (temp.equalsIgnoreCase("1")) {
+                    mod.setNeedIndemnitorPaperwork(true);
+                } else {
+                    mod.setNeedIndemnitorPaperwork(false);
+                }
+                temp = dObj.getString("NeedDefendantPaperwork");
+                if (temp.equalsIgnoreCase("1")) {
+                    mod.setNeedDefendantPaperwork(true);
+                } else {
+                    mod.setNeedDefendantPaperwork(false);
+                }
+                temp = dObj.getString("PaymentAlreadyReceived");
+                if (temp.equalsIgnoreCase("1")) {
+                    mod.setPaymentAlreadyReceived(true);
+                } else {
+                    mod.setPaymentAlreadyReceived(false);
+                }
+
+                mod.setSentRequestTime(dObj.getString("SentRequestTime"));//
+
+                JSONArray wArr = dObj.getJSONArray("WarrantList");
+                ArrayList<WarrantModel> wList = new ArrayList<WarrantModel>();
+                if (wArr != null && wArr.length() > 0) {
+                    for (int i = 0; i < wArr.length(); i++) {
+                        JSONObject wObj = wArr.getJSONObject(i);
+                        if (wObj != null) {
+                            WarrantModel wMod = new WarrantModel();
+                            wMod.setId(wObj.optInt("Id"));
+                            wMod.setAmount(wObj.optString("Amount"));
+                            wMod.setTownship(wObj.optString("Township"));
+                            wMod.setCourtDate(wObj.optString("CourtDate"));
+                            wMod.setNotes(wObj.optString("Notes"));
+                            wMod.setStatus(wObj.optString("Status"));
+
+                            if (wObj.has("case_no") && wObj.optString("case_no") != null && !wObj.optString("case_no").equals(""))
+                                wMod.setCase_no(wObj.optString("case_no"));
+                            if (wObj.has("PowerNo") && wObj.optString("PowerNo") != null && !wObj.optString("PowerNo").equals(""))
+                                wMod.setPowerNo(wObj.optString("PowerNo"));
+                            if (wObj.has("Notes") && wObj.optString("Notes") != null && !wObj.optString("Notes").equals(""))
+                                wMod.setNotes(wObj.optString("Notes"));
+                            else
+                                wMod.setNotes(wObj.optString(""));
+
+
+                            wList.add(wMod);
+                        }
+                    }
+                }
+                mod.setWarrantList(wList);
+
+                JSONArray wCourtDates = dObj.getJSONArray("CourtDates");
+                ArrayList<CourtDateModel> cDatesList = new ArrayList<CourtDateModel>();
+                if (wCourtDates != null && wCourtDates.length() > 0) {
+                    for (int i = 0; i < wCourtDates.length(); i++) {
+                        JSONArray arrCourdt = wCourtDates.getJSONArray(i);
+                        for (int j = 0; j < arrCourdt.length(); j++) {
+                            JSONObject iObj = arrCourdt.getJSONObject(j);
+                            if (iObj != null) {
+                                CourtDateModel oCDate = new CourtDateModel();
+                                oCDate.setId(iObj.getInt("Id"));
+                                oCDate.setWarrantId(iObj.getInt("WarrentId"));
+                                oCDate.setCourtDate(iObj.optString("CourtDate"));
+                                cDatesList.add(oCDate);
+                            }
+                        }
+
+                    }
+                }
+                mod.setCourtDates(cDatesList);
+
+                JSONObject objDocuments = dObj.getJSONObject("documents");
+
+                BondDocuments bondDocumentList = new BondDocuments();
+
+                if (objDocuments != null) {
+
+                    JSONArray docCosigner = objDocuments.getJSONArray("cosigner");
+
+
+                    ArrayList<String> tempDoc = new ArrayList<>();
+                    for (int i = 0; i < docCosigner.length(); i++) {
+                        tempDoc.add(docCosigner.get(i).toString());
+                    }
+                    bondDocumentList.setCosignerPhoto(tempDoc);
+                    JSONArray docDefendant = objDocuments.getJSONArray("defendent");
+
+                    ArrayList<String> tempDoc1 = new ArrayList<String>();
+                    for (int i = 0; i < docDefendant.length(); i++) {
+                        tempDoc1.add(docDefendant.get(i).toString());
+                    }
+                    bondDocumentList.setDefendantPhoto(tempDoc1);
+                    JSONArray docAttachment = objDocuments.getJSONArray("attachments");
+
+                    ArrayList<String> tempDoc2 = new ArrayList<String>();
+                    for (int i = 0; i < docAttachment.length(); i++) {
+                        tempDoc2.add(docAttachment.get(i).toString());
+                    }
+                    bondDocumentList.setOtherDocuments(tempDoc2);
+
+
+                }
+                mod.setBondDocuments(bondDocumentList);
+
+                Log.d("BCosigner=", "" + mod.getBondDocuments().getCosignerPhoto().size());
+                Log.d("BDef=", "" + mod.getBondDocuments().getDefendantPhoto().size());
+                Log.d("BOther=", "" + mod.getBondDocuments().getOtherDocuments().size());
+
+                JSONArray iArr = dObj.getJSONArray("IndemnitorsList");
+                ArrayList<IndemnitorModel> iList = new ArrayList<IndemnitorModel>();
+                if (iArr != null && iArr.length() > 0) {
+                    for (int i = 0; i < iArr.length(); i++) {
+                        JSONObject iObj = iArr.getJSONObject(i);
+                        if (iObj != null) {
+                            IndemnitorModel iMod = new IndemnitorModel();
+                            iMod.setName(iObj.optString("Name"));
+                            iMod.setFName(iObj.optString("ind_firstname"));
+                            iMod.setLName(iObj.optString("ind_lastname"));
+                            iMod.setPhoneNumber(iObj.optString("PhoneNumber"));
+
+                            iList.add(iMod);
+                        }
+                    }
+                }
+                mod.setIndemnitorsList(iList);
+
+                JSONArray insArr = dObj.getJSONArray("InsuranceList");
+                ArrayList<InsuranceModel> insList = new ArrayList<InsuranceModel>();
+                if (insArr != null && insArr.length() > 0) {
+                    for (int i = 0; i < insArr.length(); i++) {
+                        JSONObject insObj = insArr.getJSONObject(i);
+                        if (insObj != null) {
+                            InsuranceModel insMod = new InsuranceModel();
+                            insMod.setId(Integer.parseInt(insObj
+                                    .optString("Id")));
+                            insMod.setName(insObj.optString("Name"));
+
+                            insList.add(insMod);
+                        }
+                    }
+                }
+                mod.setInsuranceList(insList);
+
+                return mod;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     public static BailRequestModel parseBailRequestDetail(JSONObject dObj) {
         try {
@@ -2218,7 +2518,7 @@ public class WebAccess {
         String stRes = executeArray(GET_AN_AGENT, obj);
         try {
             if (!Commons.isEmpty(stRes)) {
-                Log.e("Output Response 7GET_AN_AGENT:", stRes);
+                Log.e("Output AGENT:", stRes);
                 JSONObject json = new JSONObject(stRes);
                 JSONObject j = json.getJSONObject("data");
                 agentRequestId = j.optString("AgentRequestId");
@@ -2245,7 +2545,7 @@ public class WebAccess {
         String stRes = executePostRequest(SEND_REQUEST_AGENT, param, false);
         try {
             if (!Commons.isEmpty(stRes)) {
-                Log.e("Output Response 8SEND_REQUEST_AGENT:", stRes);
+                Log.e("OutputAGENT:", stRes);
                 JSONObject obj = new JSONObject(stRes);
                 if (obj != null) {
                     String status = obj.getString("status");

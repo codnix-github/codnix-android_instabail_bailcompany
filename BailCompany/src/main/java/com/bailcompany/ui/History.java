@@ -123,7 +123,6 @@ public class History extends CustomFragment {
 
 			return convertView;
 		}
-
 	}
 
 	@Override

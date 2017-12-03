@@ -23,6 +23,7 @@ public class BailRequestModel implements Serializable {
 	String AmountToCollect;
 	ArrayList<WarrantModel> WarrantList;
 	ArrayList<CourtDateModel> CourtDates;
+	BondDocuments BondDocuments;
 	ArrayList<IndemnitorModel> IndemnitorsList;
 	ArrayList<InsuranceModel> InsuranceList;
 	String SenderCompanyId, SenderCompanyName, SenderCompanyImage,
@@ -446,5 +447,11 @@ public class BailRequestModel implements Serializable {
 		this.comments = comments;
 	}
 
-	
+	public com.bailcompany.model.BondDocuments getBondDocuments() {
+		return BondDocuments;
+	}
+
+	public void setBondDocuments(com.bailcompany.model.BondDocuments bondDocuments) {
+		BondDocuments = bondDocuments;
+	}
 }

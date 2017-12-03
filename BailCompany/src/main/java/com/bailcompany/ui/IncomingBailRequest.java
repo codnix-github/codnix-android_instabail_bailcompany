@@ -265,6 +265,7 @@ public class IncomingBailRequest extends CustomFragment {
 									if (resObj.optString("status")
 											.equalsIgnoreCase("1")) {
 										WebAccess.getALLReferRequest(response2);
+
 										if (bailReqList != null
 												&& bailReqList.size() > 0) {
 											adapter.notifyDataSetChanged();

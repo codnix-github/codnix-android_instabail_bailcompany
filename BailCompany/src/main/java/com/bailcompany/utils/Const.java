@@ -10,6 +10,12 @@ public class Const {
 
 	public static final String INSTABAIL_COMPANY_LOGIN_URL = "https://instabailapp.com/web/company";
 
+	public static final String RETURN_FLAG="flag";
+	public static final String BOND_DETAILS_UPDATED="5001";
+	public static final String BOND_DOCUMENT_UPLOADED="5002";
+	public static final String DEFENDANT_BASIC_DETAILS_UPDATED="5002";
+
+
 	public static final String LANGUAGE = "language";// 0=eng
 	public static final String EXTRA_DATA = "extraData";
 

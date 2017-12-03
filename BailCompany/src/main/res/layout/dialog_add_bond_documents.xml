@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
+
+
+        <LinearLayout
+            android:id="@+id/lladddocument"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:scrollbars="vertical">
+
+            <com.bailcompany.custom.CustomGridView
+                android:id="@+id/my_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:columnWidth="@dimen/col_width"
+                android:gravity="center"
+                android:horizontalSpacing="3dp"
+                android:numColumns="3"
+                android:paddingBottom="@dimen/pad_5dp"
+                android:paddingLeft="@dimen/pad_5dp"
+                android:paddingRight="@dimen/pad_5dp"
+                android:paddingTop="@dimen/pad_5dp"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="3dp" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnUploadDoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload" />
+    </LinearLayout>
+</ScrollView>

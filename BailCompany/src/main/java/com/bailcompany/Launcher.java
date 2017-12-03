@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bailcompany.custom.CustomActivity;
+import com.bailcompany.defendant.ProfileStyle2Activity;
 import com.bailcompany.utils.Const;
 import com.bailcompany.utils.Methods;
 import com.bailcompany.utils.Utility;

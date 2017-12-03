@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/pad_15dp"
+        android:layout_marginRight="@dimen/pad_10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/txt_16sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/powerNumberSp"
+        style="@style/style_get_ch"
+        android:layout_marginLeft="@dimen/pad_10dp"
+        android:layout_marginRight="@dimen/pad_10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_10dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Serial"
+                android:textSize="@dimen/txt_10sp" />
+
+            <EditText
+                android:id="@+id/serialET"
+                style="@style/style_edit_match"
+                android:layout_weight="1"
+                android:hint="Serial"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_10dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Case No"
+                android:textSize="@dimen/txt_10sp" />
+
+            <EditText
+                android:id="@+id/caseNoET"
+                style="@style/style_edit_match"
+
+                android:layout_weight="1"
+                android:hint="Case No"
+                android:inputType="text" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_10dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount"
+                android:textSize="@dimen/txt_10sp" />
+
+            <EditText
+                android:id="@+id/edtAmout"
+                style="@style/style_edit_match"
+
+                android:layout_weight="1"
+                android:hint="Amount"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_10dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Township"
+                android:textSize="@dimen/txt_10sp" />
+
+            <EditText
+                android:id="@+id/edtTownship"
+                style="@style/style_edit_match"
+
+                android:layout_weight="1"
+                android:hint="Township"
+                android:inputType="text" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_10dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:text="Status"
+            android:textSize="@dimen/txt_10sp" />
+
+        <Spinner
+            android:id="@+id/spinerStatus"
+            style="@style/style_get_ch"
+            android:layout_marginLeft="@dimen/pad_10dp"
+            android:layout_marginRight="@dimen/pad_10dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_10dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:text="Note"
+            android:textSize="@dimen/txt_10sp" />
+
+        <EditText
+            android:id="@+id/edtNote"
+            style="@style/style_edit_match"
+            android:layout_margin="@dimen/pad_10dp"
+            android:layout_weight="1"
+            android:hint="Note"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/saperator_yellow" />
+</LinearLayout>
