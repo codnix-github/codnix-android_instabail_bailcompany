@@ -86,7 +86,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/budtto2n3"
+                        android:id="@+id/llFacebook"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
@@ -112,7 +112,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/butto2dn3"
+                        android:id="@+id/llGoogle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
@@ -138,7 +138,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/butto2n3"
+                        android:id="@+id/llTwitter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
@@ -164,7 +164,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/butto2n3g"
+                        android:id="@+id/llCallDefendant"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
@@ -180,7 +180,7 @@
                             app:cardCornerRadius="24dp">
 
                             <ImageView
-                                android:id="@+id/ivCall"
+                                android:id="@+id/ivCallDefendant"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal|center_vertical"

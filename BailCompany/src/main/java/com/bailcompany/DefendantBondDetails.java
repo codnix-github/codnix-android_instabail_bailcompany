@@ -565,6 +565,10 @@ public class DefendantBondDetails extends CustomActivity {
     }
 
     public void uploadDocuments(){
+        if(imgPathList.size()<1){
+            return;
+        }
+
         try {
             RequestParams param = new RequestParams();
             String url = WebAccess.MAIN_URL + WebAccess.UPLOAD_BOND_DOCUMENTS;
@@ -607,6 +611,7 @@ public class DefendantBondDetails extends CustomActivity {
                 }
             }
 
+
             Log.d("DocToUpload=",""+imgPathList.size());
 
             client.post(this, url, param, new AsyncHttpResponseHandler() {
@@ -640,12 +645,12 @@ public class DefendantBondDetails extends CustomActivity {
                                                 Log.d("Res=",message);
 
                                     Utils.showDialog(DefendantBondDetails.this,message);
-                                    /*
+
                                     Intent intent = new Intent();
                                     intent.putExtra(Const.RETURN_FLAG, Const.BOND_DOCUMENT_UPLOADED);
                                     setResult(RESULT_OK, intent);
                                     finish();
-*/
+
                                 }
 
                             } else if (resObj.optString("status")

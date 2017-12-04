@@ -151,6 +151,23 @@ public class Defendant extends CustomFragment {
                 }
             }
         });
+        final ImageView ivCallDefendant = (ImageView) v.findViewById(R.id.ivCallDefendant);
+        ivCallDefendant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!defModel.getCellTele().equals("")) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+defModel.getCellTele()));
+                    startActivity(callIntent);
+                }
+                else  if (!defModel.getHomeTele().equals("")) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+defModel.getHomeTele()));
+                    startActivity(callIntent);
+                }
+
+            }
+        });
 
         tvDefLocation.setOnClickListener(new View.OnClickListener() {
             @Override
