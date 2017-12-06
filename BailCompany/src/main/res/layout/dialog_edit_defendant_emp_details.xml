@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/pad_15dp"
+            android:layout_marginRight="@dimen/pad_10dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/txt_16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employer"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtEmployer"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="Employer"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Occupation"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtOccupation"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Occupation"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:text="Address"
+                android:textSize="@dimen/txt_10sp" />
+
+            <EditText
+                android:id="@+id/edtAddress"
+                style="@style/style_edit_match"
+                android:layout_margin="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:hint="Address"
+                android:inputType="text" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="City"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtCity"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="City"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zip Code"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtZipCode"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Zip Code"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:text="State"
+                android:textSize="@dimen/txt_10sp" />
+
+            <Spinner
+                android:id="@+id/spState"
+                style="@style/style_get_ch"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Telephone"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtTelephone"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Telephone"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Supervisor"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtSupervisor"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Supervisor"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duration"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtDuration"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Duration"
+                    android:inputType="text" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+        <Button
+            android:id="@+id/btnUpdateEmpDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/pad_20dp"
+            android:background="@drawable/btn_signin_yellow"
+            android:text="Save"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+</ScrollView>

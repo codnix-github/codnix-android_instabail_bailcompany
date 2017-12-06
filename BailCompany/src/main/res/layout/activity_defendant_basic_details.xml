@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="First Name"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtFirstName"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="First Name"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last Name"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtLastName"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Last Name"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtAddress"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Address"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Town"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtTown"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Town"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zip Code"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtZipCode"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Zip Code"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="State"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <Spinner
+                    android:id="@+id/spState"
+                    style="@style/style_get_ch"
+                    android:layout_marginLeft="@dimen/pad_10dp"
+                    android:layout_marginRight="@dimen/pad_10dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home Number"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtHomeNumber"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="Home Number"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cell Number"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtCellNumber"
+                    style="@style/style_edit_match"
+
+                    android:layout_weight="1"
+                    android:hint="Cell Number"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date Of Birth"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtDateOfBirty"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:hint="Birth Date"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Social Security Number"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtSSN"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="SSN"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Height"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtHeight"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="Height"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weight"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtWeight"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="Weight"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eye Color"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <Spinner
+                    android:id="@+id/spEyeColor"
+                    style="@style/style_get_ch"
+                    android:layout_marginLeft="@dimen/pad_10dp"
+                    android:layout_marginRight="@dimen/pad_10dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hair Color"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <Spinner
+                    android:id="@+id/spHairColor"
+                    style="@style/style_get_ch"
+                    android:layout_marginLeft="@dimen/pad_10dp"
+                    android:layout_marginRight="@dimen/pad_10dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tattoos"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtTattoos"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="Tattoos"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="POB"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtPOB"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="POB"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Facebook Profile"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtFacebook"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="Facebook Profile"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Twitter Profile"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtTwitter"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="Twitter Profile"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Google"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <EditText
+                    android:id="@+id/edtGoogle"
+                    style="@style/style_edit_match"
+                    android:layout_weight="1"
+                    android:hint="Google Profile"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profile Picture"
+                    android:textSize="@dimen/txt_10sp" />
+
+                <ImageView
+                    android:id="@+id/ivDefendantProfilePic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/completion_form_add_photo_btn" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/saperator_yellow" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnUpdateProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/pad_10dp"
+                android:background="@drawable/btn_signin_yellow"
+                android:text="Update"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

@@ -23,19 +23,25 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bailcompany.DefendantBasicProfileDetails;
 import com.bailcompany.DefendantBondDetails;
+import com.bailcompany.DefendantEmploymentDetails;
 import com.bailcompany.Launcher;
 import com.bailcompany.MainActivity;
 import com.bailcompany.R;
 import com.bailcompany.custom.CustomFragment;
 import com.bailcompany.model.BailRequestModel;
+import com.bailcompany.model.DefendantEmploymentModel;
 import com.bailcompany.model.DefendantModel;
+import com.bailcompany.model.DefendantNotesModel;
+import com.bailcompany.model.DefendantVehicleModel;
 import com.bailcompany.utils.Const;
 import com.bailcompany.utils.ImageLoader;
 import com.bailcompany.utils.ImageUtils;
@@ -93,6 +99,47 @@ public class Defendant extends CustomFragment {
         IsBailRequest = true;
         geDefendantProfile();
         incomingRequestList = (ListView) v.findViewById(R.id.incoming_request_list);
+        ((Button) v.findViewById(R.id.btnBasicDetails)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivityForResult(
+                        new Intent(getContext(),
+                                DefendantBasicProfileDetails.class).putExtra(
+                                "defendant", defModel), 5555);
+            }
+        });
+        ((Button) v.findViewById(R.id.btnEmployment)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivityForResult(
+                        new Intent(getContext(),
+                                DefendantEmploymentDetails.class).putExtra(
+                                "defendant", defModel), 5555);
+            }
+        });
+        ((Button) v.findViewById(R.id.btnVehicle)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivityForResult(
+                        new Intent(getContext(),
+                                DefendantEmploymentDetails.class).putExtra(
+                                "defendant", defModel), 5555);
+            }
+        });
+        ((Button) v.findViewById(R.id.btnNotes)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivityForResult(
+                        new Intent(getContext(),
+                                DefendantEmploymentDetails.class).putExtra(
+                                "defendant", defModel), 5555);
+            }
+        });
+
 
         adapter = new IncomingListAdapter(getActivity());
         incomingRequestList.setAdapter(adapter);
@@ -106,7 +153,7 @@ public class Defendant extends CustomFragment {
                 startActivityForResult(
                         new Intent(getActivity(),
                                 DefendantBondDetails.class).putExtra(
-                                "bail", bailReqList.get(position)).putExtra(
+                                "bail", bailReqList.get(position)).putExtra("defendant", defModel).putExtra(
                                 "position", position), 5555);
             }
         });
@@ -157,12 +204,11 @@ public class Defendant extends CustomFragment {
             public void onClick(View view) {
                 if (!defModel.getCellTele().equals("")) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+defModel.getCellTele()));
+                    callIntent.setData(Uri.parse("tel:" + defModel.getCellTele()));
                     startActivity(callIntent);
-                }
-                else  if (!defModel.getHomeTele().equals("")) {
+                } else if (!defModel.getHomeTele().equals("")) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+defModel.getHomeTele()));
+                    callIntent.setData(Uri.parse("tel:" + defModel.getHomeTele()));
                     startActivity(callIntent);
                 }
 
@@ -267,11 +313,74 @@ public class Defendant extends CustomFragment {
                                             defModel.setModifyOn(defObject.getString("ModifyOn"));
                                             defModel.setStateName(defObject.getString("StateName"));
 
+                                            JSONArray defEmploymentDtl = resObj.getJSONArray("employementdetails");
+                                            JSONArray defVehicleDtl = resObj.getJSONArray("vehicledetails");
+                                            JSONArray defNoteDtl = resObj.getJSONArray("notes");
+
+                                            ArrayList<DefendantEmploymentModel> employmentDtl = new ArrayList<DefendantEmploymentModel>();
+                                            if (defEmploymentDtl != null && defEmploymentDtl.length() > 0) {
+                                                for (int i = 0; i < defEmploymentDtl.length(); i++) {
+                                                    DefendantEmploymentModel empModel = new DefendantEmploymentModel();
+                                                    JSONObject empObj = defEmploymentDtl.getJSONObject(i);
+                                                    empModel.setId(empObj.getString("Id"));
+                                                    empModel.setDefId(empObj.getString("DefendantId"));
+                                                    empModel.setEmployer(empObj.getString("Employer"));
+                                                    empModel.setOccupation(empObj.getString("Occupation"));
+                                                    empModel.setAddress(empObj.getString("Address"));
+                                                    empModel.setCity(empObj.getString("City"));
+                                                    empModel.setState(empObj.getString("State"));
+                                                    empModel.setZip(empObj.getString("Zip"));
+                                                    empModel.setTelephone(empObj.getString("Telephone"));
+                                                    empModel.setSupervisor(empObj.getString("Supervisor"));
+                                                    empModel.setDuration(empObj.getString("Duration"));
+                                                    empModel.setStatus(empObj.getString("Status"));
+                                                    empModel.setModifyOn(empObj.getString("ModifyOn"));
+                                                    employmentDtl.add(empModel);
+
+                                                }
+                                            }
+                                            defModel.setEmploymentDtl(employmentDtl);
+
+                                            ArrayList<DefendantVehicleModel> vehicleDtl = new ArrayList<>();
+                                            if (defVehicleDtl != null && defVehicleDtl.length() > 0) {
+                                                for (int i = 0; i < defVehicleDtl.length(); i++) {
+                                                    DefendantVehicleModel vehiModel = new DefendantVehicleModel();
+                                                    JSONObject empObj = defVehicleDtl.getJSONObject(i);
+                                                    vehiModel.setId(empObj.getString("Id"));
+                                                    vehiModel.setDefId(empObj.getString("DefendantId"));
+                                                    vehiModel.setYear(empObj.getString("Year"));
+                                                    vehiModel.setMake(empObj.getString("Make"));
+                                                    vehiModel.setModel(empObj.getString("Model"));
+                                                    vehiModel.setColor(empObj.getString("Color"));
+                                                    vehiModel.setState(empObj.getString("State"));
+                                                    vehiModel.setRegistration(empObj.getString("Registration"));
+                                                    vehiModel.setStatus(empObj.getString("Status"));
+                                                    vehiModel.setModifyOn(empObj.getString("ModifyOn"));
+                                                    vehicleDtl.add(vehiModel);
+
+                                                }
+                                            }
+                                            defModel.setVehicleDtl(vehicleDtl);
+                                            ArrayList<DefendantNotesModel> nodeDtl = new ArrayList<>();
+                                            if (defNoteDtl != null && defNoteDtl.length() > 0) {
+                                                for (int i = 0; i < defNoteDtl.length(); i++) {
+                                                    DefendantNotesModel noteModel = new DefendantNotesModel();
+                                                    JSONObject empObj = defNoteDtl.getJSONObject(i);
+                                                    noteModel.setId(empObj.getString("Id"));
+                                                    noteModel.setDefId(empObj.getString("DefId"));
+                                                    noteModel.setNote(empObj.getString("Note"));
+                                                    noteModel.setStatus(empObj.getString("Status"));
+                                                    noteModel.setModifyOn(empObj.getString("ModifyOn"));
+                                                    nodeDtl.add(noteModel);
+
+                                                }
+                                            }
+                                            defModel.setNotesDtl(nodeDtl);
+
 
                                             //  Glide.with(getActivity()).load(WebAccess.PHOTO + defModel.getPhoto()).into(defProfile);
 
                                             String fullAddress = "";
-                                            // var fullAddress=(profileData.Address==""?'':(profileData.Address+", ")+ profileData.Town+", "+profileData.State+", "+profileData.Zipcode;
                                             if (defModel.getAddress() != "") {
                                                 fullAddress = defModel.getAddress() + ", ";
                                             }
@@ -463,11 +572,10 @@ public class Defendant extends CustomFragment {
         incomingRequestList.setAdapter(adapter);
         if (resultCode == Activity.RESULT_OK) {
             String key = data.getStringExtra(Const.RETURN_FLAG);
-            if (key.equalsIgnoreCase(Const.BOND_DETAILS_UPDATED) ||key.equalsIgnoreCase(Const.BOND_DOCUMENT_UPLOADED) )
+            if (key.equalsIgnoreCase(Const.BOND_DETAILS_UPDATED) || key.equalsIgnoreCase(Const.BOND_DOCUMENT_UPLOADED))
                 getBondDetails();
             else if (key.equalsIgnoreCase(Const.DEFENDANT_BASIC_DETAILS_UPDATED))
                 geDefendantProfile();
-
 
 
         }

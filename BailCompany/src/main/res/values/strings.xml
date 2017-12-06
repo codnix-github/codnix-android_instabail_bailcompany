@@ -337,6 +337,8 @@
     <string name="sender_id">511912945344</string>
     <string name="permission_not_granted">Unable to perform selected action because permissions were not granted.</string>
     <string name="title_activity_incoming_refer_bail_request_detail">IncomingReferBailRequestDetail</string>
+    <string name="title_activity_defendant_profile_detail">Defendant Basic Profile</string>
+    <string name="title_activity_defendant_employment_detail">Defendant Employment Details</string>
     <string name="hello_world">Hello world!</string>
     <string name="subscribe_package">How will you use Insta-Bail?</string>
     <string name="pick">Pick Your Package</string>

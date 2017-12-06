@@ -41,9 +41,9 @@ import android.widget.Toast;
 
 import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.custom.CustomGridView;
-import com.bailcompany.custom.LocationImpl;
 import com.bailcompany.model.BailRequestModel;
 import com.bailcompany.model.CourtDateModel;
+import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.User;
 import com.bailcompany.model.WarrantModel;
@@ -59,7 +59,6 @@ import com.bailcompany.utils.Utility;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.util.Util;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.loopj.android.http.AsyncHttpClient;
@@ -78,6 +77,7 @@ import java.util.Date;
 
 @SuppressLint("InflateParams")
 public class DefendantBondDetails extends CustomActivity {
+    private static final int Take_DROPBOX = 2;
     static ProgressDialog pd;
     static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     static int getCallTimeout = 50000;
@@ -110,6 +110,7 @@ public class DefendantBondDetails extends CustomActivity {
     ArrayList<Uri> uriArrayList;
     int adpaterPosition = 0;
     private BailRequestModel bm;
+    private DefendantModel defendant;
     private LinearLayout preFixedViewLL;
     private LinearLayout warrantCourtDatesLL;
     private LinearLayout llDefendantDocuments;
@@ -118,8 +119,6 @@ public class DefendantBondDetails extends CustomActivity {
     private CustomGridView photoGrid;
     private PhotoAdapter adapter;
     private File file;
-    private static final int Take_DROPBOX = 2;
-
     private SlideDateTimeListener listener = new SlideDateTimeListener() {
 
 
@@ -204,6 +203,7 @@ public class DefendantBondDetails extends CustomActivity {
         llDefendantDocuments = (LinearLayout) findViewById(R.id.llDocumentsDefendant);
         llCosignerDocuments = (LinearLayout) findViewById(R.id.llDocumentsCosigner);
         llOtherDocuments = (LinearLayout) findViewById(R.id.llDocumentsOther);
+
 
 
         ArrayList<WarrantModel> wList = bm.getWarrantList();
@@ -314,23 +314,23 @@ public class DefendantBondDetails extends CustomActivity {
                             AlertDialog dialog;
                             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             View dialogForm = inflater.inflate(R.layout.dialog_edit_defendant_bond_details, null, false);
-                            final LinearLayout loginContainer = (LinearLayout) dialogForm.findViewById(R.id.loginContainer);
-                            final LinearLayout signupContainer = (LinearLayout) dialogForm.findViewById(R.id.signupContainer);
-                            TextView buttonTabLogin = (TextView) dialogForm.findViewById(R.id.buttonTabLogin);
+                            final LinearLayout llWarrantContainer = (LinearLayout) dialogForm.findViewById(R.id.llWarrantContainer);
+                            final LinearLayout llWarrantDate = (LinearLayout) dialogForm.findViewById(R.id.llWarrantDate);
+                            TextView tvWarrantDate = (TextView) dialogForm.findViewById(R.id.tvWarrantDate);
                             Button buttonAddMoreCourtDate = (Button) dialogForm.findViewById(R.id.add_more_courtdate);
-                            buttonTabLogin.setOnClickListener(new View.OnClickListener() {
+                            tvWarrantDate.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    loginContainer.setVisibility(View.VISIBLE);
-                                    signupContainer.setVisibility(View.GONE);
+                                    llWarrantContainer.setVisibility(View.VISIBLE);
+                                    llWarrantDate.setVisibility(View.GONE);
                                 }
                             });
-                            TextView buttonTabSignup = (TextView) dialogForm.findViewById(R.id.buttonTabSignup);
-                            buttonTabSignup.setOnClickListener(new View.OnClickListener() {
+                            TextView lblWarrantDate = (TextView) dialogForm.findViewById(R.id.lblWarrantDate);
+                            lblWarrantDate.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    loginContainer.setVisibility(View.GONE);
-                                    signupContainer.setVisibility(View.VISIBLE);
+                                    llWarrantContainer.setVisibility(View.GONE);
+                                    llWarrantDate.setVisibility(View.VISIBLE);
                                 }
                             });
                             buttonAddMoreCourtDate.setOnClickListener(new View.OnClickListener() {
@@ -564,8 +564,8 @@ public class DefendantBondDetails extends CustomActivity {
 
     }
 
-    public void uploadDocuments(){
-        if(imgPathList.size()<1){
+    public void uploadDocuments() {
+        if (imgPathList.size() < 1) {
             return;
         }
 
@@ -578,14 +578,12 @@ public class DefendantBondDetails extends CustomActivity {
                     MainActivity.user.getTempAccessCode());
             param.put("UserName", MainActivity.user.getUsername());
             param.put("DefId", defId);
-            param.put("RequestId",reqId);
+            param.put("RequestId", reqId);
 
-           for (int i = 0; i < imgPathList.size(); i++) {
+            for (int i = 0; i < imgPathList.size(); i++) {
                 String type;
                 String DocPhotos = "DocPhotos[" + i + "]";
-
                 String path = imgPathList.get(i);
-
                 type = null;
                 if (path.lastIndexOf(".") != -1) {
                     type = path.substring(path.lastIndexOf(".") + 1);
@@ -612,7 +610,7 @@ public class DefendantBondDetails extends CustomActivity {
             }
 
 
-            Log.d("DocToUpload=",""+imgPathList.size());
+            Log.d("DocToUpload=", "" + imgPathList.size());
 
             client.post(this, url, param, new AsyncHttpResponseHandler() {
 
@@ -642,9 +640,9 @@ public class DefendantBondDetails extends CustomActivity {
                                 if (!Commons.isEmpty(message)
                                         || message.equalsIgnoreCase("success")) {
 
-                                                Log.d("Res=",message);
+                                    Log.d("Res=", message);
 
-                                    Utils.showDialog(DefendantBondDetails.this,message);
+                                    Utils.showDialog(DefendantBondDetails.this, message);
 
                                     Intent intent = new Intent();
                                     intent.putExtra(Const.RETURN_FLAG, Const.BOND_DOCUMENT_UPLOADED);
@@ -682,10 +680,11 @@ public class DefendantBondDetails extends CustomActivity {
             });
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     protected void setActionBar() {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -1361,12 +1360,12 @@ public class DefendantBondDetails extends CustomActivity {
                     }
                     File file = new File(path);
                     float size = file.length() / 1024f;
-                   // sizeStr = getToatSize(size);
+                    // sizeStr = getToatSize(size);
                     if (sizeStr != null) {
                         imgPathList.add(path);
                         uriArrayList.add(uri);
                         adapter.notifyDataSetChanged();
-                    //    totalSizeTV.setText(sizeStr);
+                        //    totalSizeTV.setText(sizeStr);
                     } else {
                         Utils.showDialog(this,
                                 "Too Big!  All attachments \"combined\" can not exceed 24mb");
@@ -1411,6 +1410,7 @@ public class DefendantBondDetails extends CustomActivity {
                 });
         builder.create().show();
     }
+
     public void removeDropboxTempFiles() {
         for (int i = 0; i < imgPathList.size(); i++) {
             String path = imgPathList.get(i);

@@ -37,6 +37,11 @@ public class DefendantModel implements Serializable {
 	private String Status;
 	private String ModifyOn;
 	private String StateName;
+	private ArrayList<DefendantEmploymentModel> EmploymentDtl;
+	private ArrayList<DefendantVehicleModel> VehicleDtl;
+	private ArrayList<DefendantNotesModel> NotesDtl;
+
+
 
 	public String getId() {
 		return Id;
@@ -244,5 +249,29 @@ public class DefendantModel implements Serializable {
 
 	public void setStateName(String stateName) {
 		StateName = stateName;
+	}
+
+	public ArrayList<DefendantEmploymentModel> getEmploymentDtl() {
+		return EmploymentDtl;
+	}
+
+	public void setEmploymentDtl(ArrayList<DefendantEmploymentModel> employmentDtl) {
+		EmploymentDtl = employmentDtl;
+	}
+
+	public ArrayList<DefendantVehicleModel> getVehicleDtl() {
+		return VehicleDtl;
+	}
+
+	public void setVehicleDtl(ArrayList<DefendantVehicleModel> vehicleDtl) {
+		VehicleDtl = vehicleDtl;
+	}
+
+	public ArrayList<DefendantNotesModel> getNotesDtl() {
+		return NotesDtl;
+	}
+
+	public void setNotesDtl(ArrayList<DefendantNotesModel> notesDtl) {
+		NotesDtl = notesDtl;
 	}
 }

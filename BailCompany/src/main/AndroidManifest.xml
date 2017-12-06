@@ -254,6 +254,17 @@ https://stackoverflow.com/questions/15727912/sha-1-fingerprint-of-keystore-certi
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
 
+        <activity
+            android:name=".DefendantBasicProfileDetails"
+            android:label="@string/title_activity_defendant_profile_detail"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".DefendantEmploymentDetails"
+            android:label="@string/title_activity_defendant_employment_detail"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+
 
         <service
             android:name="com.paypal.android.sdk.payments.PayPalService"

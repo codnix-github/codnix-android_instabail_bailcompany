@@ -220,7 +220,7 @@
                 android:weightSum="2">
 
                 <Button
-                    android:id="@+id/btnCreateAccount"
+                    android:id="@+id/btnBasicDetails"
                     style="@style/PrimaryFlatButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -233,7 +233,7 @@
                     android:textColor="@android:color/black" />
 
                 <Button
-                    android:id="@+id/btnCreateAccount1"
+                    android:id="@+id/btnEmployment"
                     style="@style/PrimaryFlatButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -255,7 +255,7 @@
                 android:weightSum="2">
 
                 <Button
-                    android:id="@+id/btnCreateAccoun2t"
+                    android:id="@+id/btnVehicle"
                     style="@style/PrimaryFlatButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -267,7 +267,7 @@
                     android:textColor="@android:color/black" />
 
                 <Button
-                    android:id="@+id/btnCreateAccount13"
+                    android:id="@+id/btnNotes"
                     style="@style/PrimaryFlatButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

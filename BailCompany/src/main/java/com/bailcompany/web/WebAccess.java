@@ -120,6 +120,7 @@ public class WebAccess {
     public static final String GET_DEFENDANT_BOND_DETAIL = "getDefendantBondDetails";
     public static final String UPDATE_BOND_DETAILS = "updateWarrant";
     public static final String UPLOAD_BOND_DOCUMENTS = "uploadBondDocuments";
+    public static final String UPDATE_DEFENDENT_BASIC_PROFILE = "updateDefendantBasicProfile";
 
     public static final String GCM_SENDER_ID = "432754724650";
     public final static String Key_Push_Message = "message";
