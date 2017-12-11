@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -50,14 +51,17 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bailcompany.DefendantSelectionActivity;
 import com.bailcompany.Login;
 import com.bailcompany.MainActivity;
 import com.bailcompany.R;
 import com.bailcompany.custom.CustomFragment;
+import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.GetAnAgentModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.StateModel;
 import com.bailcompany.utils.Commons;
+import com.bailcompany.utils.Const;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
 import com.loopj.android.http.AsyncHttpClient;
@@ -115,6 +119,8 @@ public class TransferBond extends CustomFragment implements
 	private EditText warAmount;
 	private EditText warTown;
 	private EditText amountCompamnyOffer;
+	private RadioButton rbNewDefendant, rbExistingDefendant;
+	private String defId = "";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -156,11 +162,31 @@ public class TransferBond extends CustomFragment implements
 		instruction = (EditText) v.findViewById(R.id.instructions);
 		indFName = (EditText) v.findViewById(R.id.ind_fname);
 		indLName = (EditText) v.findViewById(R.id.ind_lname);
-
 		indPhone = (EditText) v.findViewById(R.id.ind_phone);
 		editAmountTo = (EditText) v.findViewById(R.id.edit_amount_to);
 		amountCompamnyOffer = (EditText) v.findViewById(R.id.companyOffer);
 		editPaymentPlan = (EditText) v.findViewById(R.id.edit_payment_plan);
+		rbNewDefendant = (RadioButton) v.findViewById(R.id.rbNewDefendant);
+		rbExistingDefendant = (RadioButton) v.findViewById(R.id.rbExistingDefendant);
+
+		rbExistingDefendant.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+				if (b) {
+					startActivityForResult(
+							new Intent(getActivity(),
+									DefendantSelectionActivity.class), 5555);
+				}
+			}
+		});
+		rbNewDefendant.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+				if (b) {
+					defId = "";
+				}
+			}
+		});
 
 		addMore = (Button) v.findViewById(R.id.add_more);
 		btnSubmit = (Button) v.findViewById(R.id.btnSubmit);
@@ -252,6 +278,29 @@ public class TransferBond extends CustomFragment implements
 				});
 		addWarrant(false);
 		setTouchNClick(addMoreIndemnitors);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode == Activity.RESULT_OK) {
+			String key = data.getStringExtra(Const.RETURN_FLAG);
+			if (key.equalsIgnoreCase(Const.RETURN_DEFENDANT_DETAIL)) {
+
+				DefendantModel defModel = (DefendantModel) data.getSerializableExtra(Const.EXTRA_DATA);
+				if (defModel != null) {
+					defId = defModel.getId();
+					defFName.setText(defModel.getFirstName());
+					defLName.setText(defModel.getLastName());
+					SSN.setText(defModel.getSSN());
+					dateOfBirth.setText(defModel.getDOB());
+				} else {
+					defId = "";
+				}
+
+			}
+		}
 	}
 
 	void getInsurance() {
@@ -530,6 +579,10 @@ public class TransferBond extends CustomFragment implements
 	}
 
 	private void transferBond() {
+		if (!rbExistingDefendant.isChecked()) {
+			defId = "";
+		}
+
 		showProgressDialog("");
 		Date d = null;
 		String date = "";
@@ -602,6 +655,8 @@ public class TransferBond extends CustomFragment implements
 				.get(selectState.getSelectedItemPosition() - 1);
 
 		param.put("TransferBondState", sm.getId());
+		param.put("DefId", defId);
+
 		int i = selectInsurence.getSelectedItemPosition();
 		if (i != 0) {
 			i = i - 1;

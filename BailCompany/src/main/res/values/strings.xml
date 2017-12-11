@@ -125,6 +125,7 @@
     <string name="black_list_members">Black List Members </string>
     <string name="history">History</string>
     <string name="defendant">Defendant</string>
+    <string name="calendar">Calendar</string>
     <string name="txt_contact">“Please feel free to Ask a Question, Note A Concern, Rate An Agent, Request A Feature or Just Say Hello”</string>
     <string name="wrte_here">Write here...</string>
     <string name="send">Send</string>
@@ -162,6 +163,8 @@
     <string name="pay_ty">Payment Type</string>
     <string name="Amount_percentage">Amount or Percentage agent requested</string>
     <string name="co_sig">Amount of Co-Signors</string>
+    <string name="new_defendant">New Defendant</string>
+    <string name="existing_defendant">Existing Defendant</string>
     <string name="pay_alr">Payment Already Received by Company</string>
     <string name="premium">Premium</string>
     <string name="enter_here">Enter here</string>
@@ -337,8 +340,16 @@
     <string name="sender_id">511912945344</string>
     <string name="permission_not_granted">Unable to perform selected action because permissions were not granted.</string>
     <string name="title_activity_incoming_refer_bail_request_detail">IncomingReferBailRequestDetail</string>
+    <string name="title_activity_defendant_detail">Defendant Details</string>
     <string name="title_activity_defendant_profile_detail">Defendant Basic Profile</string>
     <string name="title_activity_defendant_employment_detail">Defendant Employment Details</string>
+    <string name="title_activity_defendant_vehicle_detail">Defendant Vehicle Details</string>
+    <string name="title_activity_defendant_notes_detail">Defendant Notes</string>
+    <string name="title_activity_select_defendant">Select Defendant</string>
+    <string name="btn_add_emplyment_details">Add Employment Details</string>
+    <string name="btn_add_vehicle_details">Add Vehicle Details</string>
+    <string name="btn_add_notes_details">Add Note</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="subscribe_package">How will you use Insta-Bail?</string>
     <string name="pick">Pick Your Package</string>

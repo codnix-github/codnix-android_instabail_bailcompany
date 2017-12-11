@@ -7,6 +7,35 @@
     <LinearLayout
         style="@style/linear_v"
         android:padding="@dimen/pad_20dp" >
+        <LinearLayout style="@style/linear_h">
+
+            <RadioGroup
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rbNewDefendant"
+                    style="@style/style_get"
+                    android:button="@drawable/radio_selector"
+                    android:checked="true"
+                    android:paddingLeft="@dimen/pad_10dp"
+                    android:text="@string/new_defendant"
+                    android:textColor="@color/text_get_agent"
+                    android:textSize="@dimen/txt_14sp" />
+
+                <RadioButton
+                    android:id="@+id/rbExistingDefendant"
+                    style="@style/style_get"
+                    android:button="@drawable/radio_selector"
+                    android:paddingLeft="@dimen/pad_10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/existing_defendant"
+                    android:textColor="@color/text_get_agent"
+                    android:textSize="@dimen/txt_14sp" />
+            </RadioGroup>
+        </LinearLayout>
+
 
         <EditText
             android:id="@+id/def_fname"

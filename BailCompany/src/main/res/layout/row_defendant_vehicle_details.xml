@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/linear_v"
+    android:paddingLeft="@dimen/pad_5dp">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:id="@+id/llRowEmploymentDtl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/pad_5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="@dimen/pad_5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:text="Year"
+                        android:textColor="@color/gray_dk" />
+
+                    <TextView
+                        android:id="@+id/tvYear"
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:text="Make"
+                        android:textColor="@color/gray_dk" />
+
+                    <TextView
+                        android:id="@+id/tvMake"
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:text="Model"
+                        android:textColor="@color/gray_dk" />
+
+                    <TextView
+                        android:id="@+id/tvModel"
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:text="Color"
+                        android:textColor="@color/gray_dk" />
+
+                    <TextView
+                        android:id="@+id/tvColor"
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:text="State"
+                        android:textColor="@color/gray_dk" />
+
+                    <TextView
+                        android:id="@+id/tvState"
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:text="Registration"
+                        android:textColor="@color/gray_dk" />
+
+                    <TextView
+                        android:id="@+id/tvRegistration"
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/edtVehicleDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/llRowEmploymentDtl"
+                android:layout_alignRight="@+id/llRowEmploymentDtl"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_marginTop="10dp"
+                android:tint="@color/black"
+                android:src="@drawable/ic_edit" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

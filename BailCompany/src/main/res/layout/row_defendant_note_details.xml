@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/linear_v"
+    android:paddingLeft="@dimen/pad_5dp">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:id="@+id/llRowEmploymentDtl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_alignRight="@+id/ivNoteDetails"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/pad_5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="@dimen/pad_5dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/bail_request"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:text="Note"
+                        android:visibility="gone"
+
+                        android:textColor="@color/gray_dk" />
+
+                    <TextView
+                        android:id="@+id/tvNote"
+                        style="@style/bail_request"
+                        android:layout_marginRight="5dp"
+                        android:layout_width="195dp"
+                        android:layout_weight="3"
+                        android:paddingLeft="@dimen/pad_5dp"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvNoteModifyOn"
+                    style="@style/bail_request"
+                    android:layout_width="wrap_content"
+                 android:layout_gravity="right"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="2015-12-10"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivNoteDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/llRowEmploymentDtl"
+
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_edit"
+                android:tint="@color/black" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

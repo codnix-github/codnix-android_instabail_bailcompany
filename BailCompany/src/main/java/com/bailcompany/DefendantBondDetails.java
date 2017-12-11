@@ -47,6 +47,7 @@ import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.User;
 import com.bailcompany.model.WarrantModel;
+import com.bailcompany.ui.DefendantBasicProfile;
 import com.bailcompany.ui.MainFragment;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
@@ -119,6 +120,7 @@ public class DefendantBondDetails extends CustomActivity {
     private CustomGridView photoGrid;
     private PhotoAdapter adapter;
     private File file;
+    AlertDialog dialog=null;
     private SlideDateTimeListener listener = new SlideDateTimeListener() {
 
 
@@ -311,7 +313,7 @@ public class DefendantBondDetails extends CustomActivity {
 
                             }
 
-                            AlertDialog dialog;
+
                             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             View dialogForm = inflater.inflate(R.layout.dialog_edit_defendant_bond_details, null, false);
                             final LinearLayout llWarrantContainer = (LinearLayout) dialogForm.findViewById(R.id.llWarrantContainer);
@@ -352,12 +354,13 @@ public class DefendantBondDetails extends CustomActivity {
                             buttonUpdateWarrant.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    if(dialog!=null)
+                                        dialog.dismiss();
                                     updateWarrantDetails();
 
                                 }
                             });
-                            AlertDialog.Builder builder = new AlertDialog.Builder(DefendantBondDetails.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(THIS);
                             builder.setView(dialogForm);
                             builder.create();
 
@@ -721,8 +724,12 @@ public class DefendantBondDetails extends CustomActivity {
                             if (resObj.optString("status")
                                     .equalsIgnoreCase("1")) {
 
-                                Utils.showDialog(DefendantBondDetails.this,
-                                        resObj.getString("message"));
+
+                                Toast.makeText(
+                                        DefendantBondDetails.this,
+                                        resObj.optString("message"),
+                                        Toast.LENGTH_SHORT).show();
+
                                 Intent intent = new Intent();
                                 intent.putExtra(Const.RETURN_FLAG, Const.BOND_DETAILS_UPDATED);
                                 setResult(RESULT_OK, intent);
@@ -791,19 +798,6 @@ public class DefendantBondDetails extends CustomActivity {
 
         super.onClick(v);
 
-        if (v.getId() == R.id.btn_accept) {
-            if (submit.getText().equals("Submit")) {
-                if (amountReq.getText().toString().equalsIgnoreCase("")) {
-                    Utils.showDialog(THIS, "Please Enter Bid Amount");
-                } else {
-                    // sentRequest();
-                }
-            }
-            // if (!bm.isIsAccept()) {
-            // sendAcceptanceToCompany(true);
-            // }
-
-        }
 
     }
 
@@ -918,155 +912,6 @@ public class DefendantBondDetails extends CustomActivity {
         return null;
     }
 
-    void sendAcceptanceToCompany(final boolean accept) {
-        if (Utils.isOnline()) {
-            showProgressDialog("");
-            RequestParams param = new RequestParams();
-
-            param.put("TransferBondId", reqId);
-            param.put("UserName", MainActivity.user.getUsername());
-            param.put("TemporaryAccessCode",
-                    MainActivity.user.getTempAccessCode());
-
-            param.put("LocationLongitude", bm.getLocationLatitude());
-            param.put("LocationLatitude", bm.getLocationLongitude());
-
-            String url = WebAccess.MAIN_URL + WebAccess.ACCEPT_BOND_REQUEST;
-            client.setTimeout(getCallTimeout);
-            client.post(this, url, param, new AsyncHttpResponseHandler() {
-
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-                    dismissProgressDialog();
-                    Utils.showDialog(DefendantBondDetails.this,
-                            R.string.err_unexpect);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-
-
-                    try {
-                        String response2;
-                        response2 = new String(responseBody);
-                        JSONObject resObj = new JSONObject(response2);
-
-                        if (resObj != null) {
-                            message = resObj.optString("message");
-                            if (resObj.optString("status")
-                                    .equalsIgnoreCase("1")) {
-                                showDialog(DefendantBondDetails.this,
-                                        message);
-                                // getAllAgents(accept);
-                            } else if (resObj.optString("status")
-                                    .equalsIgnoreCase("3")) {
-                                Toast.makeText(
-                                        THIS,
-                                        "Session was closed please login again",
-                                        Toast.LENGTH_LONG).show();
-                                MainActivity.sp.edit().putBoolean("isFbLogin",
-                                        false);
-                                MainActivity.sp.edit().putString("user", null)
-                                        .commit();
-                                startActivity(new Intent(
-                                        DefendantBondDetails.this,
-                                        Launcher.class));
-                            } else {
-                                dismissProgressDialog();
-                                Utils.showDialog(
-                                        DefendantBondDetails.this,
-                                        message);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        dismissProgressDialog();
-                        Utils.showDialog(DefendantBondDetails.this,
-                                R.string.err_unexpect);
-                        e.printStackTrace();
-                    }
-                }
-
-            });
-        } else {
-            Utils.noInternetDialog(THIS);
-        }
-    }
-
-    void sentRequest() {
-        if (Utils.isOnline(this)) {
-
-            showProgressDialog("");
-
-            RequestParams param = new RequestParams();
-            param.put("TemporaryAccessCode",
-                    MainActivity.user.getTempAccessCode());
-            param.put("UserName", MainActivity.user.getUsername());
-            param.put("RequestId", reqId);
-            param.put("Amount", amountReq.getText().toString());
-            param.put("Description", quotes.getText().toString());
-
-            String url = WebAccess.MAIN_URL + WebAccess.GET_BID_ON_COMPANY;
-            client.setTimeout(getCallTimeout);
-            client.post(this, url, param, new AsyncHttpResponseHandler() {
-
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-                    dismissProgressDialog();
-                    Utils.showDialog(DefendantBondDetails.this,
-                            R.string.err_unexpect);
-                }
-
-                @SuppressWarnings("unused")
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                    dismissProgressDialog();
-                    String response2;
-                    response2 = new String(responseBody);
-                    if (response2 != null) {
-                        JSONObject json;
-                        try {
-                            json = new JSONObject(response2);
-                            if (json.optString("status").equalsIgnoreCase("1")) {
-                                Toast.makeText(
-                                        DefendantBondDetails.this,
-                                        json.optString("message"),
-                                        Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK);
-                                finish();
-
-                            } else if (json.optString("status")
-                                    .equalsIgnoreCase("3")) {
-                                Toast.makeText(
-                                        THIS,
-                                        "Session was closed please login again",
-                                        Toast.LENGTH_LONG).show();
-                                MainActivity.sp.edit().putBoolean("isFbLogin",
-                                        false);
-                                MainActivity.sp.edit().putString("user", null)
-                                        .commit();
-                                startActivity(new Intent(
-                                        DefendantBondDetails.this,
-                                        Launcher.class));
-                            } else
-                                Utils.showDialog(
-                                        DefendantBondDetails.this,
-                                        json.optString("message"));
-                        } catch (JSONException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-
-                    } else
-                        Utils.showDialog(DefendantBondDetails.this,
-                                R.string.err_unexpect);
-
-                }
-
-            });
-
-        } else
-            Utils.noInternetDialog(this);
-    }
 
     public void getDropDownValues() {
         pd = ProgressDialog.show(DefendantBondDetails.this, "", "Loading.....");

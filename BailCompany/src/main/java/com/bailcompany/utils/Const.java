@@ -14,6 +14,7 @@ public class Const {
 	public static final String BOND_DETAILS_UPDATED="5001";
 	public static final String BOND_DOCUMENT_UPLOADED="5002";
 	public static final String DEFENDANT_BASIC_DETAILS_UPDATED="5003";
+	public static final String RETURN_DEFENDANT_DETAIL="5004";
 
 
 	public static final String LANGUAGE = "language";// 0=eng

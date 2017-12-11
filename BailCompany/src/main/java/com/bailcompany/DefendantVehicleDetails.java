@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.model.DefendantEmploymentModel;
 import com.bailcompany.model.DefendantModel;
+import com.bailcompany.model.DefendantVehicleModel;
 import com.bailcompany.model.StateModel;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
@@ -43,7 +44,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 @SuppressWarnings("deprecation")
-public class DefendantEmploymentDetails extends CustomActivity {
+public class DefendantVehicleDetails extends CustomActivity {
+
 
     static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     static int getCallTimeout = 50000;
@@ -53,8 +55,8 @@ public class DefendantEmploymentDetails extends CustomActivity {
 
     DefendantModel defModel;
     String defId;
-    ArrayList<DefendantEmploymentModel> arrDefEmpDtl;
-    LinearLayout llEmpDetails;
+    ArrayList<DefendantVehicleModel> arrDefVehicleDtl;
+    LinearLayout llVehicleDetails;
     ArrayList<StateModel> allState = null;
     boolean isEdit = false;
 
@@ -63,11 +65,11 @@ public class DefendantEmploymentDetails extends CustomActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_defendant_employment);
-        setActionBar(getString(R.string.title_activity_defendant_employment_detail));
-        _activity = DefendantEmploymentDetails.this;
-        llEmpDetails = (LinearLayout) findViewById(R.id.llEmpDetails);
-        ((Button) findViewById(R.id.btnAddEmploymentDtl)).setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_defendant_vehicle);
+        setActionBar(getString(R.string.title_activity_defendant_vehicle_detail));
+        _activity = DefendantVehicleDetails.this;
+        llVehicleDetails = (LinearLayout) findViewById(R.id.llVehicleDetails);
+        ((Button) findViewById(R.id.btnAddVehicletDtl)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openEditDialog(null);
@@ -79,7 +81,7 @@ public class DefendantEmploymentDetails extends CustomActivity {
                     .getSerializableExtra("defendant");
             if (defModel != null) {
                 defId = defModel.getId();
-                arrDefEmpDtl = defModel.getEmploymentDtl();
+                arrDefVehicleDtl = defModel.getVehicleDtl();
                 showDetails();
             }
         }
@@ -89,62 +91,55 @@ public class DefendantEmploymentDetails extends CustomActivity {
     public void showDetails() {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        for (final DefendantEmploymentModel eMod : arrDefEmpDtl) {
-            View v = inflater.inflate(R.layout.row_defendant_employment_details, null, false);
-            ((TextView) v.findViewById(R.id.tvEmployer)).setText(eMod.getEmployer());
-            ((TextView) v.findViewById(R.id.tvOccupation)).setText(eMod.getOccupation());
-            ((TextView) v.findViewById(R.id.tvAddress)).setText(eMod.getAddress());
-            ((TextView) v.findViewById(R.id.tvCity)).setText(eMod.getCity());
+        for (final DefendantVehicleModel eMod : arrDefVehicleDtl) {
+            View v = inflater.inflate(R.layout.row_defendant_vehicle_details, null, false);
+            ((TextView) v.findViewById(R.id.tvMake)).setText(eMod.getMake());
+            ((TextView) v.findViewById(R.id.tvModel)).setText(eMod.getModel());
+            ((TextView) v.findViewById(R.id.tvYear)).setText(eMod.getYear());
+            ((TextView) v.findViewById(R.id.tvColor)).setText(eMod.getColor());
             ((TextView) v.findViewById(R.id.tvState)).setText(eMod.getState());
-            ((TextView) v.findViewById(R.id.tvZip)).setText(eMod.getZip());
-            ((TextView) v.findViewById(R.id.tvTelephone)).setText(eMod.getTelephone());
-            ((TextView) v.findViewById(R.id.tvSupervisor)).setText(eMod.getSupervisor());
-            ((TextView) v.findViewById(R.id.tvDuration)).setText(eMod.getDuration());
+            ((TextView) v.findViewById(R.id.tvRegistration)).setText(eMod.getRegistration());
 
-            ((ImageView) v.findViewById(R.id.edtEmpDetails)).setOnClickListener(new View.OnClickListener() {
+            ((ImageView) v.findViewById(R.id.edtVehicleDetails)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     openEditDialog(eMod);
                 }
             });
 
-            llEmpDetails.addView(v);
+            llVehicleDetails.addView(v);
         }
 
     }
 
-    public void openEditDialog(final DefendantEmploymentModel eMod) {
+    public void openEditDialog(final DefendantVehicleModel eMod) {
         AlertDialog dialog;
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogForm = inflater.inflate(R.layout.dialog_edit_defendant_emp_details, null, false);
+        View dialogForm = inflater.inflate(R.layout.dialog_edit_defendant_vehicle_details, null, false);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(DefendantEmploymentDetails.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(DefendantVehicleDetails.this);
         builder.setView(dialogForm);
         builder.create();
 
         final Spinner spState = (Spinner) dialogForm.findViewById(R.id.spState);
-        final EditText edtEmployer = (EditText) dialogForm.findViewById(R.id.edtEmployer);
-        final EditText edtOccupation = (EditText) dialogForm.findViewById(R.id.edtOccupation);
-        final EditText edtAddress = (EditText) dialogForm.findViewById(R.id.edtAddress);
-        final EditText edtCity = (EditText) dialogForm.findViewById(R.id.edtCity);
-        final EditText edtZipCode = (EditText) dialogForm.findViewById(R.id.edtZipCode);
-        final EditText edtTelephone = (EditText) dialogForm.findViewById(R.id.edtTelephone);
-        final EditText edtSupervisor = (EditText) dialogForm.findViewById(R.id.edtSupervisor);
-        final EditText edtDuration = (EditText) dialogForm.findViewById(R.id.edtDuration);
+        final EditText edtYear = (EditText) dialogForm.findViewById(R.id.edtYear);
+        final EditText edtMake = (EditText) dialogForm.findViewById(R.id.edtMake);
+        final EditText edtModel = (EditText) dialogForm.findViewById(R.id.edtModel);
+        final EditText edtColor = (EditText) dialogForm.findViewById(R.id.edtColor);
+        final EditText edtRegistration = (EditText) dialogForm.findViewById(R.id.edtRegistration);
+
         isEdit = false;
         if (eMod != null) {
             isEdit = true;
-            edtEmployer.setText(eMod.getEmployer());
-            edtOccupation.setText(eMod.getOccupation());
-            edtAddress.setText(eMod.getAddress());
-            edtCity.setText(eMod.getCity());
-            edtZipCode.setText(eMod.getZip());
-            edtTelephone.setText(eMod.getTelephone());
-            edtSupervisor.setText(eMod.getSupervisor());
-            edtDuration.setText(eMod.getDuration());
+            edtYear.setText(eMod.getYear());
+            edtMake.setText(eMod.getMake());
+            edtModel.setText(eMod.getModel());
+            edtColor.setText(eMod.getColor());
+            edtRegistration.setText(eMod.getRegistration());
+
         }
 
-        ((Button) dialogForm.findViewById(R.id.btnUpdateEmpDetails)).setOnClickListener(new View.OnClickListener() {
+        ((Button) dialogForm.findViewById(R.id.btnUpdateVehicleDetails)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RequestParams param = new RequestParams();
@@ -152,29 +147,23 @@ public class DefendantEmploymentDetails extends CustomActivity {
                         MainActivity.user.getTempAccessCode());
                 param.put("UserName", MainActivity.user.getUsername());
                 param.put("DefId", defId);
-                param.put("Employer", edtEmployer.getText().toString());
-                param.put("EmployerOccupation", edtOccupation.getText().toString());
-                param.put("EmployerAddress", edtAddress.getText().toString());
-                param.put("EmployerCity", edtCity.getText().toString());
+                param.put("VehicleYear", edtYear.getText().toString());
+                param.put("VehicleMake", edtMake.getText().toString());
+                param.put("VehicleModel", edtModel.getText().toString());
+                param.put("VehicleColor", edtColor.getText().toString());
+                param.put("VehicleRegistration", edtRegistration.getText().toString());
 
                 if (spState.getSelectedItemPosition() == 0)
-                    param.put("EmployerState", "");
+                    param.put("VehicleState", "");
                 else
-                    param.put("EmployerState", spState.getSelectedItem().toString());
-
-
-                param.put("EmployerZipcode", edtZipCode.getText().toString());
-                param.put("EmployerTelephone", edtTelephone.getText().toString());
-
-                param.put("EmployerSupervisor", edtSupervisor.getText().toString());
-                param.put("EmployerDuration", edtDuration.getText().toString());
+                    param.put("VehicleState", spState.getSelectedItem().toString());
 
                 if (isEdit) {
-                    param.put("EmploymentId", eMod.getId());
+                    param.put("VehicleId", eMod.getId());
                 } else {
-                    param.put("EmploymentId", "");
+                    param.put("VehicleId", "");
                 }
-                updateDefendantEmpDetails(param);
+                updateDefendantVehicleDetails(param);
             }
         });
         ArrayList<String> arrState = new ArrayList<>();
@@ -191,7 +180,6 @@ public class DefendantEmploymentDetails extends CustomActivity {
         ArrayAdapter<String> adapterHairColor = new ArrayAdapter<String>(_activity, android.R.layout.simple_spinner_item, arrState);
         spState.setAdapter(adapterHairColor);
         spState.setSelection(curr_pos);
-
 
         dialog = builder.create();
         dialog.show();
@@ -217,7 +205,7 @@ public class DefendantEmploymentDetails extends CustomActivity {
                 } else {
                     path = FilePath.getPath(THIS, uri);
                 }
-            }  else {
+            }else {
                 uri = data.getData();
 
                 if (uri == null) {
@@ -238,10 +226,10 @@ public class DefendantEmploymentDetails extends CustomActivity {
     }
 
 
-    public void updateDefendantEmpDetails(RequestParams param) {
+    public void updateDefendantVehicleDetails(RequestParams param) {
         try {
             showProgressDialog("");
-            String url = WebAccess.MAIN_URL + WebAccess.ADD_UPDATE_DEFENDENT_EMPLOYMENT_DETAILS;
+            String url = WebAccess.MAIN_URL + WebAccess.ADD_UPDATE_DEFENDENT_VEHICLE_DETAILS;
             client.setTimeout(getCallTimeout);
             client.post(this, url, param, new AsyncHttpResponseHandler() {
 
@@ -249,7 +237,7 @@ public class DefendantEmploymentDetails extends CustomActivity {
                 public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
                     dismissProgressDialog();
 
-                    Utils.showDialog(_activity,
+                    Utils.showDialog(THIS,
                             R.string.err_unexpect);
 
                 }

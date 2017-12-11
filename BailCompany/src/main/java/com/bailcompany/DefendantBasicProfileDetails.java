@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.StateModel;
+import com.bailcompany.ui.DefendantBasicProfile;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
 import com.bailcompany.utils.FilePath;
@@ -373,7 +374,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                 public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
                     dismissProgressDialog();
 
-                    Utils.showDialog(getApplicationContext(),
+                    Utils.showDialog(THIS,
                             R.string.err_unexpect);
 
                 }
@@ -398,7 +399,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
 
                                     Log.d("Res=", message);
 
-                                    Utils.showDialog(DefendantBasicProfileDetails.this, message);
+                                    Utils.showDialog(THIS, message);
 
                                     Intent intent = new Intent();
                                     intent.putExtra(Const.RETURN_FLAG, Const.DEFENDANT_BASIC_DETAILS_UPDATED);
@@ -417,16 +418,16 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                                         false);
                                 MainActivity.sp.edit().putString("user", null)
                                         .commit();
-                                startActivity(new Intent(getApplicationContext(),
+                                startActivity(new Intent(DefendantBasicProfileDetails.this,
                                         Launcher.class));
                             } else {
 
-                                Utils.showDialog(getApplicationContext(),
+                                Utils.showDialog(THIS,
                                         resObj.optString("message"));
                             }
                         }
                     } catch (JSONException e) {
-                        Utils.showDialog(getApplicationContext(), "Error occurs");
+                        Utils.showDialog(THIS, "Error occurs");
                         e.printStackTrace();
                     }
 
@@ -484,7 +485,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
 
                         }
                     } else
-                        Utils.showDialog(getApplicationContext(), "Error occurs");
+                        Utils.showDialog(THIS, "Error occurs");
 
                 }
 

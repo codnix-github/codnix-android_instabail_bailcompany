@@ -22,8 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bailcompany.custom.CustomActivity;
-import com.bailcompany.model.DefendantEmploymentModel;
 import com.bailcompany.model.DefendantModel;
+import com.bailcompany.model.DefendantNotesModel;
+import com.bailcompany.model.DefendantVehicleModel;
 import com.bailcompany.model.StateModel;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
@@ -39,35 +40,31 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 
 @SuppressWarnings("deprecation")
-public class DefendantEmploymentDetails extends CustomActivity {
+public class DefendantNoteDetails extends CustomActivity {
+
 
     static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     static int getCallTimeout = 50000;
-
     String message;
     JSONObject jsonObj;
-
     DefendantModel defModel;
     String defId;
-    ArrayList<DefendantEmploymentModel> arrDefEmpDtl;
-    LinearLayout llEmpDetails;
-    ArrayList<StateModel> allState = null;
+    ArrayList<DefendantNotesModel> arrDefNotesDtl;
+    LinearLayout llNoteDetails;
     boolean isEdit = false;
-
     private Context _activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_defendant_employment);
-        setActionBar(getString(R.string.title_activity_defendant_employment_detail));
-        _activity = DefendantEmploymentDetails.this;
-        llEmpDetails = (LinearLayout) findViewById(R.id.llEmpDetails);
-        ((Button) findViewById(R.id.btnAddEmploymentDtl)).setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_defendant_notes);
+        setActionBar(getString(R.string.title_activity_defendant_notes_detail));
+        _activity = DefendantNoteDetails.this;
+        llNoteDetails = (LinearLayout) findViewById(R.id.llNotesDetails);
+        ((Button) findViewById(R.id.btnAddNotesDtl)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openEditDialog(null);
@@ -79,72 +76,54 @@ public class DefendantEmploymentDetails extends CustomActivity {
                     .getSerializableExtra("defendant");
             if (defModel != null) {
                 defId = defModel.getId();
-                arrDefEmpDtl = defModel.getEmploymentDtl();
+                arrDefNotesDtl = defModel.getNotesDtl();
                 showDetails();
             }
         }
-        getAllStates();
+
     }
 
     public void showDetails() {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        for (final DefendantEmploymentModel eMod : arrDefEmpDtl) {
-            View v = inflater.inflate(R.layout.row_defendant_employment_details, null, false);
-            ((TextView) v.findViewById(R.id.tvEmployer)).setText(eMod.getEmployer());
-            ((TextView) v.findViewById(R.id.tvOccupation)).setText(eMod.getOccupation());
-            ((TextView) v.findViewById(R.id.tvAddress)).setText(eMod.getAddress());
-            ((TextView) v.findViewById(R.id.tvCity)).setText(eMod.getCity());
-            ((TextView) v.findViewById(R.id.tvState)).setText(eMod.getState());
-            ((TextView) v.findViewById(R.id.tvZip)).setText(eMod.getZip());
-            ((TextView) v.findViewById(R.id.tvTelephone)).setText(eMod.getTelephone());
-            ((TextView) v.findViewById(R.id.tvSupervisor)).setText(eMod.getSupervisor());
-            ((TextView) v.findViewById(R.id.tvDuration)).setText(eMod.getDuration());
+        for (final DefendantNotesModel eMod : arrDefNotesDtl) {
+            View v = inflater.inflate(R.layout.row_defendant_note_details, null, false);
+            ((TextView) v.findViewById(R.id.tvNote)).setText(eMod.getNote());
+            ((TextView) v.findViewById(R.id.tvNoteModifyOn)).setText(eMod.getModifyOn());
 
-            ((ImageView) v.findViewById(R.id.edtEmpDetails)).setOnClickListener(new View.OnClickListener() {
+
+            ((ImageView) v.findViewById(R.id.ivNoteDetails)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     openEditDialog(eMod);
                 }
             });
 
-            llEmpDetails.addView(v);
+            llNoteDetails.addView(v);
         }
 
     }
 
-    public void openEditDialog(final DefendantEmploymentModel eMod) {
+    public void openEditDialog(final DefendantNotesModel eMod) {
         AlertDialog dialog;
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogForm = inflater.inflate(R.layout.dialog_edit_defendant_emp_details, null, false);
+        View dialogForm = inflater.inflate(R.layout.dialog_edit_defendant_notes_details, null, false);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(DefendantEmploymentDetails.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(DefendantNoteDetails.this);
         builder.setView(dialogForm);
         builder.create();
 
-        final Spinner spState = (Spinner) dialogForm.findViewById(R.id.spState);
-        final EditText edtEmployer = (EditText) dialogForm.findViewById(R.id.edtEmployer);
-        final EditText edtOccupation = (EditText) dialogForm.findViewById(R.id.edtOccupation);
-        final EditText edtAddress = (EditText) dialogForm.findViewById(R.id.edtAddress);
-        final EditText edtCity = (EditText) dialogForm.findViewById(R.id.edtCity);
-        final EditText edtZipCode = (EditText) dialogForm.findViewById(R.id.edtZipCode);
-        final EditText edtTelephone = (EditText) dialogForm.findViewById(R.id.edtTelephone);
-        final EditText edtSupervisor = (EditText) dialogForm.findViewById(R.id.edtSupervisor);
-        final EditText edtDuration = (EditText) dialogForm.findViewById(R.id.edtDuration);
+        final EditText edtNote = (EditText) dialogForm.findViewById(R.id.edtNote);
+
+
         isEdit = false;
         if (eMod != null) {
             isEdit = true;
-            edtEmployer.setText(eMod.getEmployer());
-            edtOccupation.setText(eMod.getOccupation());
-            edtAddress.setText(eMod.getAddress());
-            edtCity.setText(eMod.getCity());
-            edtZipCode.setText(eMod.getZip());
-            edtTelephone.setText(eMod.getTelephone());
-            edtSupervisor.setText(eMod.getSupervisor());
-            edtDuration.setText(eMod.getDuration());
+            edtNote.setText(eMod.getNote());
+
         }
 
-        ((Button) dialogForm.findViewById(R.id.btnUpdateEmpDetails)).setOnClickListener(new View.OnClickListener() {
+        ((Button) dialogForm.findViewById(R.id.btnUpdateVehicleDetails)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RequestParams param = new RequestParams();
@@ -152,46 +131,16 @@ public class DefendantEmploymentDetails extends CustomActivity {
                         MainActivity.user.getTempAccessCode());
                 param.put("UserName", MainActivity.user.getUsername());
                 param.put("DefId", defId);
-                param.put("Employer", edtEmployer.getText().toString());
-                param.put("EmployerOccupation", edtOccupation.getText().toString());
-                param.put("EmployerAddress", edtAddress.getText().toString());
-                param.put("EmployerCity", edtCity.getText().toString());
-
-                if (spState.getSelectedItemPosition() == 0)
-                    param.put("EmployerState", "");
-                else
-                    param.put("EmployerState", spState.getSelectedItem().toString());
-
-
-                param.put("EmployerZipcode", edtZipCode.getText().toString());
-                param.put("EmployerTelephone", edtTelephone.getText().toString());
-
-                param.put("EmployerSupervisor", edtSupervisor.getText().toString());
-                param.put("EmployerDuration", edtDuration.getText().toString());
+                param.put("Note", edtNote.getText().toString());
 
                 if (isEdit) {
-                    param.put("EmploymentId", eMod.getId());
+                    param.put("NoteId", eMod.getId());
                 } else {
-                    param.put("EmploymentId", "");
+                    param.put("NoteId", "");
                 }
-                updateDefendantEmpDetails(param);
+                updateDefendantNoteDetails(param);
             }
         });
-        ArrayList<String> arrState = new ArrayList<>();
-        int curr_pos = 0;
-        arrState.add("Select State");
-        for (int i = 0; i < allState.size(); i++) {
-            arrState.add(allState.get(i).getName());
-            if (eMod != null) {
-                if (allState.get(i).getName().equalsIgnoreCase(eMod.getState())) {
-                    curr_pos = i + 1;
-                }
-            }
-        }
-        ArrayAdapter<String> adapterHairColor = new ArrayAdapter<String>(_activity, android.R.layout.simple_spinner_item, arrState);
-        spState.setAdapter(adapterHairColor);
-        spState.setSelection(curr_pos);
-
 
         dialog = builder.create();
         dialog.show();
@@ -217,7 +166,7 @@ public class DefendantEmploymentDetails extends CustomActivity {
                 } else {
                     path = FilePath.getPath(THIS, uri);
                 }
-            }  else {
+            }else {
                 uri = data.getData();
 
                 if (uri == null) {
@@ -238,10 +187,10 @@ public class DefendantEmploymentDetails extends CustomActivity {
     }
 
 
-    public void updateDefendantEmpDetails(RequestParams param) {
+    public void updateDefendantNoteDetails(RequestParams param) {
         try {
             showProgressDialog("");
-            String url = WebAccess.MAIN_URL + WebAccess.ADD_UPDATE_DEFENDENT_EMPLOYMENT_DETAILS;
+            String url = WebAccess.MAIN_URL + WebAccess.ADD_UPDATE_DEFENDENT_NOTES_DETAILS;
             client.setTimeout(getCallTimeout);
             client.post(this, url, param, new AsyncHttpResponseHandler() {
 
@@ -249,7 +198,7 @@ public class DefendantEmploymentDetails extends CustomActivity {
                 public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
                     dismissProgressDialog();
 
-                    Utils.showDialog(_activity,
+                    Utils.showDialog(THIS,
                             R.string.err_unexpect);
 
                 }
@@ -319,52 +268,10 @@ public class DefendantEmploymentDetails extends CustomActivity {
 
     }
 
-    void getAllStates() {
-
-        if (Utils.isOnline()) {
-            String url = WebAccess.MAIN_URL + WebAccess.GET_ALL_States;
-            client.setTimeout(getCallTimeout);
-            showProgressDialog("");
-            client.get(url, new AsyncHttpResponseHandler() {
-
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-                    dismissProgressDialog();
-                }
-
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                    dismissProgressDialog();
-                    String response2;
-                    response2 = new String(responseBody);
-                    if (response2 != null) {
-                        ArrayList<StateModel> insListState = new ArrayList<StateModel>();
-                        insListState = WebAccess.getAllStates(response2);
-
-                        if (insListState != null && insListState.size() > 0) {
-
-                            allState = new ArrayList<StateModel>();
-                            for (int i = 0; i < insListState.size(); i++) {
-                                allState.add(insListState.get(i));
-                            }
-
-                        }
-                    } else
-                        Utils.showDialog(THIS, "Error occurs");
-                }
-            });
-
-        } else {
-            dismissProgressDialog();
-            Utils.noInternetDialog(THIS);
-        }
-
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        hideKeyboard();
 
     }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainTopLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainTopLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -37,14 +37,14 @@
                     <ImageView
                         android:id="@+id/profile_pic"
                         android:layout_width="74dp"
-                        android:layout_height="74dp"
-                        android:src="@drawable/side_menu_profile_pic" />
+                        android:layout_height="74dp" />
+
                     <ImageView
                         android:id="@+id/expanded_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:visibility="gone"
-                        android:contentDescription="@string/accept" />
+                        android:contentDescription="@string/accept"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="14dp"
-                            android:text="Michael Angelo"
+                            android:text=""
                             android:textColor="@android:color/white"
                             android:textSize="18sp" />
 
@@ -71,7 +71,7 @@
                             android:drawableLeft="@drawable/ic_place"
                             android:drawableTint="@color/white"
                             android:gravity="center_vertical"
-                            android:text="@string/defendant_address"
+                            android:text=""
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -91,8 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:onClick="onClick">
+                        android:gravity="center_horizontal|center_vertical">
 
                         <android.support.v7.widget.CardView
                             android:layout_width="36dp"
@@ -117,8 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:onClick="onClick">
+                        android:gravity="center_horizontal|center_vertical">
 
                         <android.support.v7.widget.CardView
                             android:layout_width="36dp"
@@ -143,8 +141,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:onClick="onClick">
+                        android:gravity="center_horizontal|center_vertical">
 
                         <android.support.v7.widget.CardView
                             android:layout_width="36dp"
@@ -164,13 +161,37 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llSMSDefendant"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical">
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center_horizontal"
+                            app:cardBackgroundColor="@color/color_sms"
+                            app:cardCornerRadius="24dp">
+
+                            <ImageView
+                                android:id="@+id/ivSMSDefendant"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal|center_vertical"
+                                android:src="@drawable/ic_mail_outline_black_24dp"
+                                android:tint="@color/white" />
+                        </android.support.v7.widget.CardView>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/llCallDefendant"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:onClick="onClick">
+                        android:gravity="center_horizontal|center_vertical">
 
                         <android.support.v7.widget.CardView
                             android:layout_width="48dp"
@@ -188,10 +209,8 @@
                                 android:tint="@color/white" />
                         </android.support.v7.widget.CardView>
                     </LinearLayout>
+
                 </LinearLayout>
-
-
-
 
             </LinearLayout>
         </android.support.design.widget.CollapsingToolbarLayout>

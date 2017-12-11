@@ -1,44 +1,28 @@
 package com.bailcompany.ui;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.UserDictionary;
 import android.support.v4.app.DialogFragment;
 import android.telephony.PhoneNumberUtils;
 import android.text.Html;
 import android.text.InputFilter;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -57,6 +41,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bailcompany.DefendantSelectionActivity;
 import com.bailcompany.FindBestAgent;
 import com.bailcompany.Launcher;
 import com.bailcompany.Login;
@@ -64,22 +49,50 @@ import com.bailcompany.MainActivity;
 import com.bailcompany.R;
 import com.bailcompany.custom.CustomFragment;
 import com.bailcompany.model.AgentModel;
-import com.bailcompany.model.BailRequestModel;
+import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.GetAnAgentModel;
 import com.bailcompany.model.IndemnitorModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.WarrantModel;
 import com.bailcompany.utils.Commons;
+import com.bailcompany.utils.Const;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 @SuppressLint("InflateParams")
 public class GetAnAgent extends CustomFragment implements
         OnCheckedChangeListener {
 
+    public static String location_entered;
+    public static String agentRequestId;
+    static EditText dateOfBirth;
+    static int getCallTimeout = 50000;
+    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
+    ArrayList<String[]> resList;
+    String selectedItem = "";
+    ArrayList<InsuranceModel> insList = new ArrayList<InsuranceModel>();
+    int i;
+    String response2;
+    String message;
+    JSONObject jsonObj;
+    String key;
+    boolean selfBtnPress;
+    int selectedIndex = -1;
     private Spinner selCountryCode;
     private CheckBox chkCourtFill;
     private CheckBox chkBailSource;
@@ -89,7 +102,6 @@ public class GetAnAgent extends CustomFragment implements
     private CheckBox chkDefendantPaper;
     private RadioButton radioPaymentAlr;
     private RadioButton radioPaymentToBe;
-
     private EditText warAmount;
     private EditText warTown;
     private EditText defFName;
@@ -98,44 +110,49 @@ public class GetAnAgent extends CustomFragment implements
     private EditText bookingNumber;
     private EditText editAmountTo;
     private EditText editPaymentPlan;
-    static EditText dateOfBirth;
-
     private EditText indemFName;
     private EditText indemLName;
     private EditText indemPhone;
-
+    private RadioButton rbNewDefendant, rbExistingDefendant;
     // private EditText location;
     private AutoCompleteTextView location;
     private EditText instruction, selectInsurance;
     private Button addMore, findBestAgent, selfAssign;
     private Button addMoreIndemnitors;
     private LinearLayout warrentLayout;
-    public static String location_entered;
-
     private LinearLayout indDetail;
-
     private ArrayList<GetAnAgentModel> listWarrent;
     private ArrayList<GetAnAgentModel> listIndemnitors;
     private ArrayList<AgentModel> agentList;
     private String companyId;
-    ArrayList<String[]> resList;
     private String locLatt = "0.0", locLng = "0.0";
-    String selectedItem = "";
-
-    ArrayList<InsuranceModel> insList = new ArrayList<InsuranceModel>();
     private ArrayList<String> selectedItems;
     private boolean[] chkItems;
+    private String defId = "";
 
-    static int getCallTimeout = 50000;
-    int i;
-    String response2;
-    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
-    String message;
-    JSONObject jsonObj;
-    String key;
-    boolean selfBtnPress;
-    public static String agentRequestId;
-    int selectedIndex = -1;
+    public static AlertDialog showDialog(Context ctx, String msg,
+                                         DialogInterface.OnClickListener listener) {
+
+        return showDialog(ctx, msg, ctx.getString(android.R.string.ok), null,
+                listener, null);
+    }
+
+    public static AlertDialog showDialog(Context ctx, String msg, String btn1,
+                                         String btn2, DialogInterface.OnClickListener listener1,
+                                         DialogInterface.OnClickListener listener2) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        // builder.setTitle(R.string.app_name);
+        builder.setMessage(msg).setCancelable(false)
+                .setPositiveButton(btn1, listener1);
+        if (btn2 != null && listener2 != null)
+            builder.setNegativeButton(btn2, listener2);
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        return alert;
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -294,6 +311,28 @@ public class GetAnAgent extends CustomFragment implements
                 android.R.layout.simple_list_item_1));
         indemFName = (EditText) v.findViewById(R.id.ind_fname);
         indemLName = (EditText) v.findViewById(R.id.ind_lname);
+        rbNewDefendant = (RadioButton) v.findViewById(R.id.rbNewDefendant);
+        rbExistingDefendant = (RadioButton) v.findViewById(R.id.rbExistingDefendant);
+
+        rbExistingDefendant.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    startActivityForResult(
+                            new Intent(getActivity(),
+                                    DefendantSelectionActivity.class), 5555);
+                }
+            }
+        });
+        rbNewDefendant.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    defId = "";
+                }
+            }
+        });
+
         indemFName.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -422,80 +461,6 @@ public class GetAnAgent extends CustomFragment implements
 
     }
 
-    private class PlacesAdaper extends ArrayAdapter<String> implements
-            Filterable {
-
-        ArrayList<String> resultList = new ArrayList<String>();
-
-        public PlacesAdaper(Context context, int textViewResourceId) {
-            super(context, textViewResourceId);
-            // TODO Auto-generated constructor stub
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return resultList.size();
-        }
-
-        @Override
-        public String getItem(int position) {
-            // TODO Auto-generated method stub
-            return resultList.get(position);
-        }
-
-        @Override
-        public Filter getFilter() {
-            // TODO Auto-generated method stub
-            Filter filter = new Filter() {
-
-                @Override
-                protected void publishResults(CharSequence constraint,
-                                              FilterResults results) {
-                    // TODO Auto-generated method stub
-                    if (results != null && results.count > 0) {
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    // TODO Auto-generated method stub
-                    FilterResults fRes = new FilterResults();
-
-                    if (constraint != null) {
-                        if (constraint.length() == 3)
-                            Toast.makeText(getActivity(), "Please wait...",
-                                    Toast.LENGTH_SHORT).show();
-                        resList = Utils.searchPlaces(constraint.toString());
-                        Log.e("Places", resList == null ? "No Place Found"
-                                : resList.size() + " places found");
-                        resultList.clear();
-                        ArrayList<String[]> tempResList = new ArrayList<String[]>();
-                        if (resList != null) {
-                            for (String[] place : resList) {
-                                if (!place[1].equals("")) {
-                                    resultList.add(place[0]);
-                                    tempResList.add(place);
-                                }
-
-                            }
-                            resList = tempResList;
-                        }
-
-                        fRes.values = resultList;
-                        fRes.count = resultList.size();
-                    }
-                    return fRes;
-                }
-            };
-            return filter;
-        }
-
-    }
-
     private void phoneFormat(final EditText ph) {
         ph.setOnFocusChangeListener(new OnFocusChangeListener() {
 
@@ -607,27 +572,33 @@ public class GetAnAgent extends CustomFragment implements
                 }
                 break;
             case R.id.find_best_agent:
+
+                if (!rbExistingDefendant.isChecked()) {
+                    defId = "";
+                }
+
                 if (isValid() && getWarrents() && getIndemnitors() && Radio()
                         && Checked() && Insurance()) // $$$$$$$$$$$$$$$$$$$$
                 // Validation
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                 {
                     if (Utils.isOnline(getActivity())) {
+
                         selfBtnPress = false;
                         showProgressDialog("");
                         WebAccess.params = saveForumData();
-//                        if (WebAccess.agentRecord != null && WebAccess.agentRecord.getAgentId().equals(""))
-//                            WebAccess.params = saveForumData();
-//                        else
-//                            WebAccess.params = null;
-
                         getAgentList();
+
                         // getBestAgent();
                     } else
                         Utils.noInternetDialog(getActivity());
                 }
                 break;
             case R.id.self_assigned:
+                if (!rbExistingDefendant.isChecked()) {
+                    defId = "";
+                }
+
                 if (isValid() && getWarrents() && getIndemnitors() && Radio()
                         && Checked() && Insurance()) // $$$$$$$$$$$$$$$$$$$$
                 // Validation
@@ -757,39 +728,6 @@ public class GetAnAgent extends CustomFragment implements
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         menu.clear();
-    }
-
-    public static class DatePickerFragment extends DialogFragment implements
-            DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, 1990, 0, 1);
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            int selectedYear, month, day;
-            selectedYear = year;
-            month = monthOfYear;
-            day = dayOfMonth;
-
-            String date = pad(month + 1) + "/" + pad(day) + "/" + selectedYear;
-            dateOfBirth.setText(date);
-        }
-
-        private String pad(int c) {
-            return c >= 10 ? "" + c : "0" + c;
-        }
-
     }
 
     // private JSONObject getJsonObject() {
@@ -1372,6 +1310,29 @@ public class GetAnAgent extends CustomFragment implements
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            String key = data.getStringExtra(Const.RETURN_FLAG);
+            if (key.equalsIgnoreCase(Const.RETURN_DEFENDANT_DETAIL)) {
+
+                DefendantModel defModel = (DefendantModel) data.getSerializableExtra(Const.EXTRA_DATA);
+                if (defModel != null) {
+                    defId = defModel.getId();
+                    defFName.setText(defModel.getFirstName());
+                    defLName.setText(defModel.getLastName());
+                    SSN.setText(defModel.getSSN());
+                    dateOfBirth.setText(defModel.getDOB());
+                } else {
+                    defId = "";
+                }
+
+            }
+        }
+    }
+
     // public String changeDateFormat(String s) {
     // Date d = null;
     // String date = "";
@@ -1391,6 +1352,8 @@ public class GetAnAgent extends CustomFragment implements
     // }
 
     void getBestAgent() {
+
+
         showProgressDialog("");
         Date d = null;
         String date = "";
@@ -1429,6 +1392,8 @@ public class GetAnAgent extends CustomFragment implements
         param.put("NeedDefendantPaperwork", chkDefendantPaper.isChecked() ? 1
                 : 0);
         param.put("PaymentAlreadyReceived", radioPaymentAlr.isChecked() ? 1 : 0);
+        param.put("DefId", defId);
+
 
         if (!radioPaymentAlr.isChecked()) {
             param.put("AmountToCollect",
@@ -1681,6 +1646,7 @@ public class GetAnAgent extends CustomFragment implements
         param.put("NeedDefendantPaperwork", chkDefendantPaper.isChecked() ? 1
                 : 0);
         param.put("PaymentAlreadyReceived", radioPaymentAlr.isChecked() ? 1 : 0);
+        param.put("DefId", defId);
 
         if (!radioPaymentAlr.isChecked()) {
             param.put("AmountToCollect",
@@ -1738,27 +1704,110 @@ public class GetAnAgent extends CustomFragment implements
 
     }
 
-    public static AlertDialog showDialog(Context ctx, String msg,
-                                         DialogInterface.OnClickListener listener) {
+    public static class DatePickerFragment extends DialogFragment implements
+            DatePickerDialog.OnDateSetListener {
 
-        return showDialog(ctx, msg, ctx.getString(android.R.string.ok), null,
-                listener, null);
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, 1990, 0, 1);
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            int selectedYear, month, day;
+            selectedYear = year;
+            month = monthOfYear;
+            day = dayOfMonth;
+
+            String date = pad(month + 1) + "/" + pad(day) + "/" + selectedYear;
+            dateOfBirth.setText(date);
+        }
+
+        private String pad(int c) {
+            return c >= 10 ? "" + c : "0" + c;
+        }
+
     }
 
-    public static AlertDialog showDialog(Context ctx, String msg, String btn1,
-                                         String btn2, DialogInterface.OnClickListener listener1,
-                                         DialogInterface.OnClickListener listener2) {
+    private class PlacesAdaper extends ArrayAdapter<String> implements
+            Filterable {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        // builder.setTitle(R.string.app_name);
-        builder.setMessage(msg).setCancelable(false)
-                .setPositiveButton(btn1, listener1);
-        if (btn2 != null && listener2 != null)
-            builder.setNegativeButton(btn2, listener2);
+        ArrayList<String> resultList = new ArrayList<String>();
 
-        AlertDialog alert = builder.create();
-        alert.show();
-        return alert;
+        public PlacesAdaper(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+            // TODO Auto-generated constructor stub
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return resultList.size();
+        }
+
+        @Override
+        public String getItem(int position) {
+            // TODO Auto-generated method stub
+            return resultList.get(position);
+        }
+
+        @Override
+        public Filter getFilter() {
+            // TODO Auto-generated method stub
+            Filter filter = new Filter() {
+
+                @Override
+                protected void publishResults(CharSequence constraint,
+                                              FilterResults results) {
+                    // TODO Auto-generated method stub
+                    if (results != null && results.count > 0) {
+                        notifyDataSetChanged();
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    // TODO Auto-generated method stub
+                    FilterResults fRes = new FilterResults();
+
+                    if (constraint != null) {
+                        if (constraint.length() == 3)
+                            Toast.makeText(getActivity(), "Please wait...",
+                                    Toast.LENGTH_SHORT).show();
+                        resList = Utils.searchPlaces(constraint.toString());
+                        Log.e("Places", resList == null ? "No Place Found"
+                                : resList.size() + " places found");
+                        resultList.clear();
+                        ArrayList<String[]> tempResList = new ArrayList<String[]>();
+                        if (resList != null) {
+                            for (String[] place : resList) {
+                                if (!place[1].equals("")) {
+                                    resultList.add(place[0]);
+                                    tempResList.add(place);
+                                }
+
+                            }
+                            resList = tempResList;
+                        }
+
+                        fRes.values = resultList;
+                        fRes.count = resultList.size();
+                    }
+                    return fRes;
+                }
+            };
+            return filter;
+        }
 
     }
 

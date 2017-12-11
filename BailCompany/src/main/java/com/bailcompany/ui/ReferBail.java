@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -34,21 +35,26 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.bailcompany.DefendantSelectionActivity;
 import com.bailcompany.Login;
 import com.bailcompany.MainActivity;
 import com.bailcompany.R;
 import com.bailcompany.custom.CustomFragment;
+import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.GetAnAgentModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.utils.Commons;
+import com.bailcompany.utils.Const;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
 import com.loopj.android.http.AsyncHttpClient;
@@ -74,6 +80,8 @@ public class ReferBail extends CustomFragment {
 	public static String location_entered;
 	private String locLatt = "0.0", locLng = "0.0";
 	ArrayList<String[]> resList;
+	private RadioButton rbNewDefendant, rbExistingDefendant;
+	private String defId = "";
 
 	static AsyncHttpClient client = new AsyncHttpClient(true,80,443);
 	String message;
@@ -99,6 +107,7 @@ public class ReferBail extends CustomFragment {
 
 	private void initValues(View v) {
 
+
 		dateOfBirth = (EditText) v.findViewById(R.id.dob);
 
 		number_cosigner = (EditText) v.findViewById(R.id.no_cosigner);
@@ -114,6 +123,30 @@ public class ReferBail extends CustomFragment {
 		addMore = (Button) v.findViewById(R.id.add_more);
 		btnSubmit = (Button) v.findViewById(R.id.btnSubmit);
 		warrentLayout = (LinearLayout) v.findViewById(R.id.warrent_layout);
+		rbNewDefendant = (RadioButton) v.findViewById(R.id.rbNewDefendant);
+		rbExistingDefendant = (RadioButton) v.findViewById(R.id.rbExistingDefendant);
+
+		rbExistingDefendant.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+				if (b) {
+					startActivityForResult(
+							new Intent(getActivity(),
+									DefendantSelectionActivity.class), 5555);
+				}
+			}
+		});
+		rbNewDefendant.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+				if (b) {
+					defId = "";
+				}
+			}
+		});
+
+
+
 		location.setAdapter(new PlacesAdaper(getActivity(),
 				android.R.layout.simple_list_item_1));
 
@@ -195,6 +228,28 @@ public class ReferBail extends CustomFragment {
 			}
 		});
 
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode == Activity.RESULT_OK) {
+			String key = data.getStringExtra(Const.RETURN_FLAG);
+			if (key.equalsIgnoreCase(Const.RETURN_DEFENDANT_DETAIL)) {
+
+				DefendantModel defModel = (DefendantModel) data.getSerializableExtra(Const.EXTRA_DATA);
+				if (defModel != null) {
+					defId = defModel.getId();
+					defFName.setText(defModel.getFirstName());
+					defLName.setText(defModel.getLastName());
+					dateOfBirth.setText(defModel.getDOB());
+				} else {
+					defId = "";
+				}
+
+			}
+		}
 	}
 
 	@SuppressWarnings("unused")
@@ -307,6 +362,7 @@ public class ReferBail extends CustomFragment {
 		param.put("PaymentPlan", colletralText.getText().toString());
 
 		param.put("InstructionForAgent", instruction.getText().toString());
+		param.put("DefId", defId);
 
 		param.put("Location", location_entered);
 		for (int i = 0; i < listWarrent.size(); i++) {

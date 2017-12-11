@@ -39,6 +39,7 @@ public class FindBestAgent extends CustomActivity {
 				"agents");
 		agentRequestId = WebAccess.agentRequestId;
 
+
 		Intent intent = getIntent();
 		locLatt = intent.getStringExtra("locLatt");
 		locLng = intent.getStringExtra("locLng");
