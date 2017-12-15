@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,7 +20,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,10 +47,10 @@ import com.bailcompany.custom.CustomGridView;
 import com.bailcompany.model.BailRequestModel;
 import com.bailcompany.model.CourtDateModel;
 import com.bailcompany.model.DefendantModel;
+import com.bailcompany.model.IndemnitorModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.User;
 import com.bailcompany.model.WarrantModel;
-import com.bailcompany.ui.DefendantBasicProfile;
 import com.bailcompany.ui.MainFragment;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
@@ -86,6 +89,7 @@ public class DefendantBondDetails extends CustomActivity {
     String comp;
     String reqId;
     TextView submit, status, quotesText, amountReqText;
+    LinearLayout llIndemn;
     boolean fromNotification = false;
     MainFragment m = new MainFragment();
     String currentDateTimeString, reqDateTimeString;
@@ -110,6 +114,7 @@ public class DefendantBondDetails extends CustomActivity {
     ArrayList<String> imgPathList, docImgPaths;
     ArrayList<Uri> uriArrayList;
     int adpaterPosition = 0;
+    AlertDialog dialog = null;
     private BailRequestModel bm;
     private DefendantModel defendant;
     private LinearLayout preFixedViewLL;
@@ -120,7 +125,6 @@ public class DefendantBondDetails extends CustomActivity {
     private CustomGridView photoGrid;
     private PhotoAdapter adapter;
     private File file;
-    AlertDialog dialog=null;
     private SlideDateTimeListener listener = new SlideDateTimeListener() {
 
 
@@ -172,6 +176,7 @@ public class DefendantBondDetails extends CustomActivity {
         status = (TextView) findViewById(R.id.acceptedtext);
         quotesText = (TextView) findViewById(R.id.quote_inst2);
         amountReqText = (TextView) findViewById(R.id.bid_decimal2);
+        llIndemn = (LinearLayout) findViewById(R.id.llIndemnitor);
         // loadContent();
 
         setTouchNClick(R.id.btn_accept);
@@ -196,17 +201,79 @@ public class DefendantBondDetails extends CustomActivity {
         hideKeyboard();
     }
 
+    private void makeCallDialog(final String number) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("DO YOU WISH TO CALL? \n" + number);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + number));
+                if (ActivityCompat.checkSelfPermission(DefendantBondDetails.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+
+                    return;
+                }
+                startActivity(callIntent);
+            }
+        });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+
+        });
+
+        AlertDialog alertDialog = alert.show();
+        TextView messageText = (TextView) alertDialog.findViewById(android.R.id.message);
+        messageText.setGravity(Gravity.CENTER);
+        messageText.setTextColor(Color.BLACK);
+    }
+
+    private void showIndemnitorDetails() {
+
+        ArrayList<IndemnitorModel> iList = bm.getIndemnitorsList();
+        if (iList != null && iList.size() > 0) {
+            int count = 0;
+            for (IndemnitorModel iMod : iList) {
+                View v = getLayoutInflater().inflate(R.layout.row_bond_indemnitor,
+                        null);
+                if (count == 0)
+                    v.findViewById(R.id.divider).setVisibility(View.GONE);
+                if (iMod != null) {
+                    ((TextView) v.findViewById(R.id.indemnName))
+                            .setText("Name:   " + iMod.getName() + "");
+                    TextView phoneTV = (TextView) v.findViewById(R.id.indemnPhone);
+                    phoneTV.setText(iMod.getPhoneNumber());
+                    phoneTV.setTag(iMod);
+
+                    phoneTV.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            IndemnitorModel iMod = (IndemnitorModel) v.getTag();
+
+                            makeCallDialog(iMod.getPhoneNumber());
+                        }
+                    });
+
+                    llIndemn.addView(v);
+                }
+                count++;
+            }
+        }
+    }
+
     private void showDetail() {
 
         getDropDownValues();
-
+        showIndemnitorDetails();
 
         LinearLayout llWarrant = (LinearLayout) findViewById(R.id.llWarrant);
         llDefendantDocuments = (LinearLayout) findViewById(R.id.llDocumentsDefendant);
         llCosignerDocuments = (LinearLayout) findViewById(R.id.llDocumentsCosigner);
         llOtherDocuments = (LinearLayout) findViewById(R.id.llDocumentsOther);
-
-
 
         ArrayList<WarrantModel> wList = bm.getWarrantList();
         final ArrayList<CourtDateModel> allCourtDates = bm.getCourtDates();
@@ -292,15 +359,10 @@ public class DefendantBondDetails extends CustomActivity {
                 if (count == 0)
                     v.findViewById(R.id.divider).setVisibility(View.GONE);
                 if (wMod != null) {
-                    ((TextView) v.findViewById(R.id.wrntAmount))
-                            .setText("Amount:   $" + wMod.getAmount());
-
-
                     ((LinearLayout) v.findViewById(R.id.llRowWarrant)).setOnClickListener(new OnClickListener() {
 
                         @Override
                         public void onClick(View view) {
-
                             if (wMod.getPowerNo().trim().equalsIgnoreCase(""))
                                 return;
                             selectedWarrentId = wMod.getId();
@@ -310,10 +372,7 @@ public class DefendantBondDetails extends CustomActivity {
                                 if (wCourtDate.getWarrantId() == selectedWarrentId) {
                                     warrantCourtDates.add(wCourtDate);
                                 }
-
                             }
-
-
                             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             View dialogForm = inflater.inflate(R.layout.dialog_edit_defendant_bond_details, null, false);
                             final LinearLayout llWarrantContainer = (LinearLayout) dialogForm.findViewById(R.id.llWarrantContainer);
@@ -354,7 +413,7 @@ public class DefendantBondDetails extends CustomActivity {
                             buttonUpdateWarrant.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if(dialog!=null)
+                                    if (dialog != null)
                                         dialog.dismiss();
                                     updateWarrantDetails();
 
@@ -369,12 +428,14 @@ public class DefendantBondDetails extends CustomActivity {
                             dialog.show();
                         }
                     });
+                    ((TextView) v.findViewById(R.id.wrntAmount))
+                            .setText("Amount:   $" + wMod.getAmount());
                     ((TextView) v.findViewById(R.id.wrntTownship))
                             .setText("Township:   " + wMod.getTownship() + "");
-
-                    Log.e("wMod.getAmount()", "" + wMod.getAmount());
-                    Log.e("wMod.getTownship()", "" + wMod.getTownship());
-
+                    ((TextView) v.findViewById(R.id.wrntCaseNum))
+                            .setText("CaseNo:   " + wMod.getCase_no() );
+                    ((TextView) v.findViewById(R.id.wrntPowerNum))
+                            .setText("PowerNo:    " + wMod.getPowerNo());
                     llWarrant.addView(v);
                 }
                 count++;
@@ -394,13 +455,15 @@ public class DefendantBondDetails extends CustomActivity {
         ((TextView) findViewById(R.id.indemnNum)).setText(bm
                 .getNumberIndemnitors() + "");
 
+        ((TextView) findViewById(R.id.paymentStatus))
+                .setText(bm.isPaymentAlreadyReceived() ? "Payment Already Received by Company"
+                        : "Payment to be collected from Indemnitor\nAmount:  $"
+                        + bm.getAmountToCollect() + "\nPayment Plan:  "
+                        + bm.getPaymentPlan());
 
         ((TextView) findViewById(R.id.splInstruction)).setText(bm
                 .getInstructionForAgent() + "");
-
-        Log.d("BCosigner=", "" + bm.getBondDocuments().getCosignerPhoto().size());
-        Log.d("BDef=", "" + bm.getBondDocuments().getDefendantPhoto().size());
-        Log.d("BOther=", "" + bm.getBondDocuments().getOtherDocuments().size());
+        ((TextView) findViewById(R.id.paperwork)).setText(getPaperworkReq());
 
         ArrayList<String> docOtherDoc = bm.getBondDocuments().getOtherDocuments();
         if (docOtherDoc != null && docOtherDoc.size() > 0) {
@@ -565,6 +628,30 @@ public class DefendantBondDetails extends CustomActivity {
         RelativeLayout enter = (RelativeLayout) findViewById(R.id.enter);
         RelativeLayout view = (RelativeLayout) findViewById(R.id.view);
 
+    }
+    private String getPaperworkReq() {
+        String req = "";
+
+        if (!bm.isNeedPaperWork())
+            req += "No Paperwork - Post & Go";
+        // else
+        // req+="Paperwork - Post & Go, ";
+
+        if (bm.isNeedIndemnitorPaperwork()) {
+            if (!req.equalsIgnoreCase("")) {
+                req += "\n";
+            }
+            req += "Indemnitor Paperwork";
+        }
+
+        if (bm.isNeedDefendantPaperwork()) {
+            if (!req.equalsIgnoreCase("")) {
+                req += "\n";
+            }
+            req += "Defendant Paperwork";
+        }
+
+        return req;
     }
 
     public void uploadDocuments() {

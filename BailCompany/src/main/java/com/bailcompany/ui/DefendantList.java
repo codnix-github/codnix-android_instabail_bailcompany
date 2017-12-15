@@ -1,7 +1,11 @@
 package com.bailcompany.ui;
 
 import android.annotation.SuppressLint;
+import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bailcompany.Launcher;
@@ -211,6 +216,49 @@ boolean returnResult=false;
                 return true;
             }
         });
+    }
+
+    public static class F1 extends DialogFragment {
+
+       static Bitmap bitmap;
+        public static F1 newInstance(Bitmap img) {
+            F1 f1 = new F1();
+            f1.setStyle(DialogFragment.STYLE_NO_FRAME,
+                    android.R.style.Theme_DeviceDefault_Dialog);
+            bitmap=img;
+            return f1;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            // Remove the default background
+            getDialog().getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.TRANSPARENT));
+
+            // Inflate the new view with margins and background
+            View v = inflater.inflate(R.layout.popup_layout, container, false);
+            ImageView bm = (ImageView) v.findViewById(R.id.bm_company);
+
+            if (bitmap != null) {
+
+                bm.setImageBitmap(bitmap);
+            } else {
+
+            }
+
+
+            v.findViewById(R.id.popup_root).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dismiss();
+                        }
+                    });
+
+            return v;
+        }
     }
 
 }

@@ -10,7 +10,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.ActionBar;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 
 import com.bailcompany.R;
-import com.bailcompany.defendant.ProfileStyle2Activity;
 import com.bailcompany.utils.ExceptionHandler;
 import com.bailcompany.utils.Log;
 import com.bailcompany.utils.StaticData;

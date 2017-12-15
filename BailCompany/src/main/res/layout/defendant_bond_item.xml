@@ -7,27 +7,16 @@
         android:id="@+id/lp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/pad_10dp"
         android:paddingLeft="@dimen/pad_10dp"
         android:paddingRight="@dimen/pad_10dp"
-        android:paddingTop="@dimen/pad_15dp">
-
-        <TextView
-            android:id="@+id/tvTownName"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="0dp"
-            android:singleLine="false"
-            android:text="Text"
-            android:textSize="@dimen/txt_14sp" />
+        android:paddingTop="@dimen/pad_10dp">
 
         <TextView
             android:id="@+id/date"
             style="@style/style_get"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="top"
             android:layout_margin="0dp"
@@ -37,32 +26,19 @@
             android:gravity="right"
             android:text="@string/date_time"
             android:textSize="@dimen/txt_10sp" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/llPowerDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lp"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/pad_5dp"
-        android:paddingLeft="@dimen/pad_10dp"
-        android:paddingRight="@dimen/pad_10dp"
-        android:paddingTop="@dimen/pad_2dp"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tvPowerNumber"
-            style="@style/style_get"
+        <LinearLayout
+            android:id="@+id/llWarrantDetails"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_margin="0dp"
-            android:text="@string/app_name"
-            android:textSize="@dimen/txt_12sp" />
-    </LinearLayout>
+            android:orientation="vertical">
 
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/new_badge"

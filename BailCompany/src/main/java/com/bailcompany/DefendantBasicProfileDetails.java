@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.StateModel;
-import com.bailcompany.ui.DefendantBasicProfile;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
 import com.bailcompany.utils.FilePath;
@@ -36,9 +35,11 @@ import com.bailcompany.utils.Utility;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +69,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
     ImageView ivDefendantPic;
     String defPhotoPath;
     private File file, defPhotoFile;
-    private Uri defPhotoUri=null;
+    private Uri defPhotoUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +131,8 @@ public class DefendantBasicProfileDetails extends CustomActivity {
 
         if (!defModel.getPhoto().equalsIgnoreCase("")) {
             Log.d("Profile:", defModel.getPhoto());
-            Glide.with(getApplicationContext()).load(WebAccess.PHOTO + defModel.getPhoto()).placeholder(R.drawable.completion_form_add_photo_btn).error(R.drawable.completion_form_add_photo_btn).into(ivDefendantPic);
+            Glide.with(getApplicationContext()).load(WebAccess.PHOTO + defModel.getPhoto()).placeholder(R.drawable.completion_form_add_photo_btn).error(R.drawable.completion_form_add_photo_btn).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(ivDefendantPic);
         }
 
         ArrayList<String> eyeColors = new ArrayList<String>();
@@ -236,9 +238,8 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                 }
 
 
-            } else {
+            } else if (requestCode == ImageSelector.IMAGE_GALLARY) {
                 uri = data.getData();
-
                 if (uri == null) {
                     Bundle extras = data.getExtras();
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -251,18 +252,31 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                         uri = null;
                     }
                 }
-            }
-            if (uri != null) {
-                if (defPhotoPath != null) {
-                    File f = new File(defPhotoPath);
-
+            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    uri = result.getUri();
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
                 }
+            }
+            if (uri != null && requestCode != CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                Log.d("Path=",path);
+                if (ImageSelector.isImage(path.trim().substring(path.lastIndexOf('/')))) {
+                    defPhotoUri = uri;
+                    CropImage.activity(defPhotoUri).setAspectRatio(1, 1)
+                            .start(this);
+                } else {
+                    Toast.makeText(THIS, "Please select valid image", Toast.LENGTH_SHORT).show();
+                }
+                //ivDefendantPic.setImageResource(0);
+                //Glide.with(getApplicationContext()).load(defPhotoUri).placeholder(R.drawable.completion_form_add_photo_btn).error(R.drawable.completion_form_add_photo_btn).into(ivDefendantPic);
 
-                defPhotoPath = path;
+            } else if (uri != null && requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 defPhotoUri = uri;
-
                 ivDefendantPic.setImageResource(0);
-                Glide.with(getApplicationContext()).load(defPhotoUri).placeholder(R.drawable.completion_form_add_photo_btn).error(R.drawable.completion_form_add_photo_btn).into(ivDefendantPic);
+                Glide.with(getApplicationContext()).load(defPhotoUri).placeholder(R.drawable.completion_form_add_photo_btn).error(R.drawable.completion_form_add_photo_btn).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true).into(ivDefendantPic);
 
             }
 
@@ -360,9 +374,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                 param.put("DefPhoto", imgISdef, "defPhoto.jpg",
                         "image/jpg");
 
-            }
-            else
-            {
+            } else {
                 param.put("DefPhoto", "");
 
             }
@@ -396,8 +408,6 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                                 message = resObj.optString("message");
                                 if (!Commons.isEmpty(message)
                                         || message.equalsIgnoreCase("success")) {
-
-                                    Log.d("Res=", message);
 
                                     Utils.showDialog(THIS, message);
 

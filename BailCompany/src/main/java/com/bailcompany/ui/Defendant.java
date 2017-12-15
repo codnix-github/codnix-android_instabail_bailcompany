@@ -4,20 +4,22 @@ import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -41,13 +43,15 @@ import com.bailcompany.model.DefendantEmploymentModel;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.DefendantNotesModel;
 import com.bailcompany.model.DefendantVehicleModel;
-import com.bailcompany.tools.ImageZoomDialog;
+import com.bailcompany.model.WarrantModel;
+import com.bailcompany.tools.NonScrollListView;
 import com.bailcompany.utils.Const;
-import com.bailcompany.utils.ImageLoader;
-import com.bailcompany.utils.ImageUtils;
-import com.bailcompany.utils.StaticData;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -58,27 +62,29 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 @SuppressLint("InflateParams")
 public class Defendant extends CustomActivity {
 
     public static ArrayList<BailRequestModel> bailReqList = new ArrayList<BailRequestModel>();
     static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     static int getCallTimeout = 50000;
+    static Bitmap bmDefendant;
     ArrayList<String> historyItem = new ArrayList<String>();
     String defendantUrl, defendantBondUrl;
     boolean isSender, IsBailRequest;
     ListView incomingRequestList;
     int page = 0;
     boolean loadingMore;
-    Defendant.IncomingListAdapter adapter;
-
-    ImageView defProfile;
+    DefendanrBondAdapter adapter;
+    CircleImageView defProfile;
     TextView tvDefName, tvDefLocation;
     String defId = "";
     private ListView historyList;
     private Animator mCurrentAnimator;
     private DefendantModel defModel;
-    private boolean showProgressDialog=true;
+    private boolean showProgressDialog = true;
     // The system "short" animation time duration, in milliseconds. This
     // duration is ideal for subtle animations or animations that occur
     // very frequently.
@@ -102,7 +108,7 @@ public class Defendant extends CustomActivity {
 
         }
 
-        defProfile = (ImageView) findViewById(R.id.profile_pic);
+        defProfile = (CircleImageView) findViewById(R.id.profile_pic);
         tvDefLocation = (TextView) findViewById(R.id.tvDefLocation);
         tvDefName = (TextView) findViewById(R.id.tvDefName);
         defendantUrl = WebAccess.GET_DEFENDANT_DETAIL;
@@ -110,7 +116,7 @@ public class Defendant extends CustomActivity {
         isSender = false;
         IsBailRequest = true;
         geDefendantProfile();
-        incomingRequestList = (ListView) findViewById(R.id.incoming_request_list);
+        incomingRequestList = (NonScrollListView) findViewById(R.id.incoming_request_list);
         ((Button) findViewById(R.id.btnBasicDetails)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +158,7 @@ public class Defendant extends CustomActivity {
         });
 
 
-        adapter = new IncomingListAdapter(_activity);
+        adapter = new DefendanrBondAdapter(_activity);
         incomingRequestList.setAdapter(adapter);
         incomingRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -171,19 +177,14 @@ public class Defendant extends CustomActivity {
 
         getBondDetails();
 
-        final View thumb1View = findViewById(R.id.profile_pic);
-        thumb1View.setOnClickListener(new View.OnClickListener() {
+        defProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (defModel.getPhoto() == null || defModel.getPhoto().trim().equalsIgnoreCase(""))
                     return;
-                ImageZoomDialog addToQueueDialog = new ImageZoomDialog(Defendant.this, WebAccess.PHOTO + defModel.getPhoto());
-                addToQueueDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                addToQueueDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                        WindowManager.LayoutParams.MATCH_PARENT);
-                addToQueueDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                addToQueueDialog.show();
+                // hideKeyboard();
 
+                F1.newInstance().show(getFragmentManager(), null);
             }
         });
         ImageView ivFacebook = (ImageView) findViewById(R.id.ivFacebook);
@@ -199,11 +200,11 @@ public class Defendant extends CustomActivity {
             }
         });
 
-        ImageView ivGoogle = (ImageView) findViewById(R.id.ivGoogle);
-        ivGoogle.setOnClickListener(new View.OnClickListener() {
+        ImageView ivInstagram = (ImageView) findViewById(R.id.ivInstagram);
+        ivInstagram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // google url is instagram url
                 if (defModel != null && defModel.getGoogleURL() != null && !defModel.getGoogleURL().trim().equals("")) {
                     if (Patterns.WEB_URL.matcher(defModel.getGoogleURL()).matches()) {
                         Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(defModel.getGoogleURL()));
@@ -230,10 +231,16 @@ public class Defendant extends CustomActivity {
             @Override
             public void onClick(View view) {
                 if (!defModel.getCellTele().equals("")) {
+                    if (ActivityCompat.checkSelfPermission(Defendant.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:" + defModel.getCellTele()));
                     startActivity(callIntent);
                 } else if (!defModel.getHomeTele().equals("")) {
+                    if (ActivityCompat.checkSelfPermission(Defendant.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:" + defModel.getHomeTele()));
                     startActivity(callIntent);
@@ -431,8 +438,19 @@ public class Defendant extends CustomActivity {
                                             }
                                             defModel.setNotesDtl(nodeDtl);
 
-
-                                            //  Glide.with(getActivity()).load(WebAccess.PHOTO + defModel.getPhoto()).into(defProfile);
+                                            Glide.with(THIS)
+                                                    .load(WebAccess.PHOTO + defModel.getPhoto())
+                                                    .asBitmap()
+                                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                    .skipMemoryCache(true)
+                                                    .into(new SimpleTarget<Bitmap>() {
+                                                        @Override
+                                                        public void onResourceReady(Bitmap resource, GlideAnimation<? super
+                                                                Bitmap> glideAnimation) {
+                                                            bmDefendant = resource;
+                                                            defProfile.setImageBitmap(resource);
+                                                        }
+                                                    });
 
                                             String fullAddress = "";
                                             if (defModel.getAddress() != "") {
@@ -441,35 +459,14 @@ public class Defendant extends CustomActivity {
                                             if (defModel.getTown() != "") {
                                                 fullAddress += defModel.getTown() + ", ";
                                             }
-                                            if (defModel.getStateName() != "") {
-                                                fullAddress += defModel.getStateName() + ", ";
+                                            if (defModel.getState() != "") {
+                                                fullAddress += defModel.getState() + ", ";
                                             }
                                             if (defModel.getZipcode() != "") {
                                                 fullAddress += defModel.getZipcode();
                                             }
-
                                             tvDefLocation.setText(fullAddress);
-
-
                                             tvDefName.setText(defModel.getFirstName() + " " + defModel.getLastName());
-
-                                            Bitmap bm = new ImageLoader(StaticData.getDIP(60),
-                                                    StaticData.getDIP(60), ImageLoader.SCALE_FITXY).loadImage(
-                                                    WebAccess.PHOTO + defModel.getPhoto(), new ImageLoader.ImageLoadedListener() {
-
-                                                        @Override
-                                                        public void imageLoaded(Bitmap bm) {
-                                                            if (bm != null)
-                                                                defProfile.setImageBitmap(ImageUtils
-                                                                        .getCircularBitmap(bm));
-
-                                                        }
-                                                    });
-                                            if (bm != null)
-                                                defProfile.setImageBitmap(ImageUtils.getCircularBitmap(bm));
-                                            else
-                                                defProfile.setImageResource(R.drawable.default_profile_image);
-
 
                                         }
 
@@ -627,21 +624,62 @@ public class Defendant extends CustomActivity {
         if (resultCode == Activity.RESULT_OK) {
             String key = data.getStringExtra(Const.RETURN_FLAG);
             if (key.equalsIgnoreCase(Const.BOND_DETAILS_UPDATED) || key.equalsIgnoreCase(Const.BOND_DOCUMENT_UPLOADED)) {
-                showProgressDialog=false;
+                showProgressDialog = false;
                 getBondDetails();
             } else if (key.equalsIgnoreCase(Const.DEFENDANT_BASIC_DETAILS_UPDATED)) {
-                showProgressDialog=false;
-                 geDefendantProfile();
+                showProgressDialog = false;
+                geDefendantProfile();
             }
 
 
         }
     }
 
+    public static class F1 extends DialogFragment {
+
+        public static F1 newInstance() {
+            F1 f1 = new F1();
+            f1.setStyle(DialogFragment.STYLE_NO_FRAME,
+                    android.R.style.Theme_DeviceDefault_Dialog);
+
+            return f1;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            // Remove the default background
+            getDialog().getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.TRANSPARENT));
+
+            // Inflate the new view with margins and background
+            View v = inflater.inflate(R.layout.popup_layout, container, false);
+            ImageView bm = (ImageView) v.findViewById(R.id.bm_company);
+
+            if (bmDefendant != null) {
+
+                bm.setImageBitmap(bmDefendant);
+            } else {
+
+            }
+
+
+            v.findViewById(R.id.popup_root).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dismiss();
+                        }
+                    });
+
+            return v;
+        }
+    }
 
     @SuppressLint("InflateParams")
-    private class IncomingListAdapter extends BaseAdapter {
-        public IncomingListAdapter(Context context) {
+    private class DefendanrBondAdapter extends BaseAdapter {
+        public DefendanrBondAdapter(Context context) {
 
         }
 
@@ -665,28 +703,38 @@ public class Defendant extends CustomActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null)
+          //  if (convertView == null)
                 convertView = getLayoutInflater()
                         .inflate(R.layout.defendant_bond_item, null);
             LinearLayout lp = (LinearLayout) convertView.findViewById(R.id.lp);
+            LinearLayout llWarrantDetails = (LinearLayout) convertView.findViewById(R.id.llWarrantDetails);
+
             if (position % 2 == 0)
                 lp.setBackgroundColor(Color.parseColor("#F1EFEF"));
             else
                 lp.setBackgroundColor(Color.WHITE);
 
-            String powerNumbers = "";
             for (int i = 0; i < bailReqList.get(position).getWarrantList().size(); i++) {
-                powerNumbers += bailReqList.get(position).getWarrantList().get(i).getTownship();
-                //   powerNumbers+=bailReqList.get(position).getWarrantList().get(i).getPowerNo();
+                WarrantModel wMod = bailReqList.get(position).getWarrantList().get(i);
+                if (wMod != null) {
+                    View v = getLayoutInflater()
+                            .inflate(R.layout.row_warrant, null);
 
-                powerNumbers += "\n";
+                    ((TextView) v.findViewById(R.id.wrntAmount))
+                            .setText("Amount:   $" + wMod.getAmount());
+                    ((TextView) v.findViewById(R.id.wrntTownship))
+                            .setText("Township:   " + wMod.getTownship());
+                    ((TextView) v.findViewById(R.id.wrntCaseNum))
+                            .setText("CaseNo:   " + wMod.getCase_no() );
+                    ((TextView) v.findViewById(R.id.wrntPowerNum))
+                            .setText("PowerNo:    " + wMod.getPowerNo());
+                    llWarrantDetails.addView(v);
+
+                }
+
             }
 
-            ((TextView) convertView.findViewById(R.id.tvTownName))
-                    .setText(powerNumbers);
-
-
-            ((TextView) convertView.findViewById(R.id.date)).setText(Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
+             ((TextView) convertView.findViewById(R.id.date)).setText(Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
                     "MM/dd/yyyy", bailReqList.get(position).getCreatedDate()));
 
 
@@ -697,5 +745,6 @@ public class Defendant extends CustomActivity {
             return convertView;
         }
     }
+
 
 }

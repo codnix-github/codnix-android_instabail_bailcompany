@@ -26,6 +26,7 @@
                 android:id="@+id/wrntAmount"
                 style="@style/bail_request"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/pad_5dp"
                 android:textColor="@color/bail_rquest_font_bold" />

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/req_det_bg">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,9 +12,9 @@
 
         <LinearLayout
             style="@style/linear_h"
-            android:layout_margin="@dimen/pad_5dp"
-            android:background="@color/req_det_bg"
-            android:paddingBottom="@dimen/pad_30dp"
+
+            android:background="@color/white"
+
             android:visibility="gone">
 
             <LinearLayout
@@ -49,7 +49,7 @@
                     <TextView
                         style="@style/bail_request"
                         android:text="@string/email_bail"
-                        android:textColor="@color/bail_rquest_font_bold"
+                        android:textColor="@color/bail_rquest_text_color"
                         android:textStyle="bold" />
 
                     <TextView
@@ -66,13 +66,13 @@
                     <TextView
                         style="@style/bail_request"
                         android:text="@string/phone"
-                        android:textColor="@color/bail_rquest_font_bold"
+                        android:textColor="@color/bail_rquest_text_color"
                         android:textStyle="bold" />
 
                     <TextView
                         style="@style/bail_request"
                         android:text="@string/num123"
-                        android:textColor="@color/bail_rquest_font_bold" />
+                        android:textColor="@color/bail_rquest_text_color" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -82,13 +82,13 @@
                     <TextView
                         style="@style/bail_request"
                         android:text="@string/addr"
-                        android:textColor="@color/bail_rquest_font_bold"
+                        android:textColor="@color/bail_rquest_text_color"
                         android:textStyle="bold" />
 
                     <TextView
                         style="@style/bail_request"
                         android:text="@string/addr_val"
-                        android:textColor="@color/bail_rquest_font_bold" />
+                        android:textColor="@color/bail_rquest_text_color" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -98,9 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/pad_10dp"
-            android:layout_marginLeft="@dimen/pad_5dp"
-            android:layout_marginRight="@dimen/pad_5dp"
-            android:background="@color/req_det_bg"
+            android:background="@color/white"
             android:orientation="vertical">
 
 
@@ -112,184 +110,248 @@
                     style="@style/bail_request"
                     android:paddingLeft="@dimen/pad_5dp"
                     android:text="@string/warrent"
-                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textColor="@color/bail_rquest_text_color"
                     android:textStyle="bold" />
 
-                <View
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/saperator_yellow" />
+                    android:layout_height="wrap_content"
+                    android:elevation="2dp"
+                    app:cardBackgroundColor="@android:color/white">
 
-                <TextView
-                    android:id="@+id/wrntReq2"
-                    style="@style/bail_request"
+                    <LinearLayout
+                        android:id="@+id/llWarrant"
+                        style="@style/linear_v"
+                        android:background="@color/white"></LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:paddingLeft="@dimen/pad_5dp"
-                    android:paddingTop="@dimen/pad_5dp"
-                    android:textColor="@color/bail_rquest_font_bold" />
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white">
 
-                <LinearLayout
-                    android:id="@+id/llWarrant"
-                    style="@style/linear_v"></LinearLayout>
+                    <LinearLayout
+                        style="@style/linear_v"
+                        android:background="@color/white">
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/bail_request"
+                                android:paddingLeft="@dimen/pad_5dp"
+                                android:text="@string/no_ind"
+                                android:textColor="@color/bail_rquest_text_color"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/indemnNum"
+                                style="@style/bail_request"
+                                android:layout_width="match_parent"
+                                android:paddingLeft="@dimen/pad_10dp"
+                                android:paddingTop="@dimen/pad_5dp"
+                                android:text=""
+                                android:textColor="@color/bail_rquest_text_color" />
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/bail_request"
+                            android:paddingLeft="@dimen/pad_5dp"
+                            android:text="@string/ind_detail"
+                            android:textColor="@color/bail_rquest_text_color"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:id="@+id/llIndemnitor"
+                            style="@style/linear_v"
+                            android:elevation="1dp"
+                            android:padding="5dp"></LinearLayout>
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
                 <TextView
                     style="@style/bail_request"
                     android:layout_marginTop="@dimen/pad_10dp"
                     android:paddingLeft="@dimen/pad_5dp"
-                    android:text="@string/no_co"
-                    android:textColor="@color/bail_rquest_font_bold"
+                    android:text="@string/ppr_needed"
+                    android:textColor="@color/bail_rquest_text_color"
                     android:textStyle="bold" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/saperator_yellow" />
 
-                <TextView
-                    android:id="@+id/indemnNum"
-                    style="@style/bail_request"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:paddingLeft="@dimen/pad_10dp"
-                    android:paddingTop="@dimen/pad_5dp"
-                    android:textColor="@color/bail_rquest_font_bold" />
+                    android:layout_height="wrap_content"
+                    android:elevation="1dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <TextView
+                        android:id="@+id/paperwork"
+                        style="@style/bail_request"
+                        android:layout_width="wrap_content"
+                        android:padding="@dimen/pad_5dp"
+                        android:textColor="@color/bail_rquest_font_bold" />
+                </android.support.v7.widget.CardView>
 
                 <TextView
                     style="@style/bail_request"
                     android:layout_marginTop="@dimen/pad_10dp"
                     android:paddingLeft="@dimen/pad_5dp"
                     android:text="@string/insurance2"
-                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textColor="@color/bail_rquest_text_color"
                     android:textStyle="bold" />
 
-                <View
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/saperator_yellow" />
+                    android:layout_height="wrap_content"
+                    android:elevation="1dp"
+                    app:cardBackgroundColor="@color/white">
 
-                <TextView
-                    android:id="@+id/insurance"
-                    style="@style/bail_request"
-                    android:layout_width="match_parent"
-                    android:paddingLeft="@dimen/pad_5dp"
-                    android:paddingTop="@dimen/pad_5dp"
-                    android:textColor="@color/bail_rquest_font_bold" />
+                    <TextView
+                        android:id="@+id/insurance"
+                        style="@style/bail_request"
+                        android:layout_width="wrap_content"
+                        android:padding="@dimen/pad_5dp"
 
+                        android:textColor="@color/bail_rquest_font_bold" />
+                </android.support.v7.widget.CardView>
 
                 <TextView
                     style="@style/bail_request"
                     android:layout_marginTop="@dimen/pad_10dp"
                     android:paddingLeft="@dimen/pad_5dp"
-                    android:text="@string/spcl_inst"
-                    android:textColor="@color/bail_rquest_font_bold"
+                    android:text="@string/pay_st"
+                    android:textColor="@color/bail_rquest_text_color"
                     android:textStyle="bold" />
-
-                <View
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/saperator_yellow" />
+                    android:layout_height="wrap_content"
+                    android:elevation="1dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <TextView
+                        android:id="@+id/paymentStatus"
+                        style="@style/bail_request"
+                        android:layout_width="wrap_content"
+                        android:padding="@dimen/pad_5dp"
+
+                        android:textColor="@color/bail_rquest_font_bold" />
+                </android.support.v7.widget.CardView>
 
                 <TextView
-                    android:id="@+id/splInstruction"
                     style="@style/bail_request"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="@string/spcl_inst"
+                    android:textColor="@color/bail_rquest_text_color"
+                    android:textStyle="bold" />
+
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:paddingTop="@dimen/pad_5dp"
-                    android:textColor="@color/bail_rquest_font_bold" />
+                    android:layout_height="wrap_content"
+                    android:elevation="1dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <TextView
+                        android:id="@+id/splInstruction"
+                        style="@style/bail_request"
+                        android:layout_width="wrap_content"
+
+                        android:padding="@dimen/pad_5dp"
+                        android:textColor="@color/bail_rquest_font_bold" />
+                </android.support.v7.widget.CardView>
 
                 <TextView
                     style="@style/bail_request"
                     android:layout_marginTop="@dimen/pad_10dp"
                     android:paddingLeft="@dimen/pad_5dp"
                     android:text="@string/defendant_doc"
-                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textColor="@color/bail_rquest_text_color"
                     android:textStyle="bold" />
 
-                <View
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/saperator_yellow" />
-
-                <LinearLayout
-                    android:id="@+id/llDocumentsDefendant"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:id="@+id/llDocumentsDefendant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
 
-                </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
 
                 <TextView
                     style="@style/bail_request"
                     android:layout_marginTop="@dimen/pad_10dp"
                     android:paddingLeft="@dimen/pad_5dp"
                     android:text="@string/cosigner_doc"
-                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textColor="@color/bail_rquest_text_color"
                     android:textStyle="bold" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/saperator_yellow" />
-
-                <LinearLayout
-                    android:id="@+id/llDocumentsCosigner"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    app:cardBackgroundColor="@android:color/white">
 
-
-                </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/llDocumentsCosigner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"></LinearLayout>
+                </android.support.v7.widget.CardView>
 
                 <TextView
                     style="@style/bail_request"
                     android:layout_marginTop="@dimen/pad_10dp"
                     android:paddingLeft="@dimen/pad_5dp"
                     android:text="@string/otherdocument"
-                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textColor="@color/bail_rquest_text_color"
                     android:textStyle="bold" />
 
-                <View
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/saperator_yellow" />
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:id="@+id/llDocumentsOther"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-
-                <Button
-                    android:id="@+id/btnAddDocuments1"
-                    android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_self_assign_small"
-                    android:text="Add Documents" />
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/llDocumentsOther"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </android.support.v7.widget.CardView>
+
+
                 <ImageView
                     android:id="@+id/btnAddDocuments"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/btn_registration_add_photo" />
 
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            style="@style/linear_h"
-            android:background="@color/theme_black">
 
-        </LinearLayout>
     </LinearLayout>
-
 
 
 </ScrollView>

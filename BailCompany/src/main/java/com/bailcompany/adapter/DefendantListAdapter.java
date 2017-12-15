@@ -8,14 +8,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RelativeLayout;
@@ -23,11 +19,12 @@ import android.widget.TextView;
 
 import com.bailcompany.R;
 import com.bailcompany.model.DefendantModel;
-import com.bailcompany.tools.ImageZoomDialog;
 import com.bailcompany.ui.Defendant;
+import com.bailcompany.ui.DefendantList;
 import com.bailcompany.utils.Const;
 import com.bailcompany.web.WebAccess;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
@@ -42,6 +39,7 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
     private ArrayList<DefendantModel> mFilteredList;
     private Context mContex;
     private boolean mReturn;
+    private Bitmap imgDef;
 
     public DefendantListAdapter(ArrayList<DefendantModel> arrayList, Context context, boolean returnresult) {
         mArrayList = arrayList;
@@ -70,26 +68,22 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
         Glide.with(mContex)
                 .load(url)
                 .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super
                             Bitmap> glideAnimation) {
-
                         viewHolder.ivProfilePic.setImageBitmap(resource);
+                        viewHolder.bitmap = resource;
+                        imgDef = resource;
                     }
                 });
 
         viewHolder.ivProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                ImageZoomDialog addToQueueDialog = new ImageZoomDialog(mContex, url);
-                addToQueueDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                addToQueueDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                        WindowManager.LayoutParams.MATCH_PARENT);
-                addToQueueDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                addToQueueDialog.show();
-
+                DefendantList.F1.newInstance(viewHolder.bitmap).show(((Activity) mContex).getFragmentManager(), null);
             }
         });
         //  Glide.with(mContex).load(url).placeholder(R.drawable.ic_side_menu_normal).error(R.drawable.ic_action_name).into(viewHolder.ivProfilePic);
@@ -157,11 +151,21 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
         };
     }
 
+    private DefendantModel getDefendant(String id) {
+        for (DefendantModel androidVersion : mArrayList) {
+            if (androidVersion.getId().toLowerCase().equalsIgnoreCase(id)) {
+                return androidVersion;
+            }
+        }
+        return null;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private String id;
         private TextView tvName, tvBirthdate, tvSSN;
         private CircleImageView ivProfilePic;
         private RelativeLayout rlDefendantList;
+        private Bitmap bitmap;
 
         public ViewHolder(View view) {
             super(view);
@@ -174,14 +178,6 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
             id = "";
 
         }
-    }
-    private DefendantModel getDefendant(String id){
-        for (DefendantModel androidVersion : mArrayList) {
-            if (androidVersion.getId().toLowerCase().equalsIgnoreCase(id)) {
-               return androidVersion;
-            }
-        }
-        return null;
     }
 
 

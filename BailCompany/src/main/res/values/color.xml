@@ -37,6 +37,7 @@
     <color name="hired_agent_list_bg">#F8F6F6</color>
     <color name="or_line_bg">#c6c6c6</color>
     <color name="bail_rquest_font_bold">#9B9B99</color>
+    <color name="bail_rquest_text_color">#505046</color>
     <color name="req_det_bg">#f6f6f6</color>
     <color name="bail_request_font_normal">#939393</color>
 
@@ -46,6 +47,7 @@
     <!--Defendant Profile 1-->
     <color name="color_facebook">#3b5998</color>
     <color name="color_google">#ab4242</color>
+    <color name="color_instgram">#e23f5e</color>
     <color name="color_twitter">#0084b4</color>
     <color name="color_call">#58c246</color>
     <color name="color_sms">#bfad0b</color>

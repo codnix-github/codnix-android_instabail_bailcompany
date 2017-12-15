@@ -402,7 +402,6 @@ public class WebAccess {
         return bailReqList;
 
     }
-
     public static ArrayList<ChatUser> getChatRequest(String stRes) {
         ArrayList<ChatUser> reqList = new ArrayList<ChatUser>();
         try {
