@@ -71,7 +71,6 @@ public class Defendant extends CustomActivity {
     static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     static int getCallTimeout = 50000;
     static Bitmap bmDefendant;
-    ArrayList<String> historyItem = new ArrayList<String>();
     String defendantUrl, defendantBondUrl;
     boolean isSender, IsBailRequest;
     ListView incomingRequestList;
@@ -81,8 +80,6 @@ public class Defendant extends CustomActivity {
     CircleImageView defProfile;
     TextView tvDefName, tvDefLocation;
     String defId = "";
-    private ListView historyList;
-    private Animator mCurrentAnimator;
     private DefendantModel defModel;
     private boolean showProgressDialog = true;
     // The system "short" animation time duration, in milliseconds. This
@@ -703,38 +700,49 @@ public class Defendant extends CustomActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-          //  if (convertView == null)
-                convertView = getLayoutInflater()
-                        .inflate(R.layout.defendant_bond_item, null);
+            //  if (convertView == null)
+            convertView = getLayoutInflater()
+                    .inflate(R.layout.defendant_bond_item, null);
             LinearLayout lp = (LinearLayout) convertView.findViewById(R.id.lp);
             LinearLayout llWarrantDetails = (LinearLayout) convertView.findViewById(R.id.llWarrantDetails);
 
-            if (position % 2 == 0)
+            if (position % 2 == 0) {
                 lp.setBackgroundColor(Color.parseColor("#F1EFEF"));
-            else
+                llWarrantDetails.setBackgroundColor(Color.parseColor("#F1EFEF"));
+            } else {
                 lp.setBackgroundColor(Color.WHITE);
+                llWarrantDetails.setBackgroundColor(Color.WHITE);
+            }
+
 
             for (int i = 0; i < bailReqList.get(position).getWarrantList().size(); i++) {
                 WarrantModel wMod = bailReqList.get(position).getWarrantList().get(i);
                 if (wMod != null) {
                     View v = getLayoutInflater()
-                            .inflate(R.layout.row_warrant, null);
+                            .inflate(R.layout.row_defendant_warrant, null);
 
                     ((TextView) v.findViewById(R.id.wrntAmount))
                             .setText("Amount:   $" + wMod.getAmount());
                     ((TextView) v.findViewById(R.id.wrntTownship))
                             .setText("Township:   " + wMod.getTownship());
                     ((TextView) v.findViewById(R.id.wrntCaseNum))
-                            .setText("CaseNo:   " + wMod.getCase_no() );
+                            .setText("CaseNo:   " + wMod.getCase_no());
                     ((TextView) v.findViewById(R.id.wrntPowerNum))
                             .setText("PowerNo:    " + wMod.getPowerNo());
+
+                    if (!wMod.getCourtDate().equalsIgnoreCase("")) {
+                        ((LinearLayout) v.findViewById(R.id.llCourtDate)).setVisibility(View.VISIBLE);
+                        ((TextView) v.findViewById(R.id.wrntCourtDate))
+                                .setText("Court Date:    " + Utils.getRequiredDateFormatGMT("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
+
+                    }
                     llWarrantDetails.addView(v);
 
                 }
 
             }
 
-             ((TextView) convertView.findViewById(R.id.date)).setText(Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
+            ((TextView) convertView.findViewById(R.id.date)).setText(Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
                     "MM/dd/yyyy", bailReqList.get(position).getCreatedDate()));
 
 

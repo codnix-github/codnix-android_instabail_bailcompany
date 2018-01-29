@@ -91,13 +91,11 @@ public class DefendantBondDetails extends CustomActivity {
     TextView submit, status, quotesText, amountReqText;
     LinearLayout llIndemn;
     boolean fromNotification = false;
-    MainFragment m = new MainFragment();
-    String currentDateTimeString, reqDateTimeString;
+
     String message;
     JSONObject jsonObj;
     String key;
-    int crnthour, reqthour;
-    int crntminute, reqtminute;
+
     BailRequestModel mod = new BailRequestModel();
     User user;
     EditText quotes, amountReq;
@@ -108,7 +106,7 @@ public class DefendantBondDetails extends CustomActivity {
     int selectedWarrentId = 0;
     WarrantModel selectedWarrentModel = null;
     JSONArray preFixArr;
-    int defId = 1;
+    String defId=null;
     ArrayList<CourtDateModel> warrantCourtDates = new ArrayList<CourtDateModel>();
     ArrayList<WarrantCourtDatesHolder> warrantCourtDatesHolders = new ArrayList<>();
     ArrayList<String> imgPathList, docImgPaths;
@@ -125,20 +123,6 @@ public class DefendantBondDetails extends CustomActivity {
     private CustomGridView photoGrid;
     private PhotoAdapter adapter;
     private File file;
-    private SlideDateTimeListener listener = new SlideDateTimeListener() {
-
-
-        @Override
-        public void onDateTimeSet(Date date) {
-            // Do something with the date. This Date object contains
-            // the date and time that the user has selected.
-        }
-
-        @Override
-        public void onDateTimeCancel() {
-            // Overriding onDateTimeCancel() is optional.
-        }
-    };
 
     public static AlertDialog showDialog(Context ctx, String msg,
                                          DialogInterface.OnClickListener listener) {
@@ -436,6 +420,13 @@ public class DefendantBondDetails extends CustomActivity {
                             .setText("CaseNo:   " + wMod.getCase_no() );
                     ((TextView) v.findViewById(R.id.wrntPowerNum))
                             .setText("PowerNo:    " + wMod.getPowerNo());
+                    if (!wMod.getCourtDate().equalsIgnoreCase("")) {
+                        ((LinearLayout) v.findViewById(R.id.llCourtDate)).setVisibility(View.VISIBLE);
+                        ((TextView) v.findViewById(R.id.wrntCourtDate))
+                                .setText("Court Date:    " + Utils.getRequiredDateFormatGMT("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
+
+                    }
+
                     llWarrant.addView(v);
                 }
                 count++;
@@ -894,12 +885,19 @@ public class DefendantBondDetails extends CustomActivity {
             if (getIntent().hasExtra("bail")) {
                 bm = (BailRequestModel) getIntent()
                         .getSerializableExtra("bail");
+                defendant= (DefendantModel) getIntent()
+                        .getSerializableExtra("defendant");
                 if (bm != null) {
                     reqId = "" + bm.getAgentRequestId();
                     // showDetail();
                 } else {
                     Utils.showDialog(DefendantBondDetails.this,
                             "No detail found").show();
+                }
+
+                if (defendant != null) {
+                    defId=defendant.getId();
+
                 }
             } else {
                 reqId = PreferenceManager.getDefaultSharedPreferences(THIS)
@@ -917,7 +915,7 @@ public class DefendantBondDetails extends CustomActivity {
                 @Override
                 public void run() {
 
-                    if (bm != null) {
+                    if (bm != null && defId!=null) {
                         showDetail();
                     } else {
                         Utils.showDialog(DefendantBondDetails.this,
@@ -1167,10 +1165,7 @@ public class DefendantBondDetails extends CustomActivity {
     void addCourtDateView(String date) {
         View viewCourtdate = getLayoutInflater().inflate(R.layout.row_courtdates, null);
         final WarrantCourtDatesHolder warrantCourtDates = new WarrantCourtDatesHolder();
-
         warrantCourtDates.edtCourtDate = (EditText) viewCourtdate.findViewById(R.id.edtCourtDate);
-
-
         warrantCourtDates.edtCourtDate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1183,7 +1178,6 @@ public class DefendantBondDetails extends CustomActivity {
                 }
                 new SlideDateTimePicker.Builder(getSupportFragmentManager())
                         .setListener(new SlideDateTimeListener() {
-
 
                             @Override
                             public void onDateTimeSet(Date date) {

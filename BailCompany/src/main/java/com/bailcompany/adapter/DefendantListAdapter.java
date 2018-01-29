@@ -59,7 +59,8 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
         viewHolder.id = mFilteredList.get(i).getId();
         viewHolder.tvName.setText(mFilteredList.get(i).getFirstName() + " " + mFilteredList.get(i).getLastName());
         if (mFilteredList.get(i).getDOB() != null && !mFilteredList.get(i).getDOB().trim().equalsIgnoreCase(""))
-            viewHolder.tvBirthdate.setText("DOB: " + mFilteredList.get(i).getDOB());
+            viewHolder.tvBirthdate.setText("DOB: " + Const.getFormatedDate("yyyy-MM-dd", "MM/dd/yyyy", mFilteredList.get(i).getDOB()
+                    .toString()));
         if (mFilteredList.get(i).getSSN() != null && !mFilteredList.get(i).getSSN().trim().equalsIgnoreCase(""))
             viewHolder.tvSSN.setText("SSN: " + mFilteredList.get(i).getSSN());
         //Log.d("Path=", WebAccess.PHOTO + mFilteredList.get(i).getPhoto());

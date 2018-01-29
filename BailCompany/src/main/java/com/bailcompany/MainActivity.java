@@ -384,23 +384,28 @@ public class MainActivity extends CustomActivity {
                 R.drawable.black_white));
         al.add(new Feed("Bad Debt Members", null, R.drawable.bad_grey,
                 R.drawable.bad_white));
+
+        /*
         al.add(new Feed("Get A Fugitive Agent", null,
                 R.drawable.fugitive_agent_sel, R.drawable.fugitive_agent));
         al.add(new Feed("Sent Fugitive Request", null,
                 R.drawable.incoming_fugitive_agent_sel,
                 R.drawable.incoming_fugitive_agent));
-
-        al.add(new Feed("Defendant", null, R.drawable.ic_agent_normal,
+*/
+        al.add(new Feed("Defendants", null, R.drawable.ic_agent_normal,
                 R.drawable.ic_agent_selected));
-        al.add(new Feed("Calendar", null, R.drawable.ic_agent_normal,
-                R.drawable.ic_agent_selected));
+        al.add(new Feed("Calendar", null, R.drawable.ic_calendar_normal,
+                R.drawable.ic_calendar_selected));
 
         al.add(new Feed("History", null, R.drawable.history,
                 R.drawable.history_white));
+        /*
+
         al.add(new Feed("Instant Chat", null, R.drawable.ic_contact_normal,
                 R.drawable.ic_contact_selected));
         al.add(new Feed("Instant Group Chat", null,
                 R.drawable.ic_contact_normal, R.drawable.ic_contact_selected));
+                */
         al.add(new Feed("Contact Us", null, R.drawable.ic_contact_normal,
                 R.drawable.ic_contact_selected));
         al.add(new Feed("Logout", null, R.drawable.ic_logout_normal,
@@ -422,20 +427,7 @@ public class MainActivity extends CustomActivity {
                 }
                 drawerLayout.closeDrawers();
                 launchNext(arg2);
-                // if (arg2 == 1 || arg2 == 2)
-                // launchNext(arg2);
-                // if (arg2 == 3 || arg2 == 4 || arg2 == 5 || arg2 == 6
-                // || arg2 == 9 || arg2 == 10) {
-                // if (accessType == 1 || accessType == 3)
-                // launchNext(arg2);
-                // else
-                // Utils.showDialog(MainActivity.this, "Denied Acces");
-                // } else if (arg2 == 7 || arg2 == 8) {
-                // if (accessType == 2 || accessType == 3)
-                // launchNext(arg2);
-                // else
-                // Utils.showDialog(MainActivity.this, "Denied Acces");
-                // }
+
 
             }
         });
@@ -520,11 +512,11 @@ public class MainActivity extends CustomActivity {
                 f = new BadDebtMembers();
                 title = getString(R.string.bad_debt_members);
                 break;
-            case 10:
+            case 101:
                 f = new FugitiveAgent();
                 title = getString(R.string.fugitive_agent);
                 break;
-            case 11:
+            case 111:
                 f = new IncomingFugitveRequest();
                 title = getString(R.string.sent_fugitve_req);
                 prefs = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -534,19 +526,19 @@ public class MainActivity extends CustomActivity {
                 drawerLeft.setAdapter(adp);
                 break;
 
-            case 12:
+            case 10:
                 f = new DefendantList();
-                title = getString(R.string.defendant);
+                title = getString(R.string.defendants);
                 break;
-            case 13:
+            case 11:
                 f = new BailCalendar();
                 title = getString(R.string.calendar);
                 break;
-            case 14:
+            case 12:
                 f = new History();
                 title = getString(R.string.history);
                 break;
-            case 15:
+            case 151:
                 f = new InstantChat();
                 title = getString(R.string.instant_chat);
                 SharedPreferences.Editor editor4 = prefs.edit();
@@ -554,7 +546,7 @@ public class MainActivity extends CustomActivity {
                 WebAccess.instant = prefs.getBoolean("instant", false);
                 drawerLeft.setAdapter(adp);
                 break;
-            case 16:
+            case 161:
                 f = new InstantGroupChat();
                 title = getString(R.string.inst_group_msg);
                 SharedPreferences.Editor editor5 = prefs.edit();
@@ -562,11 +554,11 @@ public class MainActivity extends CustomActivity {
                 WebAccess.instantGroup = prefs.getBoolean("instantGroup", false);
                 drawerLeft.setAdapter(adp);
                 break;
-            case 17:
+            case 13:
                 f = new ContactUs();
                 title = getString(R.string.contact_us);
                 break;
-            case 18:
+            case 14:
                 sp.edit().putBoolean("isFbLogin", false);
                 sp.edit().putString("user", null).commit();
                 finish();
@@ -684,14 +676,14 @@ public class MainActivity extends CustomActivity {
 
 	/* Called whenever we call invalidateOptionsMenu() */
     /*
-	 * (non-Javadoc)
+     * (non-Javadoc)
 	 * 
 	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
 	 */
 
     /* Called whenever we call invalidateOptionsMenu() */
     /*
-	 * (non-Javadoc)
+     * (non-Javadoc)
 	 *
 	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
 	 */

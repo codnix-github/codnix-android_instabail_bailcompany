@@ -12,20 +12,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.DefendantNotesModel;
-import com.bailcompany.model.DefendantVehicleModel;
-import com.bailcompany.model.StateModel;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
 import com.bailcompany.utils.FilePath;
@@ -40,7 +36,10 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 @SuppressWarnings("deprecation")
 public class DefendantNoteDetails extends CustomActivity {
@@ -89,7 +88,11 @@ public class DefendantNoteDetails extends CustomActivity {
         for (final DefendantNotesModel eMod : arrDefNotesDtl) {
             View v = inflater.inflate(R.layout.row_defendant_note_details, null, false);
             ((TextView) v.findViewById(R.id.tvNote)).setText(eMod.getNote());
-            ((TextView) v.findViewById(R.id.tvNoteModifyOn)).setText(eMod.getModifyOn());
+
+            String mDate = Const.getFormatedDate("yyyy-MM-dd hh:mm", "MM/dd/yyyy hh:mm", eMod.getModifyOn()
+                    .toString());
+
+            ((TextView) v.findViewById(R.id.tvNoteModifyOn)).setText(mDate);
 
 
             ((ImageView) v.findViewById(R.id.ivNoteDetails)).setOnClickListener(new View.OnClickListener() {
@@ -166,7 +169,7 @@ public class DefendantNoteDetails extends CustomActivity {
                 } else {
                     path = FilePath.getPath(THIS, uri);
                 }
-            }else {
+            } else {
                 uri = data.getData();
 
                 if (uri == null) {

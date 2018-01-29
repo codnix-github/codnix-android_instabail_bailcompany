@@ -4,14 +4,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="pad_2dp">2dp</dimen>
-    <dimen name="pad_5dp">5dp</dimen>
-     <dimen name="pad_10dp">10dp</dimen>
-     <dimen name="pad_13dp">13dp</dimen>
-    <dimen name="pad_15dp">15dp</dimen> 
-	 <dimen name="pad_20dp">20dp</dimen>
-	 <dimen name="pad_30dp">30dp</dimen>
-	 <dimen name="pad_40dp">40dp</dimen>
-	 <dimen name="pad_60dp">60dp</dimen>
+	<dimen name="pad_5dp">5dp</dimen>
+	<dimen name="pad_10dp">10dp</dimen>
+	<dimen name="pad_13dp">13dp</dimen>
+	<dimen name="pad_15dp">15dp</dimen>
+	<dimen name="pad_20dp">20dp</dimen>
+	<dimen name="pad_30dp">30dp</dimen>
+	<dimen name="pad_40dp">40dp</dimen>
+	<dimen name="pad_60dp">60dp</dimen>
 	 
 	  
 	  <dimen name="txt_9sp">9sp</dimen>

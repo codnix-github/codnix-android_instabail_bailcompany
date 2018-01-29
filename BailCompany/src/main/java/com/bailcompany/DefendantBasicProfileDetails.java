@@ -122,7 +122,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
         edtWeight.setText(defModel.getWeight());
         edtTattoos.setText(defModel.getTattoos());
         edtPOB.setText(defModel.getPOB());
-        edtBirthdate.setText(getFormatedDate("yyyy-MM-dd", "MM/dd/yyyy", defModel.getDOB()
+        edtBirthdate.setText(Const.getFormatedDate("yyyy-MM-dd", "MM/dd/yyyy", defModel.getDOB()
                 .toString()));
         edtFacebook.setText(defModel.getFacebookURL());
         edtGoogle.setText(defModel.getGoogleURL());
@@ -308,25 +308,6 @@ public class DefendantBasicProfileDetails extends CustomActivity {
         builder.create().show();
     }
 
-    public String getFormatedDate(String fromFormtat, String toFormat, String date) {
-        if (date.equalsIgnoreCase(""))
-            return "";
-        Date d = null;
-        String retdate = "";
-        SimpleDateFormat formatter;
-        try {
-            //d = new Date();
-            d = new SimpleDateFormat(fromFormtat).parse(date);
-            formatter = new SimpleDateFormat(toFormat);
-            // formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-            retdate = formatter.format(d);
-
-        } catch (ParseException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        return retdate;
-    }
 
     public void updateProfile() {
 
@@ -348,7 +329,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
             param.put("Town", edtTown.getText().toString());
             param.put("State", spState.getSelectedItem().toString());
             param.put("Zipcode", edtZipCode.getText().toString());
-            param.put("DOB", getFormatedDate("MM/dd/yyyy", "yyyy-MM-dd", edtBirthdate.getText()
+            param.put("DOB", Const.getFormatedDate("MM/dd/yyyy", "yyyy-MM-dd", edtBirthdate.getText()
                     .toString()));
 
             param.put("CellTele", edtCellNumber.getText().toString());

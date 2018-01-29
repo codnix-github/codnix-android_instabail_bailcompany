@@ -96,6 +96,7 @@ public class LeftNavAdapter extends BaseAdapter {
 					R.color.saperator_yellow));
 			lbl.setCompoundDrawablesWithIntrinsicBounds(f.getImageSelected(),
 					0, 0, 0);
+
 		} else {
 			convertView.setBackgroundColor(Color.TRANSPARENT);
 		}

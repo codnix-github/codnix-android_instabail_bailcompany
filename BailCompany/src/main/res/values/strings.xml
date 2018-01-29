@@ -125,6 +125,7 @@
     <string name="black_list_members">Black List Members </string>
     <string name="history">History</string>
     <string name="defendant">Defendant</string>
+    <string name="defendants">Defendants</string>
     <string name="calendar">Calendar</string>
     <string name="txt_contact">“Please feel free to Ask a Question, Note A Concern, Rate An Agent, Request A Feature or Just Say Hello”</string>
     <string name="wrte_here">Write here...</string>

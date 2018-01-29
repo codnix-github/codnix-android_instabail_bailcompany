@@ -33,10 +33,10 @@
         <EditText
             android:id="@+id/pwrNum2"
             style="@style/style_edit_match"
-            android:visibility="gone"
             android:layout_margin="@dimen/pad_10dp"
             android:hint="@string/entr_pwr"
-            android:inputType="text" />
+            android:inputType="text"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/payment"
@@ -73,15 +73,21 @@
                 <LinearLayout
                     style="@style/linear_v"
                     android:layout_width="wrap_content"
-                    android:background="@drawable/completion_form_add_photo_rounded"
                     android:gravity="center">
 
-                    <ImageView
+
+                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/add_defendant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/completion_form_add_photo_btn"
-                        android:tag="1" />
+                        android:tag="1"
+                        app:civ_border_color="#FF000000"
+                        app:civ_border_width="0dp" />
+
+
                 </LinearLayout>
 
                 <TextView
@@ -104,15 +110,19 @@
                 <LinearLayout
                     style="@style/linear_v"
                     android:layout_width="wrap_content"
-                    android:background="@drawable/completion_form_add_photo_rounded"
                     android:gravity="center">
 
-                    <ImageView
+
+                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/add_co_signer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/completion_form_add_photo_btn"
-                        android:tag="1" />
+                        android:tag="1"
+                        app:civ_border_color="#FF000000"
+                        app:civ_border_width="0dp" />
                 </LinearLayout>
 
                 <TextView

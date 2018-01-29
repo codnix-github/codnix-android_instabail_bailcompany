@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:agendaCalendar="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.desai.vatsal.mydynamiccalendar.MyDynamicCalendar
-        android:id="@+id/calEvents"
+    <com.github.tibolte.agendacalendarview.AgendaCalendarView
+        android:id="@+id/agenda_calendar_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        agendaCalendar:agendaCurrentDayTextColor="@color/agendaCurrentDayTextColor"
+        agendaCalendar:calendarColor="@color/calendarColor"
+        agendaCalendar:calendarCurrentDayTextColor="@color/calendarCurrentDayTextColor"
+        agendaCalendar:calendarDayTextColor="@color/calendarDayTextColor"
+        agendaCalendar:calendarHeaderColor="@color/calendarHeaderColor"
+        agendaCalendar:calendarPastDayTextColor="@color/calendarPastDayTextColor" />
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/pad_5dp"
+        android:clickable="true"
+        android:src="@drawable/ic_add_black_24dp"
+        android:tint="@color/white"
+        app:backgroundTint="@color/theme_yellow" />
+
+</RelativeLayout>

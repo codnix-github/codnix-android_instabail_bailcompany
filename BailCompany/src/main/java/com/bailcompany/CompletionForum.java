@@ -1,17 +1,5 @@
 package com.bailcompany;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -75,34 +63,39 @@ import com.dropbox.client2.session.TokenPair;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.theartofdev.edmodo.cropper.CropImage;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 @SuppressWarnings("deprecation")
 @SuppressLint("InflateParams")
 public class CompletionForum extends CustomActivity {
-    private ImageView addDefendant;
-    private ImageView addCoSigner;
-    private LinearLayout preFixedViewLL;
-    private File file, cosignerPhotoFile, defPhotoFile;
+    private static final int Take_DROPBOX = 2;
+    public static String pay = "0";
+    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
+    static int getCallTimeout = 200000;
     private static boolean isDefendent, isCoSigner;
     ArrayList<String> imgPathList, docImgPaths;
     ArrayList<Uri> uriArrayList;
-    private CustomGridView photoGrid;
-    private PhotoAdapter adapter;
     BailRequestModel bailRequestMod;
-    private Uri cosignerPhotoUri, defPhotoUri;
     String pwrNum = "";
     // String payNum="";
     EditText payNum, PowerNum, comments;
     ProgressDialog pd;
-    public static String pay = "0";
-    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     String message;
     JSONObject jsonObj;
     String key;
-    static int getCallTimeout = 200000;
     LinearLayout coSigner;
-    private static final int Take_DROPBOX = 2;
-    private DropboxAPI<AndroidAuthSession> mApi;
     float totalSize = 0;
     TextView totalSizeTV;
     String cosignerPhotoPath, defPhotoPath;
@@ -110,6 +103,63 @@ public class CompletionForum extends CustomActivity {
     ArrayList<String> dropDownValuesList = new ArrayList<>();
     ArrayList<WarrantStruct> warrantIdList = new ArrayList<>();
     ArrayList<PreFixesHolder> preFixesHolders = new ArrayList<>();
+    String path = "";
+    private CircleImageView addDefendant;
+    private CircleImageView addCoSigner;
+    private LinearLayout preFixedViewLL;
+    private File file, cosignerPhotoFile, defPhotoFile;
+    private CustomGridView photoGrid;
+    private PhotoAdapter adapter;
+    private Uri cosignerPhotoUri, defPhotoUri;
+    private DropboxAPI<AndroidAuthSession> mApi;
+
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor
+                    .getColumnIndex(MediaStore.MediaColumns._ID));
+            return Uri.withAppendedPath(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public static AlertDialog showDialog(Context ctx, String msg,
+                                         DialogInterface.OnClickListener listener) {
+
+        return showDialog(ctx, msg, ctx.getString(android.R.string.ok), null,
+                listener, null);
+    }
+
+    public static AlertDialog showDialog(Context ctx, String msg, String btn1,
+                                         String btn2, DialogInterface.OnClickListener listener1,
+                                         DialogInterface.OnClickListener listener2) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        // builder.setTitle(R.string.app_name);
+        builder.setMessage(msg).setCancelable(false)
+                .setPositiveButton(btn1, listener1);
+        if (btn2 != null && listener2 != null)
+            builder.setNegativeButton(btn2, listener2);
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        return alert;
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +169,8 @@ public class CompletionForum extends CustomActivity {
         payNum = (EditText) findViewById(R.id.payment);
         preFixedViewLL = (LinearLayout) findViewById(R.id.preFixedViewLL);
         totalSizeTV = (TextView) findViewById(R.id.total_size);
-        addDefendant = (ImageView) findViewById(R.id.add_defendant);
-        addCoSigner = (ImageView) findViewById(R.id.add_co_signer);
+        addDefendant = (CircleImageView) findViewById(R.id.add_defendant);
+        addCoSigner = (CircleImageView) findViewById(R.id.add_co_signer);
         photoGrid = (CustomGridView) findViewById(R.id.my_grid_view);
         coSigner = (LinearLayout) findViewById(R.id.co_sign_container);
         comments = (EditText) findViewById(R.id.comments);
@@ -175,7 +225,7 @@ public class CompletionForum extends CustomActivity {
             }
         });
         imgPathList = new ArrayList<String>();
-        uriArrayList=new ArrayList<>();
+        uriArrayList = new ArrayList<>();
         docImgPaths = new ArrayList<String>();
         adapter = new PhotoAdapter();
         photoGrid.setAdapter(adapter);
@@ -787,19 +837,6 @@ public class CompletionForum extends CustomActivity {
         }
     }
 
-    public class PreFixesHolder {
-        Spinner spinner;
-        TextView titleTV;
-        EditText serialET;
-        EditText caseNoET;
-        int warrantID;
-    }
-
-    public class WarrantStruct {
-        int id;
-        String title;
-    }
-
     public void setCompleteStatus() {
 
         RequestParams param = new RequestParams();
@@ -857,30 +894,6 @@ public class CompletionForum extends CustomActivity {
 
         });
 
-    }
-
-    public static Uri getImageContentUri(Context context, File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.Media._ID},
-                MediaStore.Images.Media.DATA + "=? ",
-                new String[]{filePath}, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor
-                    .getColumnIndex(MediaStore.MediaColumns._ID));
-            return Uri.withAppendedPath(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.DATA, filePath);
-                return context.getContentResolver().insert(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            } else {
-                return null;
-            }
-        }
     }
 
     public void abortRequest(final boolean cancel) {
@@ -972,7 +985,6 @@ public class CompletionForum extends CustomActivity {
         Uri uri = null;
         if (resultCode == RESULT_OK) {
 
-            String path = "";
             if (requestCode == 111) {
                 if (Utils.isOnline()) {
                     submitCompletionForm();
@@ -1015,9 +1027,15 @@ public class CompletionForum extends CustomActivity {
                         }
                     }
 
+                } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == RESULT_OK) {
+                        uri = result.getUri();
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Exception error = result.getError();
+                    }
                 } else {
                     uri = data.getData();
-
                     if (uri == null) {
                         Bundle extras = data.getExtras();
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -1037,7 +1055,15 @@ public class CompletionForum extends CustomActivity {
                 }
                 String sizeStr = "Total Attachments Size: 0.00 KB";
                 if (isCoSigner) {
-                    if (uri != null) {
+                    if (uri != null && requestCode != CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                        if (ImageSelector.isImage(path.trim().substring(path.lastIndexOf('/')))) {
+                            cosignerPhotoUri = uri;
+                            CropImage.activity(cosignerPhotoUri).setAspectRatio(1, 1)
+                                    .start(this);
+                        } else {
+                            Toast.makeText(THIS, "Please select valid image", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (uri != null && requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                         if (cosignerPhotoPath != null) {
                             File f = new File(cosignerPhotoPath);
                             float size1 = f.length() / 1024f;
@@ -1048,10 +1074,10 @@ public class CompletionForum extends CustomActivity {
                         float size = file.length() / 1024f;
                         sizeStr = getToatSize(size);
                         if (sizeStr != null) {
-                            cosignerPhotoPath = path;
+                            cosignerPhotoPath = uri.getPath();
                             cosignerPhotoUri = uri;
                             addCoSigner.setImageResource(0);
-                            addCoSigner.setImageBitmap(compressFile(path));
+                            addCoSigner.setImageURI(uri);
                             addCoSigner.setTag("0");
                             totalSizeTV.setText(sizeStr);
                         } else {
@@ -1062,7 +1088,16 @@ public class CompletionForum extends CustomActivity {
                     }
                     return;
                 } else if (isDefendent) {
-                    if (uri != null) {
+                    if (uri != null && requestCode != CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                        if (ImageSelector.isImage(path.trim().substring(path.lastIndexOf('/')))) {
+                            defPhotoUri = uri;
+                            CropImage.activity(defPhotoUri).setAspectRatio(1, 1)
+                                    .start(this);
+                        } else {
+                            Toast.makeText(THIS, "Please select valid image", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (uri != null && requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                        defPhotoUri = uri;
                         if (defPhotoPath != null) {
                             File f = new File(defPhotoPath);
                             float size1 = f.length() / 1024f;
@@ -1072,10 +1107,12 @@ public class CompletionForum extends CustomActivity {
                         float size = file.length() / 1024f;
                         sizeStr = getToatSize(size);
                         if (sizeStr != null) {
-                            defPhotoPath = path;
+                            defPhotoPath = uri.getPath();
                             defPhotoUri = uri;
                             addDefendant.setImageResource(0);
-                            addDefendant.setImageBitmap(compressFile(path));
+                            // addDefendant.setImageBitmap(compressFile(uri.getPath()));
+
+                            addDefendant.setImageURI(uri);
                             addDefendant.setTag("0");
                             totalSizeTV.setText(sizeStr);
                         } else {
@@ -1083,7 +1120,10 @@ public class CompletionForum extends CustomActivity {
                                     "Too Big!  All attachments \"combined\" can not exceed 24mb");
                         }
 
+
                     }
+
+
                 } else if (path != null) {
                     if (!imgPathList.isEmpty()) {
                         if (adpaterPosition < imgPathList.size()) {
@@ -1190,6 +1230,54 @@ public class CompletionForum extends CustomActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public String getPath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null,
+                null);
+        if (cursor == null)
+            return null;
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String s = cursor.getString(column_index);
+        cursor.close();
+        return s;
+    }
+
+    public AlertDialog showDialog(Context ctx, String msg)// ///hello
+    {
+
+        return showDialog(ctx, msg, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+
+                dialog.dismiss();
+                finish();
+            }
+        });
+    }
+
+    private Bitmap compressFilePhoto(String path) {
+        File f = new File(path);
+        Bitmap bm = ImageUtils.getOrientationFixedImage(f,
+                (StaticData.width / 2) - 50, StaticData.height,
+                ImageUtils.SCALE_FITXY);
+        return bm;
+    }
+
+    public class PreFixesHolder {
+        Spinner spinner;
+        TextView titleTV;
+        EditText serialET;
+        EditText caseNoET;
+        int warrantID;
+    }
+
+    public class WarrantStruct {
+        int id;
+        String title;
+    }
+
     private class PhotoAdapter extends BaseAdapter {
 
         @Override
@@ -1239,11 +1327,11 @@ public class CompletionForum extends CustomActivity {
                     Drawable res = getResources().getDrawable(R.drawable.docs);
                     iv.setImageDrawable(res);
                 } else {
-                    Bitmap bitmap=compressFilePhoto(imgPathList.get(position));
+                    Bitmap bitmap = compressFilePhoto(imgPathList.get(position));
 
-                    if (bitmap==null){
+                    if (bitmap == null) {
                         iv.setImageURI(uriArrayList.get(position));
-                    }else {
+                    } else {
                         iv.setImageBitmap(bitmap);
                     }
 
@@ -1253,65 +1341,6 @@ public class CompletionForum extends CustomActivity {
             return convertView;
         }
 
-    }
-
-    public String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null,
-                null);
-        if (cursor == null)
-            return null;
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String s = cursor.getString(column_index);
-        cursor.close();
-        return s;
-    }
-
-    public AlertDialog showDialog(Context ctx, String msg)// ///hello
-    {
-
-        return showDialog(ctx, msg, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-
-                dialog.dismiss();
-                finish();
-            }
-        });
-    }
-
-    public static AlertDialog showDialog(Context ctx, String msg,
-                                         DialogInterface.OnClickListener listener) {
-
-        return showDialog(ctx, msg, ctx.getString(android.R.string.ok), null,
-                listener, null);
-    }
-
-    public static AlertDialog showDialog(Context ctx, String msg, String btn1,
-                                         String btn2, DialogInterface.OnClickListener listener1,
-                                         DialogInterface.OnClickListener listener2) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        // builder.setTitle(R.string.app_name);
-        builder.setMessage(msg).setCancelable(false)
-                .setPositiveButton(btn1, listener1);
-        if (btn2 != null && listener2 != null)
-            builder.setNegativeButton(btn2, listener2);
-
-        AlertDialog alert = builder.create();
-        alert.show();
-        return alert;
-
-    }
-
-    private Bitmap compressFilePhoto(String path) {
-        File f = new File(path);
-        Bitmap bm = ImageUtils.getOrientationFixedImage(f,
-                (StaticData.width / 2) - 50, StaticData.height,
-                ImageUtils.SCALE_FITXY);
-        return bm;
     }
 
 }

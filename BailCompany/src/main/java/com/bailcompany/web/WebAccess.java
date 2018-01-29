@@ -119,10 +119,15 @@ public class WebAccess {
     public static final String GET_DEFENDANT_LIST = "getAllDefendants";
     public static final String GET_DEFENDANT_DETAIL = "get-defendant-profile";
     public static final String GET_DEFENDANT_BOND_DETAIL = "getDefendantBondDetails";
+    public static final String GET_COMPANY_EVENTS = "get-events";
+    public static final String ADD_COMPANY_EVENTS = "save-event";
+
+
+
     public static final String UPDATE_BOND_DETAILS = "updateWarrant";
     public static final String UPLOAD_BOND_DOCUMENTS = "uploadBondDocuments";
     public static final String UPDATE_DEFENDENT_BASIC_PROFILE = "updateDefendantBasicProfile";
-    public static final String ADD_UPDATE_DEFENDENT_EMPLOYMENT_DETAILS= "addDefendantEmploymentProfile";
+    public static final String ADD_UPDATE_DEFENDENT_EMPLOYMENT_DETAILS = "addDefendantEmploymentProfile";
     public static final String ADD_UPDATE_DEFENDENT_VEHICLE_DETAILS = "addDefendantVehicleDetails";
     public static final String ADD_UPDATE_DEFENDENT_NOTES_DETAILS = "addDefendantNote";
 
@@ -402,6 +407,7 @@ public class WebAccess {
         return bailReqList;
 
     }
+
     public static ArrayList<ChatUser> getChatRequest(String stRes) {
         ArrayList<ChatUser> reqList = new ArrayList<ChatUser>();
         try {

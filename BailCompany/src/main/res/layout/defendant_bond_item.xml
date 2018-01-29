@@ -12,7 +12,6 @@
         android:paddingLeft="@dimen/pad_10dp"
         android:paddingRight="@dimen/pad_10dp"
         android:paddingTop="@dimen/pad_10dp">
-
         <TextView
             android:id="@+id/date"
             style="@style/style_get"
@@ -27,18 +26,18 @@
             android:text="@string/date_time"
             android:textSize="@dimen/txt_10sp" />
 
-        <LinearLayout
-            android:id="@+id/llWarrantDetails"
+    </LinearLayout>
+    <LinearLayout
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
-
-        </LinearLayout>
-
+        android:layout_below="@+id/lp"
+        android:id="@+id/llWarrantDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
 
     </LinearLayout>
+
 
     <ImageView
         android:id="@+id/new_badge"

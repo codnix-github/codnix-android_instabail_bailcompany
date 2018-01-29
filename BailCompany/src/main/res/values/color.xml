@@ -60,5 +60,14 @@
     <color name="profile2colorPrimaryDark">#7824a1</color>
     <color name="profile2colorAccent">#8f26aa</color>
 
+    <!--Calendar-->
+    <color name="calendarColor">#fdfdfd</color>
+    <color name="calendarCurrentDayTextColor">#245ea1</color>
+    <color name="calendarDayTextColor">#000000</color>
+    <color name="calendarHeaderColor">#ffdc00</color>
+    <color name="agendaCurrentDayTextColor">#ffdc00</color>
+    <color name="calendarPastDayTextColor">#646464</color>
+
+
 
 </resources>

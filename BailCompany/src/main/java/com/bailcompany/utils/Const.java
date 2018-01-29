@@ -1,7 +1,10 @@
 package com.bailcompany.utils;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.os.Environment;
 import android.util.Log;
@@ -74,6 +77,26 @@ public class Const {
 		Log.w("TIME:", String.valueOf(currentTime));
 		return (String.valueOf(currentTime));
 
+	}
+
+	public static String getFormatedDate(String fromFormtat, String toFormat, String date) {
+		if (date.equalsIgnoreCase(""))
+			return "";
+		Date d = null;
+		String retdate = "";
+		SimpleDateFormat formatter;
+		try {
+			//d = new Date();
+			d = new SimpleDateFormat(fromFormtat).parse(date);
+			formatter = new SimpleDateFormat(toFormat);
+			// formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+			retdate = formatter.format(d);
+
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return retdate;
 	}
 
 }
