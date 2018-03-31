@@ -12,13 +12,18 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -46,11 +51,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 @SuppressWarnings("deprecation")
 public class DefendantBasicProfileDetails extends CustomActivity {
@@ -64,12 +66,16 @@ public class DefendantBasicProfileDetails extends CustomActivity {
     String key, apiUrl;
     DefendantModel defModel;
     String defId;
-    EditText edtFirstName, edtLastName, edtAddress, edtTown, edtZipCode, edtHomeNumber, edtCellNumber, edtSSN, edtHeight, edtWeight, edtTattoos, edtPOB, edtFacebook, edtGoogle, edtTwitter;
+    EditText edtFirstName, edtLastName, edtTown, edtZipCode, edtHomeNumber, edtCellNumber, edtSSN, edtHeight, edtWeight, edtTattoos, edtPOB, edtFacebook, edtGoogle, edtTwitter;
     Spinner spState, spEyeColor, spHairColor;
     ImageView ivDefendantPic;
     String defPhotoPath;
+    ArrayList<String[]> resList;
     private File file, defPhotoFile;
     private Uri defPhotoUri = null;
+    private AutoCompleteTextView edtAddress;
+    private String locLatt = "0.0", locLng = "0.0";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +96,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
     public void showDetails() {
         edtFirstName = (EditText) findViewById(R.id.edtFirstName);
         edtLastName = (EditText) findViewById(R.id.edtLastName);
-        edtAddress = (EditText) findViewById(R.id.edtAddress);
+
         edtTown = (EditText) findViewById(R.id.edtTown);
         edtZipCode = (EditText) findViewById(R.id.edtZipCode);
         edtHomeNumber = (EditText) findViewById(R.id.edtHomeNumber);
@@ -110,6 +116,10 @@ public class DefendantBasicProfileDetails extends CustomActivity {
         spHairColor = (Spinner) findViewById(R.id.spHairColor);
         ivDefendantPic = (ImageView) findViewById(R.id.ivDefendantProfilePic);
 
+        edtAddress = (AutoCompleteTextView) findViewById(R.id.edtAddress);
+        edtAddress.setAdapter(new PlacesAdaper(THIS,
+                android.R.layout.simple_list_item_1));
+
         edtFirstName.setText(defModel.getFirstName());
         edtLastName.setText(defModel.getLastName());
         edtAddress.setText(defModel.getAddress());
@@ -123,11 +133,37 @@ public class DefendantBasicProfileDetails extends CustomActivity {
         edtTattoos.setText(defModel.getTattoos());
         edtPOB.setText(defModel.getPOB());
         edtBirthdate.setText(Const.getFormatedDate("yyyy-MM-dd", "MM/dd/yyyy", defModel.getDOB()
-                .toString()));
+                .toString(), false));
         edtFacebook.setText(defModel.getFacebookURL());
         edtGoogle.setText(defModel.getGoogleURL());
         edtTwitter.setText(defModel.getTwitterURL());
 
+        edtAddress.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+                                    long arg3) {
+                // TODO Auto-generated method stub
+                final String[] place = resList.get(pos);
+                Log.e("Place", place[0] + "==========" + place[1]);
+
+                showProgressDialog("");
+                new Thread(new Runnable() {
+                    public void run() {
+                        final String[] latLng = Utils.getLocationLatLng(
+                                getString(R.string.api_key), place[1]);
+                        THIS.runOnUiThread(new Runnable() {
+                            public void run() {
+                                dismissProgressDialog();
+                                locLatt = latLng[0];
+                                locLng = latLng[1];
+
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
 
         if (!defModel.getPhoto().equalsIgnoreCase("")) {
             Log.d("Profile:", defModel.getPhoto());
@@ -194,8 +230,13 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                 boolean result2 = Utility.checkPermission(THIS);
 
                 if (result2) {
-                    file = new File(Const.TEMP_PHOTO + Const.getUniqueIdforImage()
+                    file = new File(Const.TEMP_PHOTO + "/" + Const.getUniqueIdforImage()
                             + ".png");
+                    try {
+                        file.createNewFile();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     openChooser(THIS, file, null);
                 }
             }
@@ -217,16 +258,27 @@ public class DefendantBasicProfileDetails extends CustomActivity {
         if (resultCode == RESULT_OK) {
             String path = "";
             if (requestCode == ImageSelector.IMAGE_CAPTURE) {
-                uri = data.getData();
-
+                try {
+                    //  uri = data.getData();
+                    uri = FileProvider.getUriForFile(THIS, Const.PROVIDER, file);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if (uri == null) {
                     Bundle extras = data.getExtras();
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+
                     uri = ImageUtils.getImageUri(THIS, imageBitmap);
 
                     path = FilePath.getPath(THIS, uri);
                 } else {
-                    path = FilePath.getPath(THIS, uri);
+                    try {
+                        //path = FilePath.getPath(THIS, uri);
+                        path = file.getPath();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             } else if (requestCode == Take_DROPBOX) {
                 path = data.getStringExtra("path");
@@ -261,7 +313,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                 }
             }
             if (uri != null && requestCode != CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                Log.d("Path=",path);
+                Log.d("Path=", path);
                 if (ImageSelector.isImage(path.trim().substring(path.lastIndexOf('/')))) {
                     defPhotoUri = uri;
                     CropImage.activity(defPhotoUri).setAspectRatio(1, 1)
@@ -310,15 +362,12 @@ public class DefendantBasicProfileDetails extends CustomActivity {
 
 
     public void updateProfile() {
-
-
         try {
 
             showProgressDialog("");
             RequestParams param = new RequestParams();
             String url = WebAccess.MAIN_URL + WebAccess.UPDATE_DEFENDENT_BASIC_PROFILE;
             client.setTimeout(getCallTimeout);
-
             param.put("TemporaryAccessCode",
                     MainActivity.user.getTempAccessCode());
             param.put("UserName", MainActivity.user.getUsername());
@@ -327,10 +376,14 @@ public class DefendantBasicProfileDetails extends CustomActivity {
             param.put("LastName", edtLastName.getText().toString());
             param.put("Address", edtAddress.getText().toString());
             param.put("Town", edtTown.getText().toString());
-            param.put("State", spState.getSelectedItem().toString());
+            if (spState.getSelectedItemPosition() == 0) {
+                param.put("State", "");
+            } else
+                param.put("State", spState.getSelectedItem().toString());
+
             param.put("Zipcode", edtZipCode.getText().toString());
             param.put("DOB", Const.getFormatedDate("MM/dd/yyyy", "yyyy-MM-dd", edtBirthdate.getText()
-                    .toString()));
+                    .toString(), false));
 
             param.put("CellTele", edtCellNumber.getText().toString());
             param.put("HomeTele", edtHomeNumber.getText().toString());
@@ -470,8 +523,8 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                                     pos = i + 1;
                                 }
                             }
-                            ArrayAdapter<String> adapterHairColor = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, state);
-                            spState.setAdapter(adapterHairColor);
+                            ArrayAdapter<String> adapterState = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, state);
+                            spState.setAdapter(adapterState);
                             spState.setSelection(pos);
 
                         }
@@ -552,6 +605,83 @@ public class DefendantBasicProfileDetails extends CustomActivity {
 
         private String pad(int c) {
             return c >= 10 ? "" + c : "0" + c;
+        }
+
+    }
+
+    private class PlacesAdaper extends ArrayAdapter<String> implements
+            Filterable {
+
+        ArrayList<String> resultList = new ArrayList<String>();
+
+        public PlacesAdaper(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+            // TODO Auto-generated constructor stub
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return resultList.size();
+        }
+
+        @Override
+        public String getItem(int position) {
+            // TODO Auto-generated method stub
+            return resultList.get(position);
+        }
+
+        @Override
+        public Filter getFilter() {
+            // TODO Auto-generated method stub
+            Filter filter = new Filter() {
+
+                @Override
+                protected void publishResults(CharSequence constraint,
+                                              FilterResults results) {
+                    // TODO Auto-generated method stub
+                    if (results != null && results.count > 0) {
+                        notifyDataSetChanged();
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    // TODO Auto-generated method stub
+                    FilterResults fRes = new FilterResults();
+
+                    if (constraint != null) {
+                        if (constraint.length() == 3)
+                            Toast.makeText(THIS, "Please wait...",
+                                    Toast.LENGTH_SHORT).show();
+                        resList = Utils.searchPlaces(constraint.toString());
+
+                        Log.d("Result", resList.toArray().toString());
+                        Log.e("Places", resList == null ? "No Place Found"
+                                : resList.size() + " places found");
+                        resultList.clear();
+                        ArrayList<String[]> tempResList = new ArrayList<String[]>();
+                        if (resList != null) {
+                            for (String[] place : resList) {
+                                if (!place[1].equals("")) {
+                                    resultList.add(place[0]);
+
+                                    tempResList.add(place);
+                                }
+
+                            }
+                            resList = tempResList;
+                        }
+
+                        fRes.values = resultList;
+                        fRes.count = resultList.size();
+                    }
+                    return fRes;
+                }
+            };
+            return filter;
         }
 
     }

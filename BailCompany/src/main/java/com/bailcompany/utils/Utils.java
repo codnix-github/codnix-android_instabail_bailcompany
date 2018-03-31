@@ -1,5 +1,36 @@
 package com.bailcompany.utils;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
+import com.bailcompany.R;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,37 +57,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-
-import com.bailcompany.R;
-
 // TODO: Auto-generated Javadoc
 
 /**
@@ -66,6 +66,11 @@ import com.bailcompany.R;
 @SuppressLint("DefaultLocale")
 @SuppressWarnings("deprecation")
 public class Utils {
+
+    public static final String PLACES_API = "https://maps.googleapis.com/maps/api/place"
+            + "/@@/json";
+    public static final String AUTOCOMPLETE = "queryautocomplete";
+    public static final String DETAIL = "details";
 
     /**
      * Show dialog.
@@ -610,6 +615,20 @@ public class Utils {
         }
     }
 
+	/*
+     * public static String getStringFromAsset(String path) { try {
+	 * BufferedReader din = new BufferedReader(new InputStreamReader(
+	 * StaticData.appContext.getAssets().open(path)));
+	 * 
+	 * String str = ""; String s; while ((s = din.readLine()) != null) str = str
+	 * + s; din.close(); return str; } catch (Exception e) {
+	 * e.printStackTrace(); } return null; }
+	 * 
+	 * public static int parseDrawableId(String str) { return
+	 * StaticData.res.getIdentifier(str, "drawable",
+	 * StaticData.appContext.getPackageName()); }
+	 */
+
     public static String lastMessage(String date) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -669,25 +688,6 @@ public class Utils {
         return cursor.getString(column_index);
     }
 
-	/*
-     * public static String getStringFromAsset(String path) { try {
-	 * BufferedReader din = new BufferedReader(new InputStreamReader(
-	 * StaticData.appContext.getAssets().open(path)));
-	 * 
-	 * String str = ""; String s; while ((s = din.readLine()) != null) str = str
-	 * + s; din.close(); return str; } catch (Exception e) {
-	 * e.printStackTrace(); } return null; }
-	 * 
-	 * public static int parseDrawableId(String str) { return
-	 * StaticData.res.getIdentifier(str, "drawable",
-	 * StaticData.appContext.getPackageName()); }
-	 */
-
-    public static final String PLACES_API = "https://maps.googleapis.com/maps/api/place"
-            + "/@@/json";
-    public static final String AUTOCOMPLETE = "queryautocomplete";
-    public static final String DETAIL = "details";
-
     public static ArrayList<String[]> searchPlaces(String input) {
         ArrayList<String[]> resultList = null;
 
@@ -736,6 +736,7 @@ public class Utils {
             JSONObject jsonObj = new JSONObject(jsonResults.toString());
             JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
 
+            Log.d("ResultAPI=", predsJsonArray.toString());
             // Extract the Place descriptions from the results
             resultList = new ArrayList<String[]>(predsJsonArray.length());
             for (int i = 0; i < predsJsonArray.length(); i++) {

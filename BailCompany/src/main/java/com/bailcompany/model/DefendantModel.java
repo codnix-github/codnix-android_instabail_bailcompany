@@ -37,11 +37,37 @@ public class DefendantModel implements Serializable {
 	private String Status;
 	private String ModifyOn;
 	private String StateName;
+	private String UserName;
+	private String Password;
+	private String DefUserId;
+
 	private ArrayList<DefendantEmploymentModel> EmploymentDtl;
 	private ArrayList<DefendantVehicleModel> VehicleDtl;
 	private ArrayList<DefendantNotesModel> NotesDtl;
 
+	public String getDefUserId() {
+		return DefUserId;
+	}
 
+	public void setDefUserId(String defUserId) {
+		DefUserId = defUserId;
+	}
+
+	public String getUserName() {
+		return UserName;
+	}
+
+	public void setUserName(String userName) {
+		UserName = userName;
+	}
+
+	public String getPassword() {
+		return Password;
+	}
+
+	public void setPassword(String password) {
+		Password = password;
+	}
 
 	public String getId() {
 		return Id;

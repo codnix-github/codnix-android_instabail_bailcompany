@@ -80,13 +80,14 @@
                     android:text="Address"
                     android:textSize="@dimen/txt_10sp" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/edtAddress"
-                    style="@style/style_edit_match"
-
+                    style="@style/style_get_ch"
                     android:layout_weight="1"
-                    android:hint="Address"
-                    android:inputType="text" />
+                    android:drawableRight="@drawable/ic_location"
+                    android:hint="@string/loc_def"
+                    android:textSize="@dimen/txt_14sp" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -166,6 +167,7 @@
                     style="@style/style_get_ch"
                     android:layout_marginLeft="@dimen/pad_10dp"
                     android:layout_marginRight="@dimen/pad_10dp"
+
                     android:layout_weight="1" />
 
             </LinearLayout>

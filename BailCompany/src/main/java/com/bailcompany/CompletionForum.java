@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -64,6 +65,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.FileWithBitmapCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -104,6 +107,8 @@ public class CompletionForum extends CustomActivity {
     ArrayList<WarrantStruct> warrantIdList = new ArrayList<>();
     ArrayList<PreFixesHolder> preFixesHolders = new ArrayList<>();
     String path = "";
+    Uri uri = null;
+    String sizeStr = "";
     private CircleImageView addDefendant;
     private CircleImageView addCoSigner;
     private LinearLayout preFixedViewLL;
@@ -238,8 +243,13 @@ public class CompletionForum extends CustomActivity {
                 isCoSigner = false;
                 isDefendent = false;
                 adpaterPosition = position;
-                file = new File(Const.TEMP_PHOTO + Const.getUniqueIdforImage()
+                file = new File(Const.TEMP_PHOTO + "/" + Const.getUniqueIdforImage()
                         + ".png");
+                try {
+                    file.createNewFile();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 ImageView iv = (ImageView) view.findViewById(R.id.my_image);
                 boolean result = Utility.checkPermission(THIS);
                 if (result) {
@@ -314,10 +324,9 @@ public class CompletionForum extends CustomActivity {
 
                         if (position == 0)
                             ImageSelector.openGallary(act);
-                        else if (position == 1)
+                        else if (position == 1) {
                             ImageSelector.openCamera(act, file);
-
-                        else if (position == 2 && listener != null)
+                        } else if (position == 2 && listener != null)
                             listener.onRemove();
 
                     }
@@ -982,7 +991,7 @@ public class CompletionForum extends CustomActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) { // popop
         super.onActivityResult(requestCode, resultCode, data);
-        Uri uri = null;
+        uri = null;
         if (resultCode == RESULT_OK) {
 
             if (requestCode == 111) {
@@ -1006,16 +1015,27 @@ public class CompletionForum extends CustomActivity {
 
             } else {
                 if (requestCode == ImageSelector.IMAGE_CAPTURE) {
-                    uri = data.getData();
-
+                    try {
+                        //  uri = data.getData();
+                        uri = FileProvider.getUriForFile(THIS, Const.PROVIDER, file);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     if (uri == null) {
                         Bundle extras = data.getExtras();
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+
                         uri = ImageUtils.getImageUri(THIS, imageBitmap);
 
                         path = FilePath.getPath(THIS, uri);
                     } else {
-                        path = FilePath.getPath(THIS, uri);
+                        try {
+                            //path = FilePath.getPath(THIS, uri);
+                            path = file.getPath();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else if (requestCode == Take_DROPBOX) {
                     path = data.getStringExtra("path");
@@ -1053,7 +1073,7 @@ public class CompletionForum extends CustomActivity {
                         }
                     }
                 }
-                String sizeStr = "Total Attachments Size: 0.00 KB";
+                sizeStr = "Total Attachments Size: 0.00 KB";
                 if (isCoSigner) {
                     if (uri != null && requestCode != CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                         if (ImageSelector.isImage(path.trim().substring(path.lastIndexOf('/')))) {
@@ -1119,12 +1139,11 @@ public class CompletionForum extends CustomActivity {
                             Utils.showDialog(this,
                                     "Too Big!  All attachments \"combined\" can not exceed 24mb");
                         }
-
-
                     }
 
-
                 } else if (path != null) {
+
+                   // Toast.makeText(getApplicationContext(), "Path=" + path, Toast.LENGTH_SHORT).show();
                     if (!imgPathList.isEmpty()) {
                         if (adpaterPosition < imgPathList.size()) {
                             File f = new File(imgPathList.get(adpaterPosition));
@@ -1135,20 +1154,48 @@ public class CompletionForum extends CustomActivity {
                             if (adpaterPosition < uriArrayList.size())
                                 uriArrayList.remove(adpaterPosition);
                         }
+                    }
+                    if (ImageSelector.isImage(path.trim().substring(path.lastIndexOf('/')))) {
+                       // Toast.makeText(getApplicationContext(), "IS Image=Yes", Toast.LENGTH_SHORT).show();
+                        Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
 
-                    }
-                    File file = new File(path);
-                    float size = file.length() / 1024f;
-                    sizeStr = getToatSize(size);
-                    if (sizeStr != null) {
-                        imgPathList.add(path);
-                        uriArrayList.add(uri);
-                        adapter.notifyDataSetChanged();
-                        totalSizeTV.setText(sizeStr);
+                        Tiny.getInstance().source(path).asFile().withOptions(options).compress(new FileWithBitmapCallback() {
+                            @Override
+                            public void callback(boolean isSuccess, Bitmap bitmap, String outfile, Throwable t) {
+                                //return the compressed file path and bitmap object
+                                //  Log.d("OutputFile=", outfile);
+                                File compressFile = new File(outfile);
+                                float size = compressFile.length() / 1024f;
+                                sizeStr = getToatSize(size);
+                                if (sizeStr != null) {
+                                    imgPathList.add(outfile);
+                                    uriArrayList.add(uri);
+                                    adapter.notifyDataSetChanged();
+                                    totalSizeTV.setText(sizeStr);
+                                } else {
+                                    Utils.showDialog(CompletionForum.this,
+                                            "Too Big!  All attachments \"combined\" can not exceed 24mb");
+                                }
+
+                            }
+                        });
+
                     } else {
-                        Utils.showDialog(this,
-                                "Too Big!  All attachments \"combined\" can not exceed 24mb");
+                       // Toast.makeText(getApplicationContext(), "IS Image=No", Toast.LENGTH_SHORT).show();
+                        File file = new File(path);
+                        float size = file.length() / 1024f;
+                        sizeStr = getToatSize(size);
+                        if (sizeStr != null) {
+                            imgPathList.add(path);
+                            uriArrayList.add(uri);
+                            adapter.notifyDataSetChanged();
+                            totalSizeTV.setText(sizeStr);
+                        } else {
+                            Utils.showDialog(this,
+                                    "Too Big!  All attachments \"combined\" can not exceed 24mb");
+                        }
                     }
+
 
                     return;
                 }

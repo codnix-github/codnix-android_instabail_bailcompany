@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,7 +52,6 @@ import com.bailcompany.model.IndemnitorModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.User;
 import com.bailcompany.model.WarrantModel;
-import com.bailcompany.ui.MainFragment;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
 import com.bailcompany.utils.FilePath;
@@ -68,6 +68,8 @@ import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.FileWithBitmapCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,6 +80,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import br.com.simplepass.loading_button_lib.interfaces.OnAnimationEndListener;
 
 @SuppressLint("InflateParams")
 public class DefendantBondDetails extends CustomActivity {
@@ -95,6 +100,7 @@ public class DefendantBondDetails extends CustomActivity {
     String message;
     JSONObject jsonObj;
     String key;
+    CircularProgressButton btnUploadDoc;
 
     BailRequestModel mod = new BailRequestModel();
     User user;
@@ -106,13 +112,15 @@ public class DefendantBondDetails extends CustomActivity {
     int selectedWarrentId = 0;
     WarrantModel selectedWarrentModel = null;
     JSONArray preFixArr;
-    String defId=null;
+    String defId = null;
     ArrayList<CourtDateModel> warrantCourtDates = new ArrayList<CourtDateModel>();
     ArrayList<WarrantCourtDatesHolder> warrantCourtDatesHolders = new ArrayList<>();
     ArrayList<String> imgPathList, docImgPaths;
     ArrayList<Uri> uriArrayList;
     int adpaterPosition = 0;
     AlertDialog dialog = null;
+    String path = "";
+    Uri uri = null;
     private BailRequestModel bm;
     private DefendantModel defendant;
     private LinearLayout preFixedViewLL;
@@ -153,7 +161,9 @@ public class DefendantBondDetails extends CustomActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defendant_bond_details);
         setActionBar();
+
         _activity = getApplicationContext();
+        Tiny.getInstance().init(getApplication());
         submit = (TextView) findViewById(R.id.btn_accept);
         amountReq = (EditText) findViewById(R.id.bid_decimal);
         quotes = (EditText) findViewById(R.id.quote_inst);
@@ -287,8 +297,13 @@ public class DefendantBondDetails extends CustomActivity {
                                             final int position, long id) {
 
                         adpaterPosition = position;
-                        file = new File(Const.TEMP_PHOTO + Const.getUniqueIdforImage()
+                        file = new File(Const.TEMP_PHOTO + "/" + Const.getUniqueIdforImage()
                                 + ".png");
+                        try {
+                            file.createNewFile();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         ImageView iv = (ImageView) view.findViewById(R.id.my_image);
                         boolean result = Utility.checkPermission(THIS);
                         if (result) {
@@ -318,10 +333,21 @@ public class DefendantBondDetails extends CustomActivity {
 
                     }
                 });
+                /*
                 final Button btnUploadDoc = (Button) dialogForm.findViewById(R.id.btnUploadDoc);
                 btnUploadDoc.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        uploadDocuments();
+                    }
+                });
+                */
+                btnUploadDoc = (CircularProgressButton) dialogForm.findViewById(R.id.btnUploadDoc);
+                btnUploadDoc.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //uploadDocuments();
+                        btnUploadDoc.startAnimation();
                         uploadDocuments();
                     }
                 });
@@ -417,7 +443,7 @@ public class DefendantBondDetails extends CustomActivity {
                     ((TextView) v.findViewById(R.id.wrntTownship))
                             .setText("Township:   " + wMod.getTownship() + "");
                     ((TextView) v.findViewById(R.id.wrntCaseNum))
-                            .setText("CaseNo:   " + wMod.getCase_no() );
+                            .setText("CaseNo:   " + wMod.getCase_no());
                     ((TextView) v.findViewById(R.id.wrntPowerNum))
                             .setText("PowerNo:    " + wMod.getPowerNo());
                     if (!wMod.getCourtDate().equalsIgnoreCase("")) {
@@ -620,6 +646,7 @@ public class DefendantBondDetails extends CustomActivity {
         RelativeLayout view = (RelativeLayout) findViewById(R.id.view);
 
     }
+
     private String getPaperworkReq() {
         String req = "";
 
@@ -717,11 +744,19 @@ public class DefendantBondDetails extends CustomActivity {
                             if (resObj.optString("status")
                                     .equalsIgnoreCase("1")) {
                                 // setCompleteStatus();
+                                btnUploadDoc.revertAnimation(new OnAnimationEndListener() {
+                                    @Override
+                                    public void onAnimationEnd() {
+
+                                    }
+                                });
                                 message = resObj.optString("message");
                                 if (!Commons.isEmpty(message)
                                         || message.equalsIgnoreCase("success")) {
 
                                     Log.d("Res=", message);
+
+                                    btnUploadDoc.setText("Uploaded");
 
                                     Utils.showDialog(DefendantBondDetails.this, message);
 
@@ -885,7 +920,7 @@ public class DefendantBondDetails extends CustomActivity {
             if (getIntent().hasExtra("bail")) {
                 bm = (BailRequestModel) getIntent()
                         .getSerializableExtra("bail");
-                defendant= (DefendantModel) getIntent()
+                defendant = (DefendantModel) getIntent()
                         .getSerializableExtra("defendant");
                 if (bm != null) {
                     reqId = "" + bm.getAgentRequestId();
@@ -896,7 +931,7 @@ public class DefendantBondDetails extends CustomActivity {
                 }
 
                 if (defendant != null) {
-                    defId=defendant.getId();
+                    defId = defendant.getId();
 
                 }
             } else {
@@ -915,7 +950,7 @@ public class DefendantBondDetails extends CustomActivity {
                 @Override
                 public void run() {
 
-                    if (bm != null && defId!=null) {
+                    if (bm != null && defId != null) {
                         showDetail();
                     } else {
                         Utils.showDialog(DefendantBondDetails.this,
@@ -996,7 +1031,6 @@ public class DefendantBondDetails extends CustomActivity {
         }
         return null;
     }
-
 
     public void getDropDownValues() {
         pd = ProgressDialog.show(DefendantBondDetails.this, "", "Loading.....");
@@ -1133,12 +1167,12 @@ public class DefendantBondDetails extends CustomActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dropDownValuesList);
         holder.spinner.setAdapter(adapter);
         holder.spinner.setSelection(selectedPreFix + 1);
-
         ArrayList<String> status = new ArrayList<String>();
+
         status.add("Select Status");
         status.add("Active");
-        status.add("Discharge");
-        status.add("Forbidden");
+        status.add("Discharged");
+        status.add("Forfeiture");
         ArrayAdapter<String> adapterStatus = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, status);
         holder.spinnerStatus.setAdapter(adapterStatus);
         holder.spinnerStatus.setSelection(1);
@@ -1155,7 +1189,6 @@ public class DefendantBondDetails extends CustomActivity {
         } else {
             addCourtDateView("");
         }
-
 
         preFixedViewLL.addView(child);
         preFixesHolders.add(holder);
@@ -1224,14 +1257,13 @@ public class DefendantBondDetails extends CustomActivity {
 
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) { // popop
         super.onActivityResult(requestCode, resultCode, data);
-        Uri uri = null;
+        uri = null;
         if (resultCode == RESULT_OK) {
 
-            String path = "";
+            path = "";
             if (requestCode == 111) {
                 if (Utils.isOnline()) {
 
@@ -1240,16 +1272,27 @@ public class DefendantBondDetails extends CustomActivity {
                 }
             } else {
                 if (requestCode == ImageSelector.IMAGE_CAPTURE) {
-                    uri = data.getData();
-
+                    try {
+                        //  uri = data.getData();
+                        uri = FileProvider.getUriForFile(THIS, Const.PROVIDER, file);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     if (uri == null) {
                         Bundle extras = data.getExtras();
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+
                         uri = ImageUtils.getImageUri(THIS, imageBitmap);
 
                         path = FilePath.getPath(THIS, uri);
                     } else {
-                        path = FilePath.getPath(THIS, uri);
+                        try {
+                            //path = FilePath.getPath(THIS, uri);
+                            path = file.getPath();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else if (requestCode == Take_DROPBOX) {
                     path = data.getStringExtra("path");
@@ -1266,17 +1309,13 @@ public class DefendantBondDetails extends CustomActivity {
                     }
 
                     path = FilePath.getPath(THIS, uri);
-                    if (uri.toString().contains("com.dropbox")) {
 
-                    }
                 }
-                String sizeStr = "Total Attachments Size: 0.00 KB";
+              
                 if (path != null) {
+                    Toast.makeText(getApplicationContext(), "Path=" + path, Toast.LENGTH_SHORT).show();
                     if (!imgPathList.isEmpty()) {
                         if (adpaterPosition < imgPathList.size()) {
-                            File f = new File(imgPathList.get(adpaterPosition));
-                            float size1 = f.length() / 1024f;
-                            //sizeStr = getDecrToatSize(size1);
 
                             imgPathList.remove(adpaterPosition);
                             if (adpaterPosition < uriArrayList.size())
@@ -1284,18 +1323,32 @@ public class DefendantBondDetails extends CustomActivity {
                         }
 
                     }
-                    File file = new File(path);
-                    float size = file.length() / 1024f;
-                    // sizeStr = getToatSize(size);
-                    if (sizeStr != null) {
+                    // File file = new File(path);
+                    // float size = file.length() / 1024f;
+                    if (ImageSelector.isImage(path.trim().substring(path.lastIndexOf('/')))) {
+                        Toast.makeText(getApplicationContext(), "IS Image=Yes", Toast.LENGTH_SHORT).show();
+                        Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
+
+                        Tiny.getInstance().source(path).asFile().withOptions(options).compress(new FileWithBitmapCallback() {
+                            @Override
+                            public void callback(boolean isSuccess, Bitmap bitmap, String outfile, Throwable t) {
+                                //return the compressed file path and bitmap object
+                                //  Log.d("OutputFile=", outfile);
+                                imgPathList.add(outfile);
+                                uriArrayList.add(uri);
+                                adapter.notifyDataSetChanged();
+
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "IS Image=No", Toast.LENGTH_SHORT).show();
                         imgPathList.add(path);
                         uriArrayList.add(uri);
                         adapter.notifyDataSetChanged();
-                        //    totalSizeTV.setText(sizeStr);
-                    } else {
-                        Utils.showDialog(this,
-                                "Too Big!  All attachments \"combined\" can not exceed 24mb");
+
+
                     }
+
 
                     return;
                 }

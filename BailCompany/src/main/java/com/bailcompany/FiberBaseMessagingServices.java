@@ -9,9 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.bailcompany.web.WebAccess;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -26,6 +24,18 @@ import java.util.Random;
 public class FiberBaseMessagingServices extends FirebaseMessagingService {
 
     private static final String TAG = "FirebaseMsgServices";
+
+    static void updateMyActivity(Context context, String message) {
+
+        Intent intent = new Intent("update_drawer");
+
+        // put whatever data you want to send, if any
+        intent.putExtra("message", message);
+
+        // send broadcast
+        context.sendBroadcast(intent);
+    }
+    // [END receive_message]
 
     /**
      * Called when message is received.
@@ -50,8 +60,8 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         JSONObject data_OBJ = null;
         // Check if message contains a notification payload.
 
-        if (remoteMessage.getData().size()>0) {
-            String data =  remoteMessage.getData().toString();
+        if (remoteMessage.getData().size() > 0) {
+            String data = remoteMessage.getData().toString();
             try {
                 data_OBJ = new JSONObject(data);
             } catch (JSONException e) {
@@ -65,7 +75,7 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
                     SharedPreferences prefs = getSharedPreferences("MyPreferences",
                             Context.MODE_PRIVATE);
                     final JSONObject messageObj = data_OBJ.optJSONObject(WebAccess.Key_Push_Message);
-                    final String message=messageObj.optString("Message");
+                    final String message = messageObj.optString("Message");
                     WebAccess.type = messageObj.getString("Type");
                     if (WebAccess.type != null) {
                         if (WebAccess.type.equalsIgnoreCase("6")) {
@@ -146,7 +156,6 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
-    // [END receive_message]
 
     /**
      * Create and show a simple notification containing the received FCM message.
@@ -255,17 +264,6 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         Random random = new Random();
         int m = random.nextInt(9999 - 1000) + 1000;
         notificationManager.notify(m, builder.build());
-    }
-
-    static void updateMyActivity(Context context, String message) {
-
-        Intent intent = new Intent("update_drawer");
-
-        // put whatever data you want to send, if any
-        intent.putExtra("message", message);
-
-        // send broadcast
-        context.sendBroadcast(intent);
     }
 }
 

@@ -1,185 +1,195 @@
 package com.bailcompany.adapter;
 
-/**
- * Created by admin on 12/8/2017.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bailcompany.R;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.ui.Defendant;
-import com.bailcompany.ui.DefendantList;
 import com.bailcompany.utils.Const;
 import com.bailcompany.web.WebAccess;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdapter.ViewHolder> implements Filterable {
-    private ArrayList<DefendantModel> mArrayList;
-    private ArrayList<DefendantModel> mFilteredList;
-    private Context mContex;
+/**
+ * Created by ravi on 16/11/17.
+ */
+
+public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdapter.MyViewHolder>
+        implements Filterable {
+    private Context context;
+    private List<DefendantModel> defendantList;
+    private List<DefendantModel> defendantListFiltered;
+    private DefendantClickListner listener;
     private boolean mReturn;
-    private Bitmap imgDef;
 
-    public DefendantListAdapter(ArrayList<DefendantModel> arrayList, Context context, boolean returnresult) {
-        mArrayList = arrayList;
-        mFilteredList = arrayList;
-        mContex = context;
+    public DefendantListAdapter(Context context, List<DefendantModel> contactList, boolean returnresult, DefendantClickListner listener) {
+        this.context = context;
+        this.listener = listener;
+        this.defendantList = contactList;
         mReturn = returnresult;
+        this.defendantListFiltered = contactList;
     }
 
     @Override
-    public DefendantListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_defendant_list, viewGroup, false);
-        return new ViewHolder(view);
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.row_defendant_list, parent, false);
+
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final DefendantListAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.id = mFilteredList.get(i).getId();
-        viewHolder.tvName.setText(mFilteredList.get(i).getFirstName() + " " + mFilteredList.get(i).getLastName());
-        if (mFilteredList.get(i).getDOB() != null && !mFilteredList.get(i).getDOB().trim().equalsIgnoreCase(""))
-            viewHolder.tvBirthdate.setText("DOB: " + Const.getFormatedDate("yyyy-MM-dd", "MM/dd/yyyy", mFilteredList.get(i).getDOB()
-                    .toString()));
-        if (mFilteredList.get(i).getSSN() != null && !mFilteredList.get(i).getSSN().trim().equalsIgnoreCase(""))
-            viewHolder.tvSSN.setText("SSN: " + mFilteredList.get(i).getSSN());
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        final DefendantModel defDetail = defendantListFiltered.get(position);
+        holder.tvName.setText(defDetail.getFirstName() + " " + defDetail.getLastName());
+        if (defDetail.getDOB() != null && !defDetail.getDOB().trim().equalsIgnoreCase(""))
+            holder.tvBirthdate.setText("DOB: " + Const.getFormatedDate("yyyy-MM-dd", "MM/dd/yyyy", defDetail.getDOB()
+                    .toString(), false));
+        if (defDetail.getSSN() != null && !defDetail.getSSN().trim().equalsIgnoreCase(""))
+            holder.tvSSN.setText("SSN: " + defDetail.getSSN());
         //Log.d("Path=", WebAccess.PHOTO + mFilteredList.get(i).getPhoto());
-        final String url = WebAccess.PHOTO + mFilteredList.get(i).getPhoto();
+        final String url = WebAccess.PHOTO + defDetail.getPhoto();
+        if (!mReturn) {
+            if (!defDetail.getDefUserId().equalsIgnoreCase("")) {
+                holder.tvUserName.setText("User Name : " + defDetail.getUserName());
+                holder.btnLoginDetail.setBackground(ContextCompat.getDrawable(context, R.drawable.more_btn));
+            } else {
+                holder.tvUserName.setText("");
+                holder.btnLoginDetail.setBackground(ContextCompat.getDrawable(context, R.drawable.btn_self_assign_small));
+            }
+        }
 
-        Glide.with(mContex)
+        if (mReturn)
+            holder.btnLoginDetail.setVisibility(View.GONE);
+        Glide.with(context)
                 .load(url)
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super
-                            Bitmap> glideAnimation) {
-                        viewHolder.ivProfilePic.setImageBitmap(resource);
-                        viewHolder.bitmap = resource;
-                        imgDef = resource;
-                    }
-                });
+                .placeholder(R.drawable.default_profile_image)
 
-        viewHolder.ivProfilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DefendantList.F1.newInstance(viewHolder.bitmap).show(((Activity) mContex).getFragmentManager(), null);
-            }
-        });
-        //  Glide.with(mContex).load(url).placeholder(R.drawable.ic_side_menu_normal).error(R.drawable.ic_action_name).into(viewHolder.ivProfilePic);
-        viewHolder.rlDefendantList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mReturn) {
-                    Intent intent = new Intent();
-                    intent.putExtra(Const.RETURN_FLAG, Const.RETURN_DEFENDANT_DETAIL);
+                .error(R.drawable.default_profile_image)
 
-                    intent.putExtra(Const.EXTRA_DATA, getDefendant(viewHolder.id));
-
-                    ((Activity) mContex).setResult(RESULT_OK, intent);
-                    ((Activity) mContex).finish();
-                } else {
-                    Intent intent = new Intent(mContex, Defendant.class);
-                    intent.putExtra("defId", viewHolder.id);
-                    mContex.startActivity(intent);
-                }
-
-            }
-        });
+                //    .apply(RequestOptions.circleCropTransform())
+                .into(holder.ivProfilePic);
     }
 
     @Override
     public int getItemCount() {
-        return mFilteredList.size();
+        return defendantListFiltered.size();
     }
 
     @Override
     public Filter getFilter() {
-
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
-
                 String charString = charSequence.toString();
-
                 if (charString.isEmpty()) {
-
-                    mFilteredList = mArrayList;
+                    defendantListFiltered = defendantList;
                 } else {
+                    List<DefendantModel> filteredList = new ArrayList<>();
+                    for (DefendantModel defModel : defendantList) {
 
-                    ArrayList<DefendantModel> filteredList = new ArrayList<>();
-
-                    for (DefendantModel androidVersion : mArrayList) {
-                        if (androidVersion.getFirstName().toLowerCase().contains(charString) || androidVersion.getLastName().toLowerCase().contains(charString) || androidVersion.getSSN().toLowerCase().contains(charString) || androidVersion.getDOB().toLowerCase().contains(charString)) {
-                            filteredList.add(androidVersion);
+                        if (defModel.getFirstName().toLowerCase().contains(charString) || defModel.getLastName().toLowerCase().contains(charString) || defModel.getSSN().toLowerCase().contains(charString) || defModel.getDOB().toLowerCase().contains(charString)) {
+                            filteredList.add(defModel);
                         }
                     }
-
-                    mFilteredList = filteredList;
+                    defendantListFiltered = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = mFilteredList;
+                filterResults.values = defendantListFiltered;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                mFilteredList = (ArrayList<DefendantModel>) filterResults.values;
+                defendantListFiltered = (ArrayList<DefendantModel>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
     }
 
-    private DefendantModel getDefendant(String id) {
-        for (DefendantModel androidVersion : mArrayList) {
-            if (androidVersion.getId().toLowerCase().equalsIgnoreCase(id)) {
-                return androidVersion;
-            }
-        }
-        return null;
+    public interface DefendantClickListner {
+        void onContactSelected(DefendantModel contact);
+
+        void onLoginButtonClick(DefendantModel contact);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView name, phone;
+        public ImageView thumbnail;
+
         private String id;
-        private TextView tvName, tvBirthdate, tvSSN;
+        private TextView tvName, tvBirthdate, tvSSN, tvUserName;
+        private Button btnLoginDetail;
         private CircleImageView ivProfilePic;
         private RelativeLayout rlDefendantList;
         private Bitmap bitmap;
 
-        public ViewHolder(View view) {
+        public MyViewHolder(View view) {
             super(view);
 
             tvName = (TextView) view.findViewById(R.id.tvName);
             tvSSN = (TextView) view.findViewById(R.id.tvSSN);
+            tvUserName = (TextView) view.findViewById(R.id.tvUserName);
             tvBirthdate = (TextView) view.findViewById(R.id.tvBirthdate);
             ivProfilePic = (CircleImageView) view.findViewById(R.id.ivProfilePic);
             rlDefendantList = (RelativeLayout) view.findViewById(R.id.rlDefendantList);
+            btnLoginDetail = (Button) view.findViewById(R.id.btnLoginDetail);
             id = "";
+            rlDefendantList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onContactSelected(defendantListFiltered.get(getAdapterPosition()));
+                }
+            });
+            btnLoginDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onLoginButtonClick(defendantListFiltered.get(getAdapterPosition()));
+                }
+            });
+
+            rlDefendantList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mReturn) {
+                        Intent intent = new Intent();
+                        intent.putExtra(Const.RETURN_FLAG, Const.RETURN_DEFENDANT_DETAIL);
+
+                        intent.putExtra(Const.EXTRA_DATA, defendantListFiltered.get(getAdapterPosition()));
+
+                        ((Activity) context).setResult(RESULT_OK, intent);
+                        ((Activity) context).finish();
+                    } else {
+                        Intent intent = new Intent(context, Defendant.class);
+                        intent.putExtra("defId", defendantListFiltered.get(getAdapterPosition()).getId());
+                        context.startActivity(intent);
+                    }
+
+                }
+            });
+
 
         }
     }
-
-
 }

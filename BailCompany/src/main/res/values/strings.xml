@@ -390,4 +390,6 @@
     <string name="otherdocument">Attachments</string>
     <string name="cosigner_doc">Cosigner Photo</string>
     <string name="defendant_doc">Defendant Photo</string>
+    <string name="title_activity_defendant_tracker">DefendantTracker</string>
+    <string name="title_defendant_login_Detail">Login detail</string>
 </resources>

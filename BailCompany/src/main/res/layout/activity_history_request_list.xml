@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white" >
-  <ListView
-    android:id="@+id/incoming_request_list" 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:listitem="@layout/incoming_request_item" />
-        
-    </LinearLayout>
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <SearchView
+        android:id="@+id/svRequest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layoutDirection="rtl" />
+
+    <ListView
+        android:id="@+id/incoming_request_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/incoming_request_item" />
+
+</LinearLayout>
    

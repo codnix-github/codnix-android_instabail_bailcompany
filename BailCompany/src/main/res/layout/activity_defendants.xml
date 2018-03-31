@@ -3,17 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <SearchView
         android:id="@+id/svDefendant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="right"
-        android:layoutDirection="rtl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layoutDirection="rtl" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_defendant_list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_defendant_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnTrackDefendant"
+            android:layout_alignStart="@+id/btnTrackDefendant"
+            android:scrollbars="vertical" />
+
+
+        <Button
+            android:id="@+id/btnTrackDefendant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/pad_2dp"
+            android:background="@drawable/btn_signin_yellow"
+            android:drawableLeft="@drawable/ic_place"
+            android:text="Track Defendants"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
 
 </LinearLayout>

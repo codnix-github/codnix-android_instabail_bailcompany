@@ -60,6 +60,7 @@ import com.bailcompany.ui.ReferBail;
 import com.bailcompany.ui.SelfAssigned;
 import com.bailcompany.ui.ShowAllOnMap;
 import com.bailcompany.ui.TransferBond;
+import com.bailcompany.utils.Const;
 import com.bailcompany.utils.ImageLoader;
 import com.bailcompany.utils.ImageLoader.ImageLoadedListener;
 import com.bailcompany.utils.ImageUtils;
@@ -102,6 +103,7 @@ public class MainActivity extends CustomActivity {
     Bundle arg;
     String badgeMessage;
     SharedPreferences prefs;
+    ArrayList<Feed> menuItems;
     /**
      * The drawer toggle.
      */
@@ -226,18 +228,20 @@ public class MainActivity extends CustomActivity {
 
                     || WebAccess.type.equalsIgnoreCase("5")
                     || WebAccess.type.equalsIgnoreCase("4"))
-                launchNext(3);
+
+                launchNext(getMenuIndexByName(Const.Menu.TRACK_AGENT), null);
             else if (WebAccess.type.equalsIgnoreCase("6"))
-                launchNext(4);
+                launchNext(getMenuIndexByName(Const.Menu.TRANSFER_BOND), null);
 
             else if (WebAccess.type.equalsIgnoreCase("8"))
-                launchNext(7);
+                launchNext(getMenuIndexByName(Const.Menu.INCOMING_REFFER_BAIL), null); //7
+
             else if (WebAccess.type.equalsIgnoreCase("10"))
-                launchNext(11);
+                launchNext(getMenuIndexByName(Const.Menu.SENT_FUGITIVE_REQUEST), null); //11
             else if (WebAccess.type.equalsIgnoreCase("6"))
-                launchNext(12);
+                launchNext(getMenuIndexByName(Const.Menu.HISTORY), null); //12
             else if (WebAccess.type.equalsIgnoreCase("13"))
-                launchNext(13);
+                launchNext(getMenuIndexByName(Const.Menu.INSTANT_CHAT), null); //13
 
         }
 
@@ -362,56 +366,9 @@ public class MainActivity extends CustomActivity {
             // launchNext(-1);
         }
         header.setOnClickListener(ocl);
+        setMenuItems();
 
-        final ArrayList<Feed> al = new ArrayList<Feed>();
-
-        al.add(new Feed("Get An Agent", null, R.drawable.ic_agent_normal,
-                R.drawable.ic_agent_selected));
-        al.add(new Feed("Self Assigned", null, R.drawable.ic_agent_normal,
-                R.drawable.ic_agent_selected));
-        al.add(new Feed("Track Agent", null, R.drawable.ic_tracking_normal,
-                R.drawable.ic_tracking_selected));
-        al.add(new Feed("Transfer Bond", null, R.drawable.ic_transfer_normal,
-                R.drawable.ic_transfer_selected));
-        al.add(new Feed("Incoming Transfer Bond Request", null,
-                R.drawable.ic_request_normal, R.drawable.ic_request_selected));
-        al.add(new Feed("Refer Bail", null, R.drawable.refer_bail,
-                R.drawable.refer_bail_white));
-        al.add(new Feed("Incoming Bail Referral", null,
-                R.drawable.incoming_refer_bail,
-                R.drawable.incoming_refer_bail_white));
-        al.add(new Feed("Blacklist Members", null, R.drawable.black_grey,
-                R.drawable.black_white));
-        al.add(new Feed("Bad Debt Members", null, R.drawable.bad_grey,
-                R.drawable.bad_white));
-
-        /*
-        al.add(new Feed("Get A Fugitive Agent", null,
-                R.drawable.fugitive_agent_sel, R.drawable.fugitive_agent));
-        al.add(new Feed("Sent Fugitive Request", null,
-                R.drawable.incoming_fugitive_agent_sel,
-                R.drawable.incoming_fugitive_agent));
-*/
-        al.add(new Feed("Defendants", null, R.drawable.ic_agent_normal,
-                R.drawable.ic_agent_selected));
-        al.add(new Feed("Calendar", null, R.drawable.ic_calendar_normal,
-                R.drawable.ic_calendar_selected));
-
-        al.add(new Feed("History", null, R.drawable.history,
-                R.drawable.history_white));
-        /*
-
-        al.add(new Feed("Instant Chat", null, R.drawable.ic_contact_normal,
-                R.drawable.ic_contact_selected));
-        al.add(new Feed("Instant Group Chat", null,
-                R.drawable.ic_contact_normal, R.drawable.ic_contact_selected));
-                */
-        al.add(new Feed("Contact Us", null, R.drawable.ic_contact_normal,
-                R.drawable.ic_contact_selected));
-        al.add(new Feed("Logout", null, R.drawable.ic_logout_normal,
-                R.drawable.ic_logout_selected));
-
-        adp = new LeftNavAdapter(this, al);
+        adp = new LeftNavAdapter(this, menuItems);
         drawerLeft.setAdapter(adp);
         drawerLeft.setOnItemClickListener(new OnItemClickListener() {
 
@@ -420,17 +377,68 @@ public class MainActivity extends CustomActivity {
                                     long arg3) {
 
                 if (arg2 > 0) {
-                    for (Feed f : al)
+                    for (Feed f : menuItems)
                         f.setDesc(null);
-                    al.get(arg2 - 1).setDesc("");
+                    menuItems.get(arg2 - 1).setDesc("");
                     adp.notifyDataSetChanged();
                 }
                 drawerLayout.closeDrawers();
-                launchNext(arg2);
-
-
+                Log.d("Argument=", "" + arg2);
+                launchNext(menuItems.get(arg2 - 1).getIndex(), menuItems.get(arg2 - 1));
             }
         });
+    }
+
+    private void setMenuItems() {
+        menuItems = new ArrayList<>();
+        menuItems.add(new Feed(Const.Menu.GET_AN_AGENT, null, R.drawable.ic_agent_normal,
+                R.drawable.ic_agent_selected, 1));
+        menuItems.add(new Feed(Const.Menu.SELF_ASSIGNED, null, R.drawable.ic_agent_normal,
+                R.drawable.ic_agent_selected, 2));
+        menuItems.add(new Feed(Const.Menu.TRACK_AGENT, null, R.drawable.ic_tracking_normal,
+                R.drawable.ic_tracking_selected, 3));
+        if (!Const.Menu.SHOW_LIMTED_MENU) {
+            menuItems.add(new Feed(Const.Menu.TRANSFER_BOND, null, R.drawable.ic_transfer_normal,
+                    R.drawable.ic_transfer_selected, 4));
+            menuItems.add(new Feed(Const.Menu.INCOMING_TRANSFER_BOND_REQUEST, null,
+                    R.drawable.ic_request_normal, R.drawable.ic_request_selected, 5));
+
+            menuItems.add(new Feed(Const.Menu.REFFER_BAIL, null, R.drawable.refer_bail,
+                    R.drawable.refer_bail_white, 6));
+            menuItems.add(new Feed(Const.Menu.INCOMING_REFFER_BAIL, null,
+                    R.drawable.incoming_refer_bail,
+                    R.drawable.incoming_refer_bail_white, 7));
+        }
+        menuItems.add(new Feed(Const.Menu.BLACK_LIST_MEMBER, null, R.drawable.black_grey,
+                R.drawable.black_white, 8));
+        if (!Const.Menu.SHOW_LIMTED_MENU) {
+            menuItems.add(new Feed(Const.Menu.BAD_DEBT_MEMBER, null, R.drawable.bad_grey,
+                    R.drawable.bad_white, 9));
+            menuItems.add(new Feed(Const.Menu.GET_FUGITIVE_AGENT, null,
+                    R.drawable.fugitive_agent_sel, R.drawable.fugitive_agent, 10));
+            menuItems.add(new Feed(Const.Menu.SENT_FUGITIVE_REQUEST, null,
+                    R.drawable.incoming_fugitive_agent_sel,
+                    R.drawable.incoming_fugitive_agent, 11));
+        }
+
+        menuItems.add(new Feed(Const.Menu.DEFENDANTS, null, R.drawable.ic_agent_normal,
+                R.drawable.ic_agent_selected, 12));
+        menuItems.add(new Feed(Const.Menu.CALENDAR, null, R.drawable.ic_calendar_normal,
+                R.drawable.ic_calendar_selected, 13));
+
+        menuItems.add(new Feed(Const.Menu.HISTORY, null, R.drawable.history,
+                R.drawable.history_white, 14));
+        if (!Const.Menu.SHOW_LIMTED_MENU) {
+            menuItems.add(new Feed(Const.Menu.INSTANT_CHAT, null, R.drawable.ic_contact_normal,
+                    R.drawable.ic_contact_selected, 15));
+            menuItems.add(new Feed(Const.Menu.INSTANT_GROUP_CHAT, null,
+                    R.drawable.ic_contact_normal, R.drawable.ic_contact_selected, 16));
+        }
+
+        menuItems.add(new Feed(Const.Menu.CONTACT_US, null, R.drawable.ic_contact_normal,
+                R.drawable.ic_contact_selected, 17));
+        menuItems.add(new Feed(Const.Menu.LOGOUT, null, R.drawable.ic_logout_normal,
+                R.drawable.ic_logout_selected, 18));
 
     }
 
@@ -452,7 +460,7 @@ public class MainActivity extends CustomActivity {
      * the Header contents of right drawer.
      */
 
-    private void launchNext(int pos) {
+    private void launchNext(int pos, Feed selectedItem) {
         Fragment f = null;
         String title = null;
         switch (pos) {
@@ -512,11 +520,11 @@ public class MainActivity extends CustomActivity {
                 f = new BadDebtMembers();
                 title = getString(R.string.bad_debt_members);
                 break;
-            case 101:
+            case 10:
                 f = new FugitiveAgent();
                 title = getString(R.string.fugitive_agent);
                 break;
-            case 111:
+            case 11:
                 f = new IncomingFugitveRequest();
                 title = getString(R.string.sent_fugitve_req);
                 prefs = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -526,19 +534,19 @@ public class MainActivity extends CustomActivity {
                 drawerLeft.setAdapter(adp);
                 break;
 
-            case 10:
+            case 12:
                 f = new DefendantList();
                 title = getString(R.string.defendants);
                 break;
-            case 11:
+            case 13:
                 f = new BailCalendar();
                 title = getString(R.string.calendar);
                 break;
-            case 12:
+            case 14:
                 f = new History();
                 title = getString(R.string.history);
                 break;
-            case 151:
+            case 15:
                 f = new InstantChat();
                 title = getString(R.string.instant_chat);
                 SharedPreferences.Editor editor4 = prefs.edit();
@@ -546,7 +554,7 @@ public class MainActivity extends CustomActivity {
                 WebAccess.instant = prefs.getBoolean("instant", false);
                 drawerLeft.setAdapter(adp);
                 break;
-            case 161:
+            case 16:
                 f = new InstantGroupChat();
                 title = getString(R.string.inst_group_msg);
                 SharedPreferences.Editor editor5 = prefs.edit();
@@ -554,11 +562,11 @@ public class MainActivity extends CustomActivity {
                 WebAccess.instantGroup = prefs.getBoolean("instantGroup", false);
                 drawerLeft.setAdapter(adp);
                 break;
-            case 13:
+            case 17:
                 f = new ContactUs();
                 title = getString(R.string.contact_us);
                 break;
-            case 14:
+            case 18:
                 sp.edit().putBoolean("isFbLogin", false);
                 sp.edit().putString("user", null).commit();
                 finish();
@@ -617,7 +625,7 @@ public class MainActivity extends CustomActivity {
         // }
         // });
 
-        launchNext(1);
+        launchNext(1, menuItems.get(0)); //1
     }
 
     private void setActionBarTitle() {
@@ -758,4 +766,17 @@ public class MainActivity extends CustomActivity {
         }
 
     }
+
+
+    private int getMenuIndexByName(String name) {
+        int returnpos = 1;
+        for (int i = 0; i < menuItems.size(); i++) {
+            if (menuItems.get(i).getTitle().equalsIgnoreCase(name)) {
+                returnpos = menuItems.get(i).getIndex();
+                break;
+            }
+        }
+        return returnpos;
+    }
+
 }

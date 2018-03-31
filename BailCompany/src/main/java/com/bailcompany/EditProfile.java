@@ -49,7 +49,7 @@ public class EditProfile extends CustomActivity {
 				|| v.getId() == R.id.btn_cancel_edit)
 			finish();
 		if (v.getId() == R.id.img_profile) {
-			file = new File(Const.TEMP_PHOTO + Const.getUniqueIdforImage()
+			file = new File(Const.TEMP_PHOTO + "/"+Const.getUniqueIdforImage()
 					+ ".png");
 			ImageSelector.openChooser(THIS, file, null);
 		}

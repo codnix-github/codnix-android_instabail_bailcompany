@@ -9,15 +9,19 @@ android {
         applicationId "com.bailcompany"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 7
-        versionName "1.5"
+        versionCode 9
+        versionName "1.7"
         multiDexEnabled true
+        ndk {
+            abiFilters 'armeabi','x86'//or armeabi-v7a、arm64-v8a、x86
+        }
     }
     aaptOptions {
         cruncherEnabled = false
     }
     dexOptions {
-        javaMaxHeapSize "4g"    }
+        javaMaxHeapSize "4g"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -53,13 +57,15 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
 
     //compile 'com.nightonke:boommenu:2.1.1'
-   // compile 'com.github.jjobes:slideDateTimePicker:1.0.2'
+    // compile 'com.github.jjobes:slideDateTimePicker:1.0.2'
     compile 'com.github.vatsaldesai92:MyDynamicCalendarLibrary:1.0.1'
-    compile 'com.theartofdev.edmodo:android-image-cropper:2.6.+'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
+    compile 'com.zxy.android:tiny:0.1.0'
 
     compile 'com.github.pwiniars:SlideDateTimePicker:v1.0.8'
     compile 'com.github.tibolte:agendacalendarview:1.0.4'
-
+    compile 'com.github.thunder413:DateTimeUtils:1.0'
+    compile 'br.com.simplepass:loading-button-android:1.12.0'
 
 
 }

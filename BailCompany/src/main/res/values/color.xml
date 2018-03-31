@@ -23,6 +23,7 @@
     <color name="blue_sky">#33b5e5</color>
     <color name="gray">#5B5B5B</color>
     <color name="add_photo_border">#AAAAAA</color>
+    <color name="loginInputBg">#f1f5f8</color>
 
     <drawable name="trans_draw">#00000000</drawable>
 

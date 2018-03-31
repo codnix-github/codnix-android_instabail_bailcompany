@@ -29,6 +29,7 @@ import com.bailcompany.utils.ImageSelector;
 import com.bailcompany.utils.ImageUtils;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -36,10 +37,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 @SuppressWarnings("deprecation")
 public class DefendantNoteDetails extends CustomActivity {
@@ -90,7 +88,9 @@ public class DefendantNoteDetails extends CustomActivity {
             ((TextView) v.findViewById(R.id.tvNote)).setText(eMod.getNote());
 
             String mDate = Const.getFormatedDate("yyyy-MM-dd hh:mm", "MM/dd/yyyy hh:mm", eMod.getModifyOn()
-                    .toString());
+                    .toString(), true);
+
+
 
             ((TextView) v.findViewById(R.id.tvNoteModifyOn)).setText(mDate);
 

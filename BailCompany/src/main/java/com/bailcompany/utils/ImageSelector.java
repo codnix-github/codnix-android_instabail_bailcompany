@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
+import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
@@ -54,6 +55,7 @@ public class ImageSelector {
         return false;
 
     }
+
     public static void openGallary(Activity act) {
 //		String[] mimeTypes = {"image/*","application/*"};
         String[] mimeTypes = {"image/*", "application/*", "application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"};
@@ -91,7 +93,11 @@ public class ImageSelector {
     public static void openCamera(Activity act, File file) {
 
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+
+        //camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        Uri photoURI = FileProvider.getUriForFile(act, Const.PROVIDER, file);
+        camera.putExtra(MediaStore.EXTRA_OUTPUT,
+                photoURI);
         act.startActivityForResult(camera, IMAGE_CAPTURE);
     }
 

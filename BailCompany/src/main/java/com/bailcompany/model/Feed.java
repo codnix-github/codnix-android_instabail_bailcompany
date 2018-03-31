@@ -7,6 +7,7 @@ package com.bailcompany.model;
  */
 public class Feed
 {
+	private int index;
 
 	/** The title. */
 	private String title;
@@ -36,12 +37,13 @@ public class Feed
 	 * @param image
 	 *            the image
 	 */
-	public Feed(String title, String desc, int image_normal , int image_selected )
+	public Feed(String title, String desc, int image_normal , int image_selected ,int index)
 	{
 		this.title = title;
 		this.desc = desc;
 		this.image_normal = image_normal;
 		this.image_selected = image_selected;
+		this.index = index;
 	}
 
 	/**
@@ -162,6 +164,12 @@ public class Feed
 	public void setImageSelected(int image_selected) {
 		this.image_selected = image_selected;
 	}
-	
 
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
 }

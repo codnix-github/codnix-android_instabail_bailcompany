@@ -345,8 +345,6 @@ public class AgentList extends CustomFragment {
 
 			@Override
 			public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-
-
 				if (isHired) {
 					if (page == 0)
 						dismissProgressDialog();

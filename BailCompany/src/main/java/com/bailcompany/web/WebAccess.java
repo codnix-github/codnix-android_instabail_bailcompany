@@ -121,6 +121,8 @@ public class WebAccess {
     public static final String GET_DEFENDANT_BOND_DETAIL = "getDefendantBondDetails";
     public static final String GET_COMPANY_EVENTS = "get-events";
     public static final String ADD_COMPANY_EVENTS = "save-event";
+    public static final String ADD_UPDATE_DEFENDANT_LOGIN_DETAILS = "addUpdateDefendantLoginDetails";
+
 
 
 

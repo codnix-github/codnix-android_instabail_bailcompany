@@ -5,17 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.bailcompany.adapter.DefendantListAdapter;
 import com.bailcompany.custom.CustomActivity;
-import com.bailcompany.custom.CustomFragment;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
@@ -40,22 +35,25 @@ public class DefendantSelectionActivity extends CustomActivity {
     boolean loadingMore;
 
     RecyclerView mRecyclerView;
+    android.widget.SearchView svDefendant;
     private DefendantListAdapter mAdapter;
     private ArrayList<DefendantModel> defList;
-    android.widget.SearchView svDefendant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defendants);
 
-        svDefendant=(android.widget.SearchView)findViewById(R.id.svDefendant);
+        svDefendant = (android.widget.SearchView) findViewById(R.id.svDefendant);
+        Button btnTrackDefendant = (Button) findViewById(R.id.btnTrackDefendant);
+        btnTrackDefendant.setVisibility(View.GONE);
 
         initViews();
         geDefendantsList();
         search(svDefendant);
 
     }
+
     private void initViews() {
 
 
@@ -111,9 +109,6 @@ public class DefendantSelectionActivity extends CustomActivity {
                                     if (resObj.optString("status")
                                             .equalsIgnoreCase("1")) {
 
-
-                                        Log.d("Data", resObj.toString());
-
                                         defList = new ArrayList<>();
 
                                         JSONArray arrDef = resObj.getJSONArray("defendants");
@@ -132,7 +127,7 @@ public class DefendantSelectionActivity extends CustomActivity {
                                             }
 
                                         }
-                                        mAdapter = new DefendantListAdapter(defList,THIS,true);
+                                        mAdapter = new DefendantListAdapter(THIS, defList, true, null);
                                         mRecyclerView.setAdapter(mAdapter);
 
 
