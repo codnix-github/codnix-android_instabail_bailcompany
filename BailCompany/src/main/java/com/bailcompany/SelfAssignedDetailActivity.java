@@ -1,8 +1,5 @@
 package com.bailcompany;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -29,9 +26,17 @@ import com.bailcompany.model.IndemnitorModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.WarrantModel;
 import com.bailcompany.utils.Utils;
+import com.bailcompany.web.WebAccess;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import java.util.ArrayList;
 
 @SuppressLint("InflateParams")
 public class SelfAssignedDetailActivity extends CustomActivity {
+    static int getCallTimeout = 50000;
+    static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     private BailRequestModel bm;
     private TextView btnArrive;
 
@@ -47,9 +52,10 @@ public class SelfAssignedDetailActivity extends CustomActivity {
             @Override
             public void onClick(View v) {
                 hideKeyboard();
-                startActivity(new Intent(SelfAssignedDetailActivity.this,
-                        CompletionForum.class).putExtra("bail", bm));
-                finish();
+
+                sendArrivedTime(bm.getAgentRequestId());
+
+
             }
         });
 
@@ -210,6 +216,37 @@ public class SelfAssignedDetailActivity extends CustomActivity {
         ((TextView) findViewById(R.id.splInstruction)).setText(bm
                 .getInstructionForAgent() + "");
     }
+
+    void sendArrivedTime(int reqId) {
+        if (Utils.isOnline(getApplicationContext())) {
+            RequestParams param = new RequestParams();
+
+            param.put("TemporaryAccessCode",
+                    MainActivity.user.getTempAccessCode());
+            param.put("UserName", MainActivity.user.getUsername());
+            param.put("RequestId", reqId);
+            String url = WebAccess.MAIN_URL + WebAccess.SEND_ARRIVED_TIME;
+            client.setTimeout(getCallTimeout);
+            client.post(getApplicationContext(), url, param,
+                    new AsyncHttpResponseHandler() {
+
+
+                        @Override
+                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                            startActivity(new Intent(SelfAssignedDetailActivity.this,
+                                    CompletionForum.class).putExtra("bail", bm));
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                            Utils.showDialog(getApplicationContext(), "Please tray again!!!");
+                        }
+                    });
+
+        }
+    }
+
 
     private void makeCallDialog(final String number) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);

@@ -8,9 +8,9 @@ android {
     defaultConfig {
         applicationId "com.bailcompany"
         minSdkVersion 17
-        targetSdkVersion 24
-        versionCode 9
-        versionName "1.7"
+        targetSdkVersion 26
+        versionCode 18
+        versionName "1.15"
         multiDexEnabled true
         ndk {
             abiFilters 'armeabi','x86'//or armeabi-v7a、arm64-v8a、x86

@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
@@ -117,9 +116,10 @@ public class DefendantBasicProfileDetails extends CustomActivity {
         ivDefendantPic = (ImageView) findViewById(R.id.ivDefendantProfilePic);
 
         edtAddress = (AutoCompleteTextView) findViewById(R.id.edtAddress);
+      /*
         edtAddress.setAdapter(new PlacesAdaper(THIS,
                 android.R.layout.simple_list_item_1));
-
+*/
         edtFirstName.setText(defModel.getFirstName());
         edtLastName.setText(defModel.getLastName());
         edtAddress.setText(defModel.getAddress());
@@ -138,6 +138,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
         edtGoogle.setText(defModel.getGoogleURL());
         edtTwitter.setText(defModel.getTwitterURL());
 
+        /*
         edtAddress.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -164,7 +165,7 @@ public class DefendantBasicProfileDetails extends CustomActivity {
                 }).start();
             }
         });
-
+*/
         if (!defModel.getPhoto().equalsIgnoreCase("")) {
             Log.d("Profile:", defModel.getPhoto());
             Glide.with(getApplicationContext()).load(WebAccess.PHOTO + defModel.getPhoto()).placeholder(R.drawable.completion_form_add_photo_btn).error(R.drawable.completion_form_add_photo_btn).diskCacheStrategy(DiskCacheStrategy.NONE)

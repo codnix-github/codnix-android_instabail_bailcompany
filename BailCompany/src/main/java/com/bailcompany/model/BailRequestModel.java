@@ -9,9 +9,9 @@ public class BailRequestModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	String DefendantName,DefendantFName,DefendantLName, DefDOB, DefSSN, DefBookingNumber, LocationLongitude,
+	String DefendantName,DefendantFName,DefendantLName, DefDOB, DefSSN, DefBookingNumber,DefId, LocationLongitude,
 			LocationLatitude, PaymentPlan, InstructionForAgent, CreatedDate,
-			SentRequestTime, Location, CompanyImage, CompanyName, AgentId,
+			SentRequestTime, AgentArrivedTime,RequestCompletionTime,RequestAbortedTime,AgentAcceptedTime, Location, CompanyImage, CompanyName, AgentId,
 			AgentImage, AgentName, isComplete, isCancel, isAbort,
 			CompanyOfferToPay, NumberIndemnitors, Read, bondInsuranceId,
 			bondInsuranceName, IsAccept, ammountForCommission,comments;
@@ -36,6 +36,46 @@ public class BailRequestModel implements Serializable {
 		this.isCancel = "0";
 		this.isAbort = "0";
 		this.IsAccept = "0";
+	}
+
+	public String getDefId() {
+		return DefId;
+	}
+
+	public void setDefId(String defId) {
+		DefId = defId;
+	}
+
+	public String getRequestCompletionTime() {
+		return RequestCompletionTime;
+	}
+
+	public void setRequestCompletionTime(String requestCompletionTime) {
+		RequestCompletionTime = requestCompletionTime;
+	}
+
+	public String getRequestAbortedTime() {
+		return RequestAbortedTime;
+	}
+
+	public void setRequestAbortedTime(String requestAbortedTime) {
+		RequestAbortedTime = requestAbortedTime;
+	}
+
+	public String getAgentArrivedTime() {
+		return AgentArrivedTime;
+	}
+
+	public void setAgentArrivedTime(String agentArrivedTime) {
+		AgentArrivedTime = agentArrivedTime;
+	}
+
+	public String getAgentAcceptedTime() {
+		return AgentAcceptedTime;
+	}
+
+	public void setAgentAcceptedTime(String agentAcceptedTime) {
+		AgentAcceptedTime = agentAcceptedTime;
 	}
 
 	public String getAmountReceived() {

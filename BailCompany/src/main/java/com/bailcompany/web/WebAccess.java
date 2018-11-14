@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
+import com.bailcompany.CompanyFilterActivity;
 import com.bailcompany.GroupChatActivity;
 import com.bailcompany.HistoryRequestList;
+import com.bailcompany.HistoryRequestListNew;
 import com.bailcompany.IndividualChatActivity;
 import com.bailcompany.MainActivity;
 import com.bailcompany.TrackAgents;
@@ -76,6 +78,8 @@ public class WebAccess {
     final static public String ACCESS_KEY_NAME = "ACCESS_KEY";
     final static public String ACCESS_SECRET_NAME = "ACCESS_SECRET";
     public static final String MARK_REQUEST_READ = "mark-request-as-read";
+    public static final String SEND_ARRIVED_TIME = "addUpdateAgentArrivedTime";
+
     // private static final String GET_ALL_INSURANCES = "GetAllInsurances";
     public static final String GET_ALL_INSURANCES = "get-all-insurances";
     public static final String GET_ALL_States = "get-all-states";
@@ -122,8 +126,6 @@ public class WebAccess {
     public static final String GET_COMPANY_EVENTS = "get-events";
     public static final String ADD_COMPANY_EVENTS = "save-event";
     public static final String ADD_UPDATE_DEFENDANT_LOGIN_DETAILS = "addUpdateDefendantLoginDetails";
-
-
 
 
     public static final String UPDATE_BOND_DETAILS = "updateWarrant";
@@ -350,14 +352,25 @@ public class WebAccess {
 
 
                         if (dataArr != null && dataArr.length() > 0) {
+                            int counter = 0;
+                            CompanyFilterActivity.uniqueCompanyList.clear();
+                            CompanyFilterActivity.selectedCompanyList.clear();
+                            CompanyFilterActivity.previousItemStateArray.clear();
                             for (int i = 0; i < dataArr.length(); i++) {
                                 JSONObject dObj = dataArr.getJSONObject(i);
                                 BailRequestModel mod = parseBailRequestDetail(dObj);
 
                                 if (mod != null) {
+                                    if (mod.getSenderCompanyName() != null && !CompanyFilterActivity.uniqueCompanyList.contains(mod.getSenderCompanyName())) {
+                                        CompanyFilterActivity.uniqueCompanyList.add(mod.getSenderCompanyName());
+                                        CompanyFilterActivity.previousItemStateArray.put(counter++, true);
+                                        CompanyFilterActivity.selectedCompanyList.add(mod.getSenderCompanyName());
+                                    }
+
                                     IncomingBailRequest.bailReqList.add(mod);
                                     IncomingRequest.bailReqList.add(mod);
                                     HistoryRequestList.bailReqList.add(mod);
+                                    HistoryRequestListNew.bailReqList.add(mod);
                                     Defendant.bailReqList.add(mod);
                                 }
 
@@ -1105,6 +1118,11 @@ public class WebAccess {
                 mod.setDefDOB(dObj.getString("DefDOB"));
                 mod.setDefSSN(dObj.getString("DefSSN"));
 
+                if (dObj.has("DefId"))
+                    mod.setDefId(dObj.getString("DefId"));
+                else
+                    mod.setDefId(dObj.getString(""));
+
                 if (HistoryRequestList.IsBailRequest
                         || TrackAgents.IsBailRequest) {
                     mod.setSenderCompanyImage(PHOTO
@@ -1222,6 +1240,13 @@ public class WebAccess {
 
                 mod.setSentRequestTime(dObj.getString("SentRequestTime"));//
 
+
+                mod.setAgentAcceptedTime(dObj.getString("AgentAcceptedTime"));//
+                mod.setAgentArrivedTime(dObj.getString("AgentArrivedTime"));//
+                mod.setRequestCompletionTime(dObj.getString("RequestCompletionTime"));//
+                mod.setRequestAbortedTime(dObj.getString("RequestAbortedTime"));//
+
+
                 JSONArray wArr = dObj.getJSONArray("WarrantList");
                 ArrayList<WarrantModel> wList = new ArrayList<WarrantModel>();
                 if (wArr != null && wArr.length() > 0) {
@@ -1231,6 +1256,8 @@ public class WebAccess {
                             WarrantModel wMod = new WarrantModel();
                             wMod.setAmount(wObj.optString("Amount"));
                             wMod.setTownship(wObj.optString("Township"));
+                            wMod.setAmountReceived(wObj.optString("WarrantAmountRecieved"));
+
 
                             if (wObj.has("case_no") && wObj.optString("case_no") != null && !wObj.optString("case_no").equals(""))
                                 wMod.setCase_no(wObj.optString("case_no"));

@@ -192,6 +192,8 @@ public class CompletionForum extends CustomActivity {
         setTouchNClick(R.id.add_co_signer);
         setActionBar();
 
+        payNum.setVisibility(View.GONE);
+
         payNum.setOnFocusChangeListener(new OnFocusChangeListener() {
 
             @Override
@@ -400,7 +402,7 @@ public class CompletionForum extends CustomActivity {
                     startActivityForResult(
                             new Intent(CompletionForum.this,
                                     PaymentReceiptPopup.class).putExtra("bail",
-                                    bailRequestMod).putExtra("pay", payNum.getText().toString()), 111);
+                                    bailRequestMod).putExtra("pay", getTotalAmountReceived()), 111);
                 }
                 break;
 
@@ -570,7 +572,7 @@ public class CompletionForum extends CustomActivity {
         for (int index = 0; index < preFixesHolders.size(); index++) {
             PreFixesHolder holder = preFixesHolders.get(index);
 
-            if (holder.serialET.getText().toString().equals("") || holder.caseNoET.getText().toString().equals("")) {
+            if (holder.spinner.getSelectedItemPosition() == 0 || holder.serialET.getText().toString().equals("") || holder.caseNoET.getText().toString().equals("") || holder.warrantAmountReceived.getText().toString().replace("$", "").equals("")) {
                 Utils.showDialog(THIS, "Enter Warrants Info").show();
 
                 return false;
@@ -585,10 +587,10 @@ public class CompletionForum extends CustomActivity {
 //            return false;
 //        }
 
-        if (payNum.getText().toString().equals("")) {
+     /*   if (payNum.getText().toString().equals("")) {
             Utils.showDialog(THIS, "Enter Payment !").show();
             return false;
-        }
+        }*/
         return true;
     }
 
@@ -661,12 +663,15 @@ public class CompletionForum extends CustomActivity {
             param.put("PowerNo", pwrNum);
             param.put("comments", comments.getText().toString());
 
-            String amount = payNum.getText().toString();
+            // String amount = payNum.getText().toString();
 
-            if (amount.contains("$"))
+          /*  if (amount.contains("$"))
                 param.put("Amount", amount.replace("$", ""));
             else
-                param.put("Amount", amount);
+                param.put("Amount", amount);*/
+
+
+            param.put("Amount", "0");
 
             for (int index = 0; index < preFixesHolders.size(); index++) {
                 PreFixesHolder holder = preFixesHolders.get(index);
@@ -675,6 +680,7 @@ public class CompletionForum extends CustomActivity {
                 param.put("serial[" + index + "]", holder.serialET.getText().toString());
                 param.put("warrant[" + index + "]", holder.warrantID);
                 param.put("case_no[" + index + "]", holder.caseNoET.getText().toString());
+                param.put("amountReceived[" + index + "]", holder.warrantAmountReceived.getText().toString().replace("$", ""));
             }
 
             String url = WebAccess.MAIN_URL + WebAccess.SUBMIT_COMPLETION_FORM;
@@ -833,10 +839,12 @@ public class CompletionForum extends CustomActivity {
             holder.titleTV = (TextView) child.findViewById(R.id.titleTV);
             holder.serialET = (EditText) child.findViewById(R.id.serialET);
             holder.caseNoET = (EditText) child.findViewById(R.id.caseNoET);
+            holder.warrantAmountReceived = (EditText) child.findViewById(R.id.warrantAmountReceived);
             holder.warrantID = struct.id;
 
 
             holder.titleTV.setText(struct.title);
+            bindFocusEvenOnAmount(holder);
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dropDownValuesList);
             holder.spinner.setAdapter(adapter);
@@ -845,6 +853,58 @@ public class CompletionForum extends CustomActivity {
             preFixesHolders.add(holder);
         }
     }
+
+    public void bindFocusEvenOnAmount(final CompletionForum.PreFixesHolder holder) {
+        holder.warrantAmountReceived.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus && holder.warrantAmountReceived.getText().toString().startsWith("$")) {
+                    if (holder.warrantAmountReceived.getText().toString().contains("0.00")) {
+                        holder.warrantAmountReceived.setText("$");
+                    } else {
+                        holder.warrantAmountReceived.setText(holder.warrantAmountReceived.getText().toString().replace("$", ""));
+                    }
+                } else if (!hasFocus && holder.warrantAmountReceived.getText().toString().equals("$")) {
+                    holder.warrantAmountReceived.setText(holder.warrantAmountReceived.getText().toString().replace("$", ""));
+                } else if (!hasFocus && !holder.warrantAmountReceived.getText().toString().startsWith("$") && holder.warrantAmountReceived.getText().toString().length() > 1) {
+                    holder.warrantAmountReceived.setText("$" + holder.warrantAmountReceived.getText().toString());
+                }
+            }
+        });
+
+        holder.warrantAmountReceived.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (holder.warrantAmountReceived.getText().toString().length() > 0 && !holder.warrantAmountReceived.getText().toString().startsWith("$")) {
+                    holder.warrantAmountReceived.setText("$" + holder.warrantAmountReceived.getText().toString());
+                    holder.warrantAmountReceived.setSelection(holder.warrantAmountReceived.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+
+    private String getTotalAmountReceived() {
+
+        float total = 0;
+        for (int index = 0; index < preFixesHolders.size(); index++) {
+            PreFixesHolder holder = preFixesHolders.get(index);
+            total += Float.parseFloat(holder.warrantAmountReceived.getText().toString().replace("$", ""));
+        }
+        return "" + total;
+    }
+
 
     public void setCompleteStatus() {
 
@@ -1143,7 +1203,7 @@ public class CompletionForum extends CustomActivity {
 
                 } else if (path != null) {
 
-                   // Toast.makeText(getApplicationContext(), "Path=" + path, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "Path=" + path, Toast.LENGTH_SHORT).show();
                     if (!imgPathList.isEmpty()) {
                         if (adpaterPosition < imgPathList.size()) {
                             File f = new File(imgPathList.get(adpaterPosition));
@@ -1156,7 +1216,7 @@ public class CompletionForum extends CustomActivity {
                         }
                     }
                     if (ImageSelector.isImage(path.trim().substring(path.lastIndexOf('/')))) {
-                       // Toast.makeText(getApplicationContext(), "IS Image=Yes", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(), "IS Image=Yes", Toast.LENGTH_SHORT).show();
                         Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
 
                         Tiny.getInstance().source(path).asFile().withOptions(options).compress(new FileWithBitmapCallback() {
@@ -1181,7 +1241,7 @@ public class CompletionForum extends CustomActivity {
                         });
 
                     } else {
-                       // Toast.makeText(getApplicationContext(), "IS Image=No", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(), "IS Image=No", Toast.LENGTH_SHORT).show();
                         File file = new File(path);
                         float size = file.length() / 1024f;
                         sizeStr = getToatSize(size);
@@ -1317,6 +1377,7 @@ public class CompletionForum extends CustomActivity {
         TextView titleTV;
         EditText serialET;
         EditText caseNoET;
+        EditText warrantAmountReceived;
         int warrantID;
     }
 

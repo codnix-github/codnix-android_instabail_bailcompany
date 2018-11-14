@@ -140,6 +140,7 @@
             android:text="@string/def_detail"
             android:textColor="@color/bail_rquest_font_bold"
             android:textSize="@dimen/txt_16sp"
+
             android:textStyle="bold" />
 
         <LinearLayout

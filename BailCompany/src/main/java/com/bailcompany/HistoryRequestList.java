@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,12 +45,13 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class HistoryRequestList extends CustomActivity {
 
-    private static final boolean FETCH_ALL_REQUEST = true;
+    private static final boolean FETCH_ALL_REQUEST = false;
     public static ArrayList<BailRequestModel> bailReqList = new ArrayList<BailRequestModel>();
     public static String title;
     public static boolean IsBailRequest;
     static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     static int getCallTimeout = 50000;
+
     String message;
     JSONObject jsonObj;
     String key, apiUrl;
@@ -60,6 +62,7 @@ public class HistoryRequestList extends CustomActivity {
     android.widget.SearchView svRequest;
     private ListView incomingRequestList;
     private ArrayList<BailRequestModel> filteredData = null;
+    private int FILTER_COMPANY_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +191,7 @@ public class HistoryRequestList extends CustomActivity {
         if (Utils.isOnline(HistoryRequestList.this)) {
             if (page == 0)
                 showProgressDialog("");
+            showProgressDialog("");
             if (page == 0) {
                 bailReqList.clear();
 
@@ -212,6 +216,8 @@ public class HistoryRequestList extends CustomActivity {
 
                             if (page == 0)
                                 dismissProgressDialog();
+
+                            dismissProgressDialog();
                             Utils.showDialog(HistoryRequestList.this,
                                     R.string.err_unexpect);
                             loadingMore = false;
@@ -225,6 +231,7 @@ public class HistoryRequestList extends CustomActivity {
                                 dismissProgressDialog();
                                 WebAccess.AllBidListCompany.clear();
                             }
+                            dismissProgressDialog();
                             try {
                                 String response2;
                                 loadingMore = false;
@@ -257,6 +264,8 @@ public class HistoryRequestList extends CustomActivity {
                                         if (bailReqList != null
                                                 && bailReqList.size() > 0) {
                                             adapter.notifyDataSetChanged();
+
+
                                         } else {
                                             Utils.showDialog(
                                                     HistoryRequestList.this,
@@ -264,6 +273,8 @@ public class HistoryRequestList extends CustomActivity {
                                                     .show();
                                             adapter.notifyDataSetChanged();
                                         }
+
+                                        Toast.makeText(getApplicationContext(), "" + bailReqList.size() + " ( "+page +" )", Toast.LENGTH_SHORT).show();
                                     } else if (resObj.optString("status")
                                             .equalsIgnoreCase("3")) {
                                         Toast.makeText(
@@ -306,9 +317,30 @@ public class HistoryRequestList extends CustomActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == RESULT_OK && requestCode == FILTER_COMPANY_CODE) {
+            adapter.getFilter().filter(svRequest.getQuery());
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_company_filter, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
             finish();
+        if (item.getItemId() == R.id.action_filters) {
+            Intent i = new Intent(HistoryRequestList.this, CompanyFilterActivity.class);
+            startActivityForResult(i, FILTER_COMPANY_CODE);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -412,6 +444,7 @@ public class HistoryRequestList extends CustomActivity {
 
             }
             return convertView;
+
         }
 
         @Override
@@ -426,15 +459,20 @@ public class HistoryRequestList extends CustomActivity {
                 String filterString = constraint.toString().toLowerCase();
 
                 FilterResults results = new FilterResults();
+                final List<BailRequestModel> list;
+                int count = 0;
 
-                final List<BailRequestModel> list = originalData;
+                list = originalData;
 
-                int count = list.size();
-                final ArrayList<BailRequestModel> nlist = new ArrayList<BailRequestModel>(count);
+                count = list.size();
+
+
+                final ArrayList<BailRequestModel> nlist = new ArrayList<BailRequestModel>();
 
                 String filterAgentName, filterDefName, filterCompanyName, filterBookingNo, filterDefSSN;
 
                 for (int i = 0; i < count; i++) {
+
                     filterAgentName = list.get(i).getAgentName() != null ? list.get(i).getAgentName().toLowerCase() : "";
                     filterDefName = list.get(i).getDefendantName() != null ? list.get(i).getDefendantName().toLowerCase() : "";
                     filterCompanyName = list.get(i).getSenderCompanyName() != null ? list.get(i).getSenderCompanyName().toLowerCase() : "";
@@ -444,10 +482,27 @@ public class HistoryRequestList extends CustomActivity {
                     if (filterAgentName.contains(filterString) || filterDefName.contains(filterString) || filterCompanyName.contains(filterString) || filterBookingNo.contains(filterString) || filterDefSSN.contains(filterString)) {
                         nlist.add(list.get(i));
                     }
+
+                }
+                final ArrayList<BailRequestModel> nlist2 = new ArrayList<BailRequestModel>();
+
+
+                for (int i = 0; i < nlist.size(); i++) {
+                    filterCompanyName = nlist.get(i).getSenderCompanyName() != null ? nlist.get(i).getSenderCompanyName().toLowerCase() : "";
+                    if (filterCompanyName != null) {
+                        for (int j = 0; j < CompanyFilterActivity.selectedCompanyList.size(); j++) {
+                            if (filterCompanyName.equalsIgnoreCase(CompanyFilterActivity.selectedCompanyList.get(j))) {
+                                nlist2.add(nlist.get(i));
+                                break;
+                            }
+                        }
+                    }
+
                 }
 
-                results.values = nlist;
-                results.count = nlist.size();
+
+                results.values = nlist2;
+                results.count = nlist2.size();
 
                 return results;
             }

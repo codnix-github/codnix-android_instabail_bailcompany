@@ -13,6 +13,12 @@
     <color name="green">#58c246</color>
     <color name="subcription_text">#383838</color>
     <color name="gray_lt">#CCC</color>
+    <color name="grey_5">#f9f8f8</color>
+    <color name="grey_10">#e6e6e6</color>
+    <color name="grey_90">#263238</color>
+    <color name="grey_70">#646566</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_30">#bfbfbf</color>
     <color name="red_light">#e74c3c</color>
     <color name="gray_dk">#313031</color>
     <color name="white_smoke">#F7F7F7</color>

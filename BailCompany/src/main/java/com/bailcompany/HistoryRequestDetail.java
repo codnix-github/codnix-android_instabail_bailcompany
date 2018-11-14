@@ -1,18 +1,5 @@
 package com.bailcompany;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -24,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,11 +22,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +38,7 @@ import com.bailcompany.model.IndemnitorModel;
 import com.bailcompany.model.InsuranceModel;
 import com.bailcompany.model.User;
 import com.bailcompany.model.WarrantModel;
+import com.bailcompany.ui.Defendant;
 import com.bailcompany.ui.MainFragment;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.ImageLoader;
@@ -61,28 +51,31 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 @SuppressLint("InflateParams")
 public class HistoryRequestDetail extends CustomActivity {
-    private BailRequestModel bm;
-    String comp;
-    String reqId;
-
-    TextView submit, bail_request;
-    boolean fromNotification = false;
-    MainFragment m = new MainFragment();
-
-    String currentDateTimeString, reqDateTimeString;
     static ProgressDialog pd;
     static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
+    static int getCallTimeout = 50000;
+    static Bitmap bmCompany;
+    String comp;
+    String reqId;
+    TextView submit, bail_request, defName;
+    boolean fromNotification = false;
+    MainFragment m = new MainFragment();
+    String currentDateTimeString, reqDateTimeString;
     String message, header = "Bail Company Detail", status = "Accepted",
             titleDetail = "Bail Request Detail";
     JSONObject jsonObj;
     String key;
-    static int getCallTimeout = 50000;
     int crnthour, reqthour;
     int crntminute, reqtminute;
     BailRequestModel mod = new BailRequestModel();
-    static Bitmap bmCompany;
     ImageView imgCompany;
     LinearLayout layoutCompany;
     User user;
@@ -90,8 +83,37 @@ public class HistoryRequestDetail extends CustomActivity {
     Button hireAgent, selfAssign;
     boolean isAccepted;
     boolean isCompanyRequest;
+    RelativeLayout rlStep1, rlStep2, rlStep3, rlStep4;
+    ImageView image_dispatch, image_accepted, image_arrival, image_completion;
+    TextView tv_completion, tv_dispatch, tv_accepted, tv_arrival;
+    LinearLayout requestProgress;
+    private BailRequestModel bm;
     private ArrayList<AgentModel> agentList;
     private ArrayList<String> selectedItems = new ArrayList<String>();
+
+    public static AlertDialog showDialog(Context ctx, String msg,
+                                         DialogInterface.OnClickListener listener) {
+
+        return showDialog(ctx, msg, ctx.getString(android.R.string.ok), null,
+                listener, null);
+    }
+
+    public static AlertDialog showDialog(Context ctx, String msg, String btn1,
+                                         String btn2, DialogInterface.OnClickListener listener1,
+                                         DialogInterface.OnClickListener listener2) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        // builder.setTitle(R.string.app_name);
+        builder.setMessage(msg).setCancelable(false)
+                .setPositiveButton(btn1, listener1);
+        if (btn2 != null && listener2 != null)
+            builder.setNegativeButton(btn2, listener2);
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        return alert;
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,9 +141,27 @@ public class HistoryRequestDetail extends CustomActivity {
             payment.setVisibility(View.GONE);
             isAccepted = true;
             isCompanyRequest = true;
+
+
         }
+        initStepLayout();
         setActionBar(titleDetail);
         getDetail();
+        defName = (TextView) findViewById(R.id.defName);
+        defName.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                if (bm.getDefId() == null || bm.getDefId().equals(""))
+                    return;
+                Intent intent = new Intent(HistoryRequestDetail.this, Defendant.class);
+                intent.putExtra("defId", bm.getDefId());
+                startActivity(intent);
+
+            }
+        });
+
         imgCompany.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -165,6 +205,143 @@ public class HistoryRequestDetail extends CustomActivity {
         });
     }
 
+    void initStepLayout() {
+
+        rlStep1 = (RelativeLayout) findViewById(R.id.rlStep1);
+        rlStep2 = (RelativeLayout) findViewById(R.id.rlStep2);
+        rlStep3 = (RelativeLayout) findViewById(R.id.rlStep3);
+        rlStep4 = (RelativeLayout) findViewById(R.id.rlStep4);
+        requestProgress = (LinearLayout) findViewById(R.id.requestProgress);
+
+
+        image_dispatch = (ImageView) findViewById(R.id.image_dispatch);
+        image_accepted = (ImageView) findViewById(R.id.image_accepted);
+        image_arrival = (ImageView) findViewById(R.id.image_arrival);
+        image_completion = (ImageView) findViewById(R.id.image_completion);
+
+        tv_completion = (TextView) findViewById(R.id.tv_completion);
+        tv_dispatch = (TextView) findViewById(R.id.tv_dispatch);
+        tv_accepted = (TextView) findViewById(R.id.tv_accepted);
+        tv_arrival = (TextView) findViewById(R.id.tv_arrival);
+
+
+    }
+
+    void setupSteps(BailRequestModel requestdetail) {
+        try {
+            if (requestdetail.getIsComplete().equals("1")) {
+                if (requestdetail.getRequestCompletionTime().equals("")) {
+                    requestProgress.setVisibility(View.GONE);
+                    return;
+                }
+            }
+
+            tv_dispatch.setTextColor(getResources().getColor(R.color.grey_70));
+            tv_accepted.setTextColor(getResources().getColor(R.color.grey_10));
+            tv_arrival.setTextColor(getResources().getColor(R.color.grey_10));
+            tv_completion.setTextColor(getResources().getColor(R.color.grey_10));
+            image_accepted.setColorFilter(getResources().getColor(R.color.grey_10), PorterDuff.Mode.SRC_ATOP);
+            image_dispatch.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+            image_arrival.setColorFilter(getResources().getColor(R.color.grey_10), PorterDuff.Mode.SRC_ATOP);
+            image_completion.setColorFilter(getResources().getColor(R.color.grey_10), PorterDuff.Mode.SRC_ATOP);
+            requestProgress.setVisibility(View.VISIBLE);
+            tv_accepted.setText("Accepted");
+            tv_completion.setText("Completed");
+
+
+            rlStep2.setVisibility(View.VISIBLE);
+            rlStep3.setVisibility(View.VISIBLE);
+            rlStep4.setVisibility(View.VISIBLE);
+
+            if (!requestdetail.getCreatedDate().equals("")) {
+
+                tv_dispatch.setText(tv_dispatch.getText().toString() + "\n" + Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
+                        "MM/dd/yyyy hh:mm", requestdetail.getCreatedDate()));
+            }
+
+
+            if (requestdetail.isIsAccept().equals("1")) {
+                image_accepted.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+                tv_accepted.setTextColor(getResources().getColor(R.color.grey_70));
+                tv_accepted.setText(tv_accepted.getText().toString() + "\n" + Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
+                        "MM/dd/yyyy hh:mm", requestdetail.getAgentAcceptedTime()));
+            }
+            if (!requestdetail.getAgentArrivedTime().equals("")) {
+
+                if (requestdetail.getAgentAcceptedTime().equals("")) {
+                    requestProgress.setVisibility(View.GONE);
+                    return;
+                }
+                image_arrival.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+                tv_arrival.setTextColor(getResources().getColor(R.color.grey_70));
+                tv_arrival.setText(tv_arrival.getText().toString() + "\n" + Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
+                        "MM/dd/yyyy hh:mm", requestdetail.getAgentArrivedTime()));
+
+
+            }
+            if (requestdetail.getIsComplete().equals("1")) {
+                if (requestdetail.getRequestCompletionTime().equals("")) {
+                    requestProgress.setVisibility(View.GONE);
+                    return;
+                }
+
+
+                if (requestdetail.getAgentAcceptedTime().equals("")) {
+                    requestProgress.setVisibility(View.GONE);
+                    return;
+
+                }
+                if (requestdetail.getAgentArrivedTime().equals("")) {
+                    requestProgress.setVisibility(View.GONE);
+                    return;
+
+                }
+                image_completion.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+                tv_completion.setTextColor(getResources().getColor(R.color.grey_70));
+                tv_completion.setText(tv_completion.getText().toString() + "\n" + Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
+                        "MM/dd/yyyy hh:mm", requestdetail.getRequestCompletionTime()));
+
+
+            }
+
+
+            if (requestdetail.getAgentId().equals(requestdetail.getSenderCompanyId())) {
+                image_accepted.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+                tv_accepted.setTextColor(getResources().getColor(R.color.grey_70));
+                tv_accepted.setText("Self Assigned");
+
+            }
+
+            if (requestdetail.getIsAbort().equals("1")) {
+                // aborted
+                if (requestdetail.getAgentArrivedTime().equals("")) {
+                    requestProgress.setVisibility(View.GONE);
+
+                    return;
+                }
+                if (requestdetail.getIsCancel().equals("1")) {
+                    //cancelled
+                    image_completion.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+                    tv_completion.setTextColor(getResources().getColor(R.color.grey_70));
+                    tv_completion.setText("Cancelled");
+
+                } else {
+                    image_completion.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+                    tv_completion.setTextColor(getResources().getColor(R.color.grey_70));
+                    tv_completion.setText("Aborted");
+
+                }
+
+                tv_completion.setText(tv_completion.getText().toString() + "\n" + Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
+                        "MM/dd/yyyy hh:mm", requestdetail.getRequestAbortedTime()));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     void hideKeyboard() {
         View view = THIS.getCurrentFocus();
         if (view != null) {
@@ -180,7 +357,6 @@ public class HistoryRequestDetail extends CustomActivity {
         super.onResume();
         hideKeyboard();
     }
-
 
     private void showDetail() {
 
@@ -322,9 +498,11 @@ public class HistoryRequestDetail extends CustomActivity {
                             .setText("Case No:   " + wMod.getCase_no() + "");
                     ((TextView) v.findViewById(R.id.wrntPowerNum))
                             .setText("Power No:   " + wMod.getPowerNo() + "");
+                    if (wMod.getAmountReceived() != null && !wMod.getAmountReceived().equalsIgnoreCase("")) {
+                        ((TextView) v.findViewById(R.id.wrntAmountReceived))
+                                .setText("Amount Received:   $" + wMod.getAmountReceived());
+                    }
 
-                    Log.e("wMod.getAmount()", "" + wMod.getAmount());
-                    Log.e("wMod.getTownship()", "" + wMod.getTownship());
 
                     llWarrant.addView(v);
                 }
@@ -524,6 +702,7 @@ public class HistoryRequestDetail extends CustomActivity {
 
                     if (bm != null) {
                         showDetail();
+                        setupSteps(bm);
                     } else {
                         Utils.showDialog(HistoryRequestDetail.this,
                                 "No detail found").show();
@@ -533,41 +712,6 @@ public class HistoryRequestDetail extends CustomActivity {
 
         } else
             Utils.noInternetDialog(HistoryRequestDetail.this);
-    }
-
-    public static class F1 extends DialogFragment {
-
-        public static F1 newInstance() {
-            F1 f1 = new F1();
-            f1.setStyle(DialogFragment.STYLE_NO_FRAME,
-                    android.R.style.Theme_DeviceDefault_Dialog);
-            return f1;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-
-            // Remove the default background
-            getDialog().getWindow().setBackgroundDrawable(
-                    new ColorDrawable(Color.TRANSPARENT));
-
-            // Inflate the new view with margins and background
-            View v = inflater.inflate(R.layout.popup_layout, container, false);
-            ImageView bm = (ImageView) v.findViewById(R.id.bm_company);
-
-            bm.setImageBitmap(bmCompany);
-
-            v.findViewById(R.id.popup_root).setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dismiss();
-                        }
-                    });
-
-            return v;
-        }
     }
 
     private void getCompanyDetail() {
@@ -987,34 +1131,45 @@ public class HistoryRequestDetail extends CustomActivity {
 
     }
 
-    public static AlertDialog showDialog(Context ctx, String msg,
-                                         DialogInterface.OnClickListener listener) {
-
-        return showDialog(ctx, msg, ctx.getString(android.R.string.ok), null,
-                listener, null);
-    }
-
-    public static AlertDialog showDialog(Context ctx, String msg, String btn1,
-                                         String btn2, DialogInterface.OnClickListener listener1,
-                                         DialogInterface.OnClickListener listener2) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        // builder.setTitle(R.string.app_name);
-        builder.setMessage(msg).setCancelable(false)
-                .setPositiveButton(btn1, listener1);
-        if (btn2 != null && listener2 != null)
-            builder.setNegativeButton(btn2, listener2);
-
-        AlertDialog alert = builder.create();
-        alert.show();
-        return alert;
-
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
             finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class F1 extends DialogFragment {
+
+        public static F1 newInstance() {
+            F1 f1 = new F1();
+            f1.setStyle(DialogFragment.STYLE_NO_FRAME,
+                    android.R.style.Theme_DeviceDefault_Dialog);
+            return f1;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            // Remove the default background
+            getDialog().getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.TRANSPARENT));
+
+            // Inflate the new view with margins and background
+            View v = inflater.inflate(R.layout.popup_layout, container, false);
+            ImageView bm = (ImageView) v.findViewById(R.id.bm_company);
+
+            bm.setImageBitmap(bmCompany);
+
+            v.findViewById(R.id.popup_root).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dismiss();
+                        }
+                    });
+
+            return v;
+        }
     }
 }

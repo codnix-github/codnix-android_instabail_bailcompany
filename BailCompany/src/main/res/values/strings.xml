@@ -20,6 +20,7 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="signin">Sign In</string>
+    <string name="apply">Apply</string>
     <string name="subscribe">Subscriber</string>
     <string name="package2">Welcome</string>
     <string name="attach_req">Attach The Required Documents To Complete Form</string>
@@ -198,7 +199,7 @@
     <string name="pay_plan">Payment Plan (Enter Amount and Frequency)</string>
     <string name="spcl_inst">Special Instruction To Agent</string>
     <string name="power_no">Power No.</string>
-    <string name="amount_received">Amount Received</string>
+    <string name="amount_received">Total Amount Received</string>
     <string name="comments">Comments</string>
     <string name="quotes">Quotes From Agent</string>
     <string name="wrt_inst">Write your instruction here...</string>
@@ -360,6 +361,7 @@
     <string name="payment">Payment with Paypal</string>
     <string name="subscribe2">Subscribe</string>
     <string name="action_settings">Settings</string>
+    <string name="action_filter">Filter</string>
     <string name="title_activity_history_request_list">HistoryRequestList</string>
     <string name="title_activity_history_request_detail">HistoryRequestDetail</string>
     <string name="title_activity_bad_debt_detail">BadDebtDetail</string>
@@ -385,6 +387,7 @@
     <string name="title_activity_group_chat">GroupChatActivity</string>
     <string name="title_activity_completion_forum">CompletionForum</string>
     <string name="title_activity_dropbox_download">DropboxDownload</string>
+    <string name="title_company_filter">Filter</string>
     <string name="defendant_address">San Fransisco, CA</string>
 
     <string name="otherdocument">Attachments</string>

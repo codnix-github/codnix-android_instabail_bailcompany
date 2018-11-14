@@ -133,6 +133,180 @@
                 android:textSize="@dimen/txt_14sp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/requestProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/rlStep1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_dispatch"
+                            android:layout_width="@dimen/spacing_smlarge"
+                            android:layout_height="@dimen/spacing_smlarge"
+                            android:layout_centerHorizontal="true"
+                            android:background="@android:color/white"
+                            android:src="@drawable/ic_done"
+                            android:tint="@color/grey_10" />
+
+                        <TextView
+                            android:id="@+id/tv_dispatch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_mxlarge"
+                            android:gravity="center"
+
+                            android:text="Dispatched"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@color/grey_90"
+                            android:textSize="@dimen/txt_10sp" />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/line_first"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="0.3"
+                        android:src="@drawable/ic_navigate_next"
+                        android:tint="@color/grey_5"
+                        android:visibility="visible" />
+
+
+                    <RelativeLayout
+                        android:id="@+id/rlStep2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_accepted"
+                            android:layout_width="@dimen/spacing_smlarge"
+                            android:layout_height="@dimen/spacing_smlarge"
+                            android:layout_centerHorizontal="true"
+                            android:background="@android:color/white"
+                            android:src="@drawable/ic_done"
+                            android:tint="@color/grey_10" />
+
+                        <TextView
+                            android:id="@+id/tv_accepted"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_mxlarge"
+                            android:gravity="center"
+
+                            android:text="Accepted"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@color/grey_20"
+                            android:textSize="@dimen/txt_10sp" />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/line_second"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="0.3"
+                        android:src="@drawable/ic_navigate_next"
+                        android:tint="@color/grey_5"
+                        android:visibility="visible" />
+
+                    <RelativeLayout
+                        android:id="@+id/rlStep3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_arrival"
+                            android:layout_width="@dimen/spacing_smlarge"
+                            android:layout_height="@dimen/spacing_smlarge"
+                            android:layout_centerHorizontal="true"
+                            android:background="@android:color/white"
+                            android:src="@drawable/ic_done"
+                            android:tint="@color/grey_10" />
+
+                        <TextView
+                            android:id="@+id/tv_arrival"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_mxlarge"
+                            android:gravity="center"
+
+                            android:text="Arrived"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@color/grey_20"
+                            android:textSize="@dimen/txt_10sp" />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/line_third"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_weight="0.3"
+                        android:src="@drawable/ic_navigate_next"
+                        android:tint="@color/grey_5"
+                        android:visibility="visible" />
+
+                    <RelativeLayout
+                        android:id="@+id/rlStep4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_completion"
+                            android:layout_width="@dimen/spacing_smlarge"
+                            android:layout_height="@dimen/spacing_smlarge"
+                            android:layout_centerHorizontal="true"
+                            android:background="@android:color/white"
+                            android:src="@drawable/ic_done"
+                            android:tint="@color/grey_10" />
+
+                        <TextView
+                            android:id="@+id/tv_completion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_mxlarge"
+                            android:gravity="center"
+                            android:text="Completed"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@color/grey_20"
+                            android:textSize="@dimen/txt_10sp" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
         <TextView
             style="@style/bail_request"
             android:layout_width="match_parent"
@@ -161,7 +335,7 @@
                     style="@style/bail_request"
                     android:layout_width="0dp"
                     android:layout_weight="2"
-                    android:textColor="@color/bail_rquest_font_bold"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/txt_16sp" />
             </LinearLayout>
 
@@ -213,7 +387,6 @@
                     android:padding="@dimen/pad_5dp"
                     android:textColor="@color/bail_rquest_font_bold" />
             </LinearLayout>
-
 
 
             <LinearLayout

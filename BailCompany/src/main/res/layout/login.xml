@@ -33,7 +33,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/pad_60dp" />
+            android:layout_height="83dp" />
 
         <TextView
             android:id="@+id/signin_login"
@@ -97,7 +97,9 @@
             android:paddingLeft="@dimen/pad_10dp"
             android:text="@string/signin_fb"
             android:textColor="@color/white"
-            android:textSize="@dimen/txt_15sp" />
+            android:textSize="@dimen/txt_15sp" />
+
+
         -->
 
         <TextView

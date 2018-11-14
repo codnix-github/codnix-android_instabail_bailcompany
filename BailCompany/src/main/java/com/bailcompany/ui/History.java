@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bailcompany.HistoryRequestList;
+import com.bailcompany.HistoryRequestListNew;
 import com.bailcompany.R;
 import com.bailcompany.custom.CustomFragment;
 import com.bailcompany.utils.Const;
@@ -72,7 +73,7 @@ public class History extends CustomFragment {
 
                 }
                 startActivity(new Intent(getActivity(),
-                        HistoryRequestList.class).putExtra("title", title));
+                        HistoryRequestListNew.class).putExtra("title", title));
 
             }
         });

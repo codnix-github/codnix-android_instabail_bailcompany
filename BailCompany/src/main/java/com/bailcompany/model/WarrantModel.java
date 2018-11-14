@@ -5,98 +5,107 @@ import java.util.ArrayList;
 
 public class WarrantModel implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	int id;
-	String Township, Amount,case_no,PowerNo,Notes;
-	String CourtDate,Status;
-	ArrayList<CourtDateModel> courtDates;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    int id;
+    String Township, Amount, case_no, PowerNo, Notes, AmountReceived;
+    String CourtDate, Status;
+    ArrayList<CourtDateModel> courtDates;
 
-	public WarrantModel() {
-		this.Township = "";
-		this.Amount = "";
-		this.case_no = "";
-		this.PowerNo = "";
-		this.Notes = "";
-		this.CourtDate="";
-		this.courtDates=null;
-	}
+    public WarrantModel() {
+        this.Township = "";
+        this.Amount = "";
+        this.AmountReceived = "";
+        this.case_no = "";
+        this.PowerNo = "";
+        this.Notes = "";
+        this.CourtDate = "";
+        this.courtDates = null;
+    }
 
-	public static long getSerialVersionUID() {
-		return serialVersionUID;
-	}
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public String getAmountReceived() {
+        return AmountReceived;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setAmountReceived(String amountReceived) {
+        AmountReceived = amountReceived;
+    }
 
-	public String getTownship() {
-		return Township;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setTownship(String township) {
-		Township = township;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getAmount() {
-		return Amount;
-	}
+    public String getTownship() {
+        return Township;
+    }
 
-	public void setAmount(String amount) {
-		Amount = amount;
-	}
+    public void setTownship(String township) {
+        Township = township;
+    }
 
-	public String getCase_no() {
-		return case_no;
-	}
+    public String getAmount() {
+        return Amount;
+    }
 
-	public void setCase_no(String case_no) {
-		this.case_no = case_no;
-	}
+    public void setAmount(String amount) {
+        Amount = amount;
+    }
 
-	public String getPowerNo() {
-		return PowerNo;
-	}
+    public String getCase_no() {
+        return case_no;
+    }
 
-	public void setPowerNo(String powerNo) {
-		PowerNo = powerNo;
-	}
+    public void setCase_no(String case_no) {
+        this.case_no = case_no;
+    }
 
-	public String getCourtDate() {
-		return CourtDate;
-	}
+    public String getPowerNo() {
+        return PowerNo;
+    }
 
-	public void setCourtDate(String courtDate) {
-		CourtDate = courtDate;
-	}
+    public void setPowerNo(String powerNo) {
+        PowerNo = powerNo;
+    }
 
-	public String getNotes() {
-		return Notes;
-	}
+    public String getCourtDate() {
+        return CourtDate;
+    }
 
-	public void setNotes(String notes) {
-		Notes = notes;
-	}
+    public void setCourtDate(String courtDate) {
+        CourtDate = courtDate;
+    }
 
-	public ArrayList<CourtDateModel> getCourtDates() {
-		return courtDates;
-	}
+    public String getNotes() {
+        return Notes;
+    }
 
-	public String getStatus() {
-		return Status;
-	}
+    public void setNotes(String notes) {
+        Notes = notes;
+    }
 
-	public void setStatus(String status) {
-		Status = status;
-	}
+    public ArrayList<CourtDateModel> getCourtDates() {
+        return courtDates;
+    }
 
-	public void setCourtDates(ArrayList<CourtDateModel> courtDates) {
-		this.courtDates = courtDates;
-	}
+    public void setCourtDates(ArrayList<CourtDateModel> courtDates) {
+        this.courtDates = courtDates;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
 }

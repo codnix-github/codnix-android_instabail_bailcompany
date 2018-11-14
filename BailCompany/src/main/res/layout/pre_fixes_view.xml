@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/pad_15dp"
-        android:layout_marginRight="@dimen/pad_10dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="@dimen/pad_10dp"
         android:textColor="@android:color/black"
         android:textSize="@dimen/txt_16sp"
         android:textStyle="bold" />
@@ -41,6 +41,14 @@
             android:layout_weight="1"
             android:hint="Case No"
             android:inputType="text" />
+
+        <EditText
+            android:id="@+id/warrantAmountReceived"
+            style="@style/style_edit_match"
+            android:layout_margin="@dimen/pad_10dp"
+            android:layout_weight="1"
+            android:hint="Amount Received"
+            android:inputType="numberDecimal" />
     </LinearLayout>
 
     <View
