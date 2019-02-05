@@ -38,7 +38,9 @@ import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bailcompany.DefendantSelectionActivity;
@@ -72,6 +74,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 @SuppressLint("InflateParams")
@@ -93,6 +96,7 @@ public class GetAnAgent extends CustomFragment implements
     String key;
     boolean selfBtnPress;
     int selectedIndex = -1;
+    DefendantModel selectedDefendant;
     private Spinner selCountryCode;
     private CheckBox chkCourtFill;
     private CheckBox chkBailSource;
@@ -133,7 +137,8 @@ public class GetAnAgent extends CustomFragment implements
     public static AlertDialog showDialog(Context ctx, String msg,
                                          DialogInterface.OnClickListener listener) {
 
-        return showDialog(ctx, msg, ctx.getString(android.R.string.ok), null,
+        return showDialog
+                (ctx, msg, ctx.getString(android.R.string.ok), null,
                 listener, null);
     }
 
@@ -389,11 +394,11 @@ public class GetAnAgent extends CustomFragment implements
             }
         });
 
-		/*
+        /*
          * Fragment fragment = new Fragment(); Bundle bundle = new Bundle();
-		 * bundle.putString("locLatt", locLatt); bundle.putString("locLng",
-		 * locLng); fragment.setArguments(bundle);
-		 */
+         * bundle.putString("locLatt", locLatt); bundle.putString("locLng",
+         * locLng); fragment.setArguments(bundle);
+         */
 
         chkCourtFill = (CheckBox) v.findViewById(R.id.chk1);
         chkBailSource = (CheckBox) v.findViewById(R.id.chk2);
@@ -586,8 +591,17 @@ public class GetAnAgent extends CustomFragment implements
 
                         selfBtnPress = false;
                         showProgressDialog("");
-                        WebAccess.params = saveForumData();
-                        getAgentList();
+                        if (!rbExistingDefendant.isChecked()) {
+                            checkDefendantWithThisNameExist();
+                        } else {
+                            WebAccess.params = saveForumData();
+                            getAgentList();
+                        }
+
+
+
+                       /* WebAccess.params = saveForumData();
+                        getAgentList();*/
 
                         // getBestAgent();
                     } else
@@ -606,7 +620,15 @@ public class GetAnAgent extends CustomFragment implements
                 {
                     if (Utils.isOnline(getActivity())) {
                         selfBtnPress = true;
-                        getBestAgent();
+                        showProgressDialog("");
+                        //  checkDefendantWithThisNameExist();
+
+                        if (!rbExistingDefendant.isChecked()) {
+                            checkDefendantWithThisNameExist();
+                        } else {
+                            getBestAgent();
+                        }
+                        //  getBestAgent();
                     } else
                         Utils.noInternetDialog(getActivity());
                 }
@@ -1066,20 +1088,20 @@ public class GetAnAgent extends CustomFragment implements
                 return false;
             }
 
-			/*
+            /*
              * else if(editPaymentPlan.getText().toString().length() == 0) {
-			 * 
-			 * AlertDialog.Builder builder1 = new
-			 * AlertDialog.Builder(getActivity());
-			 * builder1.setMessage("Enter payment plan.!") .setCancelable(false)
-			 * .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			 * public void onClick(DialogInterface dialog, int id) { //
-			 * finish(); dialog.cancel(); } }) ;
-			 * 
-			 * AlertDialog alert1 = builder1.create();
-			 * alert1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			 * alert1.show(); return false; }
-			 */
+             *
+             * AlertDialog.Builder builder1 = new
+             * AlertDialog.Builder(getActivity());
+             * builder1.setMessage("Enter payment plan.!") .setCancelable(false)
+             * .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+             * public void onClick(DialogInterface dialog, int id) { //
+             * finish(); dialog.cancel(); } }) ;
+             *
+             * AlertDialog alert1 = builder1.create();
+             * alert1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+             * alert1.show(); return false; }
+             */
             else {
             }
 
@@ -1156,17 +1178,17 @@ public class GetAnAgent extends CustomFragment implements
 
             // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-			/*
+            /*
              * if(amt.length() == 0) {
-			 * 
-			 * warAmount.setError("Enter amount !");
-			 * if(warTown.getText().toString().length() == 0)
-			 * warTown.setError("Enter town !"); done = false; break; } else {
-			 * done = true; warAmount.setError(null); warTown.setError(null);
-			 * model.setWarrentAmount(Double.parseDouble(amt));
-			 * model.setCharginTown(warTown.getText().toString());
-			 * listWarrent.add(model); }
-			 */
+             *
+             * warAmount.setError("Enter amount !");
+             * if(warTown.getText().toString().length() == 0)
+             * warTown.setError("Enter town !"); done = false; break; } else {
+             * done = true; warAmount.setError(null); warTown.setError(null);
+             * model.setWarrentAmount(Double.parseDouble(amt));
+             * model.setCharginTown(warTown.getText().toString());
+             * listWarrent.add(model); }
+             */
         }
         return true;
     }
@@ -1475,6 +1497,177 @@ public class GetAnAgent extends CustomFragment implements
             }
 
         });
+
+    }
+
+    private void checkDefendantWithThisNameExist() {
+        String firstname = defFName.getText().toString().trim();
+        String lastname = defLName.getText().toString().trim();
+      /*  String firstname = "Vijay123";
+        String lastname = "Butani123";*/
+
+        // Darshil Sanghvi
+
+        RequestParams param = new RequestParams();
+        param.put("firstname", "" + firstname + "");
+        param.put("lastname", "" + lastname + "");
+        param.put("UserName", MainActivity.user.getUsername());
+        param.put("TemporaryAccessCode", MainActivity.user.getTempAccessCode());
+
+        String url = WebAccess.MAIN_URL + WebAccess.CHECK_DEFENDANT_EXIST;
+        client.setTimeout(getCallTimeout);
+
+
+        client.post(getActivity(), url, param, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                dismissProgressDialog();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+
+                dismissProgressDialog();
+                try {
+                    response2 = new String(responseBody);
+                    if (response2 != null) {
+                        JSONObject json = new JSONObject(response2);
+                        if (json.optString("status").equalsIgnoreCase("1")) {
+
+                            JSONArray defList = json
+                                    .getJSONArray("data");
+                            ArrayList<DefendantModel> arrDefList = new ArrayList<>();
+
+                            if (defList.length() > 0) {
+                                for (int i = 0; i < defList.length(); i++) {
+                                    JSONObject defObject = defList.getJSONObject(i);
+                                    DefendantModel objDef = new DefendantModel();
+                                    objDef.setId(defObject.getString("Id"));
+                                    objDef.setFirstName(defObject.getString("FirstName"));
+                                    objDef.setLastName(defObject.getString("LastName"));
+                                    objDef.setSSN(defObject.getString("SSN"));
+                                    objDef.setDOB(defObject.getString("DOB"));
+                                    objDef.setPhoto(defObject.getString("Photo"));
+
+                                    arrDefList.add(objDef);
+                                }
+
+                            }
+
+                            // custom dialog
+                            final Dialog dialog = new Dialog(getActivity());
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setContentView(R.layout.select_existing_defendant);
+
+                          /*  TextView tvExistDefendantExist= (TextView) dialog.findViewById(R.id.tvExistDefendantExist);
+                            tvExistDefendantExist.setText("A defendant with this name already exists");*/
+                            List<String> stringList = new ArrayList<>();  // here is list
+                            for (int i = 0; i < arrDefList.size(); i++) {
+                                stringList.add(arrDefList.get(i).getFirstName() + " " + arrDefList.get(i).getLastName() + "( SSN:" + arrDefList.get(i).getSSN() + " )");
+                            }
+                            final RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
+
+                            for (int i = 0; i < stringList.size(); i++) {
+                                RadioButton rb = new RadioButton(getActivity()); // dynamically creating RadioButton and adding to RadioGroup.
+                                rb.setText(stringList.get(i));
+                                rb.setTag(arrDefList.get(i));
+                                rb.setPadding(0, 5, 0, 5);
+                                rg.addView(rb);
+                            }
+
+                            dialog.findViewById(R.id.btnCreateNew).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                    showProgressDialog("");
+                                    if (selfBtnPress) {
+                                        getBestAgent();
+                                    } else {
+                                        WebAccess.params = saveForumData();
+                                        getAgentList();
+                                    }
+                                }
+                            });
+                            dialog.findViewById(R.id.btnUseSelected).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (selectedDefendant != null && selectedDefendant.getId() != null) {
+                                        defId = selectedDefendant.getId();
+                                        dialog.dismiss();
+                                        showProgressDialog("");
+                                        if (selfBtnPress) {
+                                            getBestAgent();
+                                        } else {
+                                            WebAccess.params = saveForumData();
+                                            getAgentList();
+                                        }
+                                    } else
+                                        Toast.makeText(getActivity(), "Please select defendant", Toast.LENGTH_SHORT).show();
+
+
+                                }
+                            });
+
+
+                            rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+                                @Override
+                                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                    int childCount = group.getChildCount();
+                                    for (int x = 0; x < childCount; x++) {
+                                        RadioButton btn = (RadioButton) group.getChildAt(x);
+                                        if (btn.getId() == checkedId) {
+                                            selectedDefendant = new DefendantModel();
+                                            selectedDefendant = (DefendantModel) btn.getTag();
+
+                                        }
+                                    }
+                                }
+                            });
+
+                            dialog.show();
+
+/*
+                            AlertDialog.Builder builder;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                            } else {
+                                builder = new AlertDialog.Builder(getActivity());
+                            }
+                            builder.setTitle("Confirmation")
+                                    .setMessage("Defendant with this name already exist?")
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue with delete
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // do nothing
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();*/
+
+
+                        } else {
+                            showProgressDialog("");
+                            if (selfBtnPress) {
+                                getBestAgent();
+                            } else {
+                                WebAccess.params = saveForumData();
+                                getAgentList();
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
     }
 

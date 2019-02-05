@@ -7,11 +7,25 @@
         android:id="@+id/lp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/pad_10dp"
         android:paddingLeft="@dimen/pad_10dp"
         android:paddingRight="@dimen/pad_10dp"
         android:paddingTop="@dimen/pad_10dp">
+        <TextView
+            android:id="@+id/tvstatus"
+            style="@style/style_get"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:drawablePadding="@dimen/pad_5dp"
+            android:gravity="left"
+            android:textColor="@color/green"
+            android:text="Dispatched"
+            android:textSize="@dimen/txt_14sp" />
+
         <TextView
             android:id="@+id/date"
             style="@style/style_get"

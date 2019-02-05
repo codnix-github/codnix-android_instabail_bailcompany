@@ -518,7 +518,51 @@ public class DefendantBondDetails extends CustomActivity {
                         }
                     });
 
-                } else {
+                } else if (url.toLowerCase().endsWith("doc") || url.toLowerCase().endsWith("docx") ) {
+
+                    Drawable res = getResources().getDrawable(R.drawable.docs);
+                    ivPic.setImageDrawable(res);
+
+                    ivPic.setOnClickListener(new OnClickListener() {
+
+                        @Override
+                        public void onClick(View arg0) {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        }
+                    });
+                }
+                else if (url.toLowerCase().endsWith("pdf") ) {
+
+                    Drawable res = getResources().getDrawable(R.drawable.pdf);
+                    ivPic.setImageDrawable(res);
+
+                    ivPic.setOnClickListener(new OnClickListener() {
+
+                        @Override
+                        public void onClick(View arg0) {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        }
+                    });
+                }
+                else if (url.toLowerCase().endsWith("zip") || url.toLowerCase().endsWith("rar") ) {
+                    Drawable res = getResources().getDrawable(R.drawable.ic_zip);
+                    ivPic.setImageDrawable(res);
+                    ivPic.setOnClickListener(new OnClickListener() {
+
+                        @Override
+                        public void onClick(View arg0) {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        }
+                    });
+                }
+
+                else {
                     TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
                     tvDocument.setText(url.substring(url.lastIndexOf("/") + 1));
                     ivPic.setVisibility(View.GONE);

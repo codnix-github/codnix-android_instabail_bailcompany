@@ -220,7 +220,7 @@ public class ShowAllOnMap extends CustomFragment{
 		super.onResume();
 		mMapView.onResume();
 
-		mMap = mMapView.getMap();
+	//	mMap = mMapView.getMap();
 		if (mMap != null)
 		{
 			Log.d("map", "map not null");

@@ -4,15 +4,18 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +37,7 @@ import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.custom.CustomFragment;
 import com.bailcompany.model.AgentModel;
 import com.bailcompany.utils.Commons;
+import com.bailcompany.utils.Utility;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -51,6 +55,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import static com.bailcompany.custom.CustomActivity.THIS;
+
 // TODO: Auto-generated Javadoc
 
 /**
@@ -59,7 +65,7 @@ import com.loopj.android.http.RequestParams;
  * app. For example you can add Map markers here or can show places on map.
  */
 @SuppressLint("InflateParams")
-public class MainFragment extends CustomFragment {
+public class MainFragment extends CustomFragment implements OnMapReadyCallback {
 
     /**
      * The map view.
@@ -150,6 +156,8 @@ public class MainFragment extends CustomFragment {
         MapsInitializer.initialize(getActivity());
         mMapView = (MapView) v.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
+        mMapView.getMapAsync(this);
+
     }
 
     /**
@@ -226,7 +234,6 @@ public class MainFragment extends CustomFragment {
         super.onResume();
         mMapView.onResume();
 
-        mMap = mMapView.getMap();
         if (mMap != null) {
             mMap.setMyLocationEnabled(true);
             // mMap.setOnInfoWindowClickListener(this);
@@ -451,4 +458,19 @@ public class MainFragment extends CustomFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (mMap != null) {
+            if (ContextCompat.checkSelfPermission(THIS,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Utility.checkPermission(THIS);
+            } else {
+                mMap.setMyLocationEnabled(true);
+                setupMapMarkers();
+
+            }
+
+        }
+    }
 }

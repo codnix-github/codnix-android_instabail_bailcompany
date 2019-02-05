@@ -32,7 +32,7 @@
             android:id="@+id/svEmpDtl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/btnAddEmploymentDtl"
+            android:layout_above="@+id/btnAddNotesDtl"
             android:layout_marginBottom="@dimen/pad_2dp">
 
             <LinearLayout

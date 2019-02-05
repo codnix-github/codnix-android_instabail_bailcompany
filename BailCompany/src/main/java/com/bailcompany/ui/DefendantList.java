@@ -294,13 +294,17 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
             public void onClick(View view) {
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = "Here is your Login Details for your Bail Client Mobile Application.\n Login Details : \n";
-                shareBody += " UserName : " + edtUserName.getText() + "\n";
-                shareBody += " Password : " + edtPassword.getText() + "\n";
-                shareBody += "  Download App from the link below, if you dont already have it downloaded:\n https://play.google.com/store/apps/details?id=com.baildefendant";
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                String shareBody = "Here is your Login Details for your Bail Client Mobile Application.\n\nLogin Details: \n";
+                shareBody += "UserName : " + edtUserName.getText().toString() + "\n";
+                shareBody += "Password : " + edtPassword.getText().toString() + "\n\n\n";
+                shareBody += "Download App from the link below, if you dont already have it downloaded.\n\n";
+                shareBody += "ANDROID: https://play.google.com/store/apps/details?id=com.baildefendant \n\n";
+                shareBody += "IPHONE: https://itunes.apple.com/us/app/Insta-bail-defendant/id1381227797?ls=1&mt=8";
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+                //https://itunes.apple.com/us/app/Insta-bail-defendant/id1381227797?ls=1&mt=8
             }
         });
 

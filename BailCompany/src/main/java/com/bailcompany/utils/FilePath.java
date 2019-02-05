@@ -128,6 +128,32 @@ public class FilePath {
                     return null;
                 }
             }
+            if (uri.toString().contains("com.google.android.apps.docs.storage")) {
+                ContentResolver contentResolver = context.getContentResolver();
+                MimeTypeMap mime = MimeTypeMap.getSingleton();
+                String type = mime.getExtensionFromMimeType(contentResolver.getType(uri));
+
+                String destinationFilename = android.os.Environment.getExternalStorageDirectory().getPath() + File.separatorChar + "drive_content_" + System.currentTimeMillis() + "." + type;
+
+                try {
+                    File f = new File(destinationFilename);
+                    f.setWritable(true, false);
+                    InputStream inputStream = context.getContentResolver().openInputStream(uri);
+                    FileOutputStream outputStream = new FileOutputStream(f);
+                    byte buffer[] = new byte[1024];
+                    int length = 0;
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
+                    }
+                    outputStream.close();
+                    inputStream.close();
+                    return destinationFilename;
+                } catch (IOException e) {
+                    System.out.println("error in creating a file");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
             return getDataColumn(context, uri, null, null);
         }
         // File

@@ -120,7 +120,7 @@ public class LocationSearchActivity extends CustomActivity{
 		super.onResume();
 		mMapView.onResume();
 
-		mMap = mMapView.getMap();
+		//mMap = mMapView.getMap();
 		if (mMap != null)
 		{
 			mMap.setMyLocationEnabled(true);

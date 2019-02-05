@@ -17,6 +17,12 @@ public class FirebaseDefendantModel {
     private String Provider;
     private String TimeZone;
     private String Token;
+    private String Battery;
+    private String MobileData;
+    private String NetworkInfoUpdateTime;
+    private String Wifi;
+    private String FastConnection;
+    private String BatteryUpdateTime;
 
 
     public String getDefId() {
@@ -82,5 +88,53 @@ public class FirebaseDefendantModel {
 
     public void setToken(String token) {
         Token = token;
+    }
+
+    public String getBattery() {
+        return Battery;
+    }
+
+    public void setBattery(String battery) {
+        Battery = battery;
+    }
+
+    public String getMobileData() {
+        return MobileData;
+    }
+
+    public void setMobileData(String mobileData) {
+        MobileData = mobileData;
+    }
+
+    public String getNetworkInfoUpdateTime() {
+        return NetworkInfoUpdateTime;
+    }
+
+    public void setNetworkInfoUpdateTime(String networkInfoUpdateTime) {
+        NetworkInfoUpdateTime = networkInfoUpdateTime;
+    }
+
+    public String getWifi() {
+        return Wifi;
+    }
+
+    public void setWifi(String wifi) {
+        Wifi = wifi;
+    }
+
+    public String getFastConnection() {
+        return FastConnection;
+    }
+
+    public void setFastConnection(String fastConnection) {
+        FastConnection = fastConnection;
+    }
+
+    public String getBatteryUpdateTime() {
+        return BatteryUpdateTime;
+    }
+
+    public void setBatteryUpdateTime(String batteryUpdateTime) {
+        BatteryUpdateTime = batteryUpdateTime;
     }
 }

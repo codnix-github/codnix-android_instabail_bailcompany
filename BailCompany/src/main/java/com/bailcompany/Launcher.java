@@ -59,8 +59,8 @@ public class Launcher extends CustomActivity {
 
     public void startService() {
         // use this to start and trigger a service
-        Intent i = new Intent(Launcher.this, NotificationService.class);
-        Launcher.this.startService(i);
+     /*   Intent i = new Intent(Launcher.this, NotificationService.class);
+        Launcher.this.startService(i);*/
     }
 
     @Override

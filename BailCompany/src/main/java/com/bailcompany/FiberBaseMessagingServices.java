@@ -1,15 +1,22 @@
 package com.bailcompany;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.bailcompany.web.WebAccess;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -18,10 +25,15 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Random;
 
 
 public class FiberBaseMessagingServices extends FirebaseMessagingService {
+
+    private NotificationManager notificationManager;
+
+    private static final String ADMIN_CHANNEL_ID = "admin_channel";
 
     private static final String TAG = "FirebaseMsgServices";
 
@@ -35,6 +47,30 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         // send broadcast
         context.sendBroadcast(intent);
     }
+
+    @Override
+    public void onNewToken(String refreshedToken) {
+
+        final Intent intent = new Intent("tokenReceiver");
+
+        // You can also include some extra data.
+        final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        intent.putExtra("token",refreshedToken);
+
+        broadcastManager.sendBroadcast(intent);
+
+        sendRegistrationToServer(refreshedToken);
+    }
+
+    private void sendRegistrationToServer(String token) {
+        SharedPreferences pref = getApplicationContext()
+                .getSharedPreferences("MyPreferences", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(WebAccess.Pkey_DEVICE_ID, token);
+        editor.commit();
+    }
+
+
     // [END receive_message]
 
     /**
@@ -218,7 +254,7 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         updateMyActivity(getApplicationContext(), WebAccess.type);
     }
 
-    public void showNotifications(String message) {
+    public void showNotifications1(String message) {
 
         NotificationManager notificationManager = (NotificationManager) getApplicationContext()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -254,16 +290,87 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         builder.setDefaults(NotificationCompat.DEFAULT_VIBRATE
                 | NotificationCompat.DEFAULT_LIGHTS);
         builder.build();
-        //
-        // note.defaults |= Notification.DEFAULT_VIBRATE;
-        // note.defaults |= Notification.DEFAULT_LIGHTS;
-        // note.flags |= Notification.FLAG_AUTO_CANCEL;
-        // note.sound = Uri.parse("android.resource://com.postingagent/"
-        // + R.raw.bells_message);
-        // note.priority = Notification.PRIORITY_HIGH;
+
         Random random = new Random();
         int m = random.nextInt(9999 - 1000) + 1000;
         notificationManager.notify(m, builder.build());
+    }
+
+    public void showNotifications(String message) {
+
+        notificationManager = (NotificationManager) getApplicationContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            setupChannels();
+        }
+
+        Intent notificationIntent = null;
+
+        if (WebAccess.loginUser) {
+
+            notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+
+        } else {
+            notificationIntent = new Intent(getApplicationContext(), Login.class);
+        }
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                notificationIntent, 0);
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder( getApplicationContext(), ADMIN_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("InstaBail")
+                        .setContentText(message)
+                        .setAutoCancel(true)
+                        .setVibrate(new long[]{0, 500, 1000})
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        //  .setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE+ "://" +getPackageName()+"/"+R.raw.bells_message))
+                        //  .setSound(defaultSoundUri)
+                        //    .setSound(Uri.parse("android.resource://com.bailcompany/"
+                        //          + R.raw.bells_message))
+                        .setContentIntent(pendingIntent);
+
+        int notificationId = new Random().nextInt(60000);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            notificationBuilder.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/" + R.raw.bells_message));
+        }
+
+        notificationManager.notify(notificationId, notificationBuilder.build());
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setupChannels() {
+        if (notificationManager != null) {
+            List<NotificationChannel> channelList = notificationManager.getNotificationChannels();
+
+           /* for (int i = 0; channelList != null && i < channelList.size(); i++) {
+                notificationManager.deleteNotificationChannel(channelList.get(i).getId());
+            }*/
+        }
+
+        String adminChannelDescription = getString(R.string.notifications_admin_channel_description);
+        Uri sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/" + R.raw.bells_message);
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build();
+
+        NotificationChannel mChannel = new NotificationChannel(ADMIN_CHANNEL_ID,
+                getString(R.string.app_name),
+                NotificationManager.IMPORTANCE_HIGH);
+
+        // Configure the notification channel.
+        mChannel.setDescription(adminChannelDescription);
+        mChannel.enableLights(true);
+        mChannel.enableVibration(true);
+        mChannel.setSound(sound, attributes); // This is IMPORTANT
+
+
+        if (notificationManager != null)
+            notificationManager.createNotificationChannel(mChannel);
     }
 }
 

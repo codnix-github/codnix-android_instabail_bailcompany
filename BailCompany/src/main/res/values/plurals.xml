@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<plurals name="seconds">
+		<item quantity="zero">@string/second_plural_zero</item>
+		<item quantity="one">@string/second_plural_one</item>
+		<item quantity="two">@string/second_plural_two</item>
+		<item quantity="few">@string/second_plural_few</item>
+		<item quantity="many">@string/second_plural_many</item>
+		<item quantity="other">@string/second_plural_other</item>
+	</plurals>
+
+	<plurals name="minutes">
+		<item quantity="zero">@string/minute_plural_zero</item>
+		<item quantity="one">@string/minute_plural_one</item>
+		<item quantity="two">@string/minute_plural_two</item>
+		<item quantity="few">@string/minute_plural_few</item>
+		<item quantity="many">@string/minute_plural_many</item>
+		<item quantity="other">@string/minute_plural_other</item>
+	</plurals>
+
+	<plurals name="hours">
+		<item quantity="zero">@string/hour_plural_zero</item>
+		<item quantity="one">@string/hour_plural_one</item>
+		<item quantity="two">@string/hour_plural_two</item>
+		<item quantity="few">@string/hour_plural_few</item>
+		<item quantity="many">@string/hour_plural_many</item>
+		<item quantity="other">@string/hour_plural_other</item>
+	</plurals>
+
+	<plurals name="days">
+		<item quantity="zero">@string/day_plural_zero</item>
+		<item quantity="one">@string/day_plural_one</item>
+		<item quantity="two">@string/day_plural_two</item>
+		<item quantity="few">@string/day_plural_few</item>
+		<item quantity="many">@string/day_plural_many</item>
+		<item quantity="other">@string/day_plural_other</item>
+	</plurals>
+
+	<plurals name="months">
+		<item quantity="zero">@string/month_plural_zero</item>
+		<item quantity="one">@string/month_plural_one</item>
+		<item quantity="two">@string/month_plural_two</item>
+		<item quantity="few">@string/month_plural_few</item>
+		<item quantity="many">@string/month_plural_many</item>
+		<item quantity="other">@string/month_plural_other</item>
+	</plurals>
+
+	<plurals name="years">
+		<item quantity="zero">@string/year_plural_zero</item>
+		<item quantity="one">@string/year_plural_one</item>
+		<item quantity="two">@string/year_plural_two</item>
+		<item quantity="few">@string/year_plural_few</item>
+		<item quantity="many">@string/year_plural_many</item>
+		<item quantity="other">@string/year_plural_other</item>
+	</plurals>
+
+</resources>

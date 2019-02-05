@@ -1,5 +1,6 @@
 package com.bailcompany;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,15 +11,18 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.FirebaseDefendantModel;
 import com.bailcompany.ui.Defendant;
+import com.bailcompany.utils.Dates;
 import com.bailcompany.web.WebAccess;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -40,16 +44,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DefendantTracker extends CustomActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class DefendantTracker extends CustomActivity implements OnMapReadyCallback, GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
 
     GoogleMap googleMap;
     String DEFAULT_ICON = "https://instabailapp.com/web/assets/default.jpg";
     String compnayId = MainActivity.user.getCompanyId();
     Bitmap defaultmarkerimg;
     HashMap<String, Marker> markers;
+    DateTimeFormatter inputDateFormat;
     private DatabaseReference mDatabase;
     private MapView mMapView;
     private ArrayList<DefendantModel> defList;
@@ -59,6 +68,7 @@ public class DefendantTracker extends CustomActivity implements OnMapReadyCallba
     private String DEFENDANT = "Defendants/";
     private boolean isZoomLevelSet = false;
     private Marker selectedMarker;
+    private DefendantModel selectedDefendant;
 
     public static Bitmap createDrawableFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -84,18 +94,34 @@ public class DefendantTracker extends CustomActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defendant_tracker);
         try {
-
             defList = (ArrayList<DefendantModel>) getIntent().getSerializableExtra("DefList");
-
             defaultmarkerimg = BitmapFactory.decodeResource(getResources(), R.drawable.marker_map);
+            setActionBar();
+            inputDateFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").withZone(DateTimeZone.UTC);
 
-            Log.d("defSize:", "" + defList.size());
             initMap(savedInstanceState);
         } catch (GooglePlayServicesNotAvailableException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+
+    protected void setActionBar() {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle(getString(R.string.title_activity_defendant_tracker));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            finish();
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
 
     private void initMap2(Bundle savedInstanceState)
             throws GooglePlayServicesNotAvailableException {
@@ -218,51 +244,107 @@ public class DefendantTracker extends CustomActivity implements OnMapReadyCallba
     private void infoWindow() {
         //  googleMap.setInfoWindowAdapter(new CustomInfoWindowDefendantAdapter(DefendantTracker.this, defList));
 
-        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoWindow(final Marker marker) {
-                getInfoContents(marker);
-                selectedMarker = marker;
-                View myContentsView = getLayoutInflater().inflate(R.layout.dialog_defendant_details, null);
-                DefendantModel defDetail = getDefendantDetailById(marker.getSnippet());
-                if (defDetail == null)
-                    return null;
 
-                Intent intent = new Intent(DefendantTracker.this, Defendant.class);
-                intent.putExtra("defId", defDetail.getId());
-                startActivity(intent);
-                /*
-                TextView tvTitle = ((TextView) myContentsView.findViewById(R.id.title));
-                tvTitle.setText(marker.getTitle());
-                TextView tvSnippet = ((TextView) myContentsView.findViewById(R.id.snippet));
-                tvSnippet.setText(marker.getSnippet());
-                Log.d("MarkerClicked,", marker.getSnippet());
+        googleMap.setInfoWindowAdapter(this);
+        googleMap.setOnInfoWindowClickListener(this);
 
-                return myContentsView;    */
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(final Marker marker) {
-
-                return null;
-            }
-        });
 
     }
 
+    @Override
+    public View getInfoWindow(final Marker marker) {
+        getInfoContents(marker);
+        selectedMarker = marker;
+        View myContentsView = getLayoutInflater().inflate(R.layout.dialog_defendant_details, null);
+        selectedDefendant = getDefendantDetailById(marker.getSnippet());
+        if (selectedDefendant == null)
+            return null;
+/*
+                Intent intent = new Intent(DefendantTracker.this, Defendant.class);
+                intent.putExtra("defId", defDetail.getId());
+                startActivity(intent);*/
+
+
+        ProgressBar batteryValue = ((ProgressBar) myContentsView.findViewById(R.id.batteryValue));
+
+        //batteryValue.setProgress();
+
+
+        FirebaseDefendantModel defPhoneDetails = getDefendantPhoneDetails(selectedDefendant.getId());
+        if (defPhoneDetails != null) {
+
+
+            try {
+                if (defPhoneDetails.getBattery() != null && !defPhoneDetails.getBattery().equalsIgnoreCase("")) {
+
+                    ((TextView) myContentsView.findViewById(R.id.tvBatteryValue)).setText("" + defPhoneDetails.getBattery() + "%");
+                    batteryValue.setProgress(Integer.parseInt(defPhoneDetails.getBattery()));
+
+                } else {
+                    findViewById(R.id.batterydetails).setVisibility(View.GONE);
+
+                }
+
+                if (defPhoneDetails.getWifi() != null && !defPhoneDetails.getWifi().equalsIgnoreCase("")) {
+                    ((TextView) myContentsView.findViewById(R.id.tvWifi)).setText("WiFi : " + (defPhoneDetails.getWifi().equalsIgnoreCase("Y") ? "On" : "Off"));
+                }
+                if (defPhoneDetails.getMobileData() != null && !defPhoneDetails.getMobileData().equalsIgnoreCase("")) {
+                    ((TextView) myContentsView.findViewById(R.id.tvMobileData)).setText("Mobile Data : " + (defPhoneDetails.getMobileData().equalsIgnoreCase("Y") ? "On" : "Off"));
+                }
+
+                TextView tvTitle = ((TextView) myContentsView.findViewById(R.id.tvName));
+                tvTitle.setText(selectedDefendant.getFirstName() + " " + selectedDefendant.getLastName());
+                TextView tvLastUpdated = ((TextView) myContentsView.findViewById(R.id.tvLastUpdated));
+
+
+                tvLastUpdated.setText("Last Updated : " + Dates.formatDate(getApplicationContext(), inputDateFormat.parseDateTime(defPhoneDetails.getDateTime())));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return myContentsView;
+        //return null;
+    }
+
+    @Override
+    public View getInfoContents(final Marker marker) {
+
+        return null;
+    }
+
+
     private void moveMarker(final FirebaseDefendantModel fDefModel) {
+
 
         if (markers == null || !markers.containsKey(fDefModel.getDefId())) {
             return;
 
         }
+
         Marker m = markers.get(fDefModel.getDefId());
         if (m != null) {
-            Log.d("Marker Move", "yes=" + fDefModel.getDefName());
+           // Log.d("Marker Move", "yes=" + fDefModel.getDefName());
             final LatLng position = new LatLng(Double.parseDouble(fDefModel.getLat()), Double.parseDouble(fDefModel.getLng()));
             m.setPosition(position);
         }
+        updateDefendantDetails(fDefModel);
+
+
+    }
+
+    private void updateDefendantDetails(FirebaseDefendantModel defmodal) {
+        if (defmodal == null)
+            return;
+
+        for (int i = 0; i < firebaseDefList.size(); i++) {
+            if (firebaseDefList.get(i).getDefId() != null && firebaseDefList.get(i).getDefId().equalsIgnoreCase(defmodal.getDefId())) {
+                firebaseDefList.set(i, defmodal);
+                break;
+
+            }
+        }
+
 
     }
 
@@ -367,6 +449,28 @@ public class DefendantTracker extends CustomActivity implements OnMapReadyCallba
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        if (selectedDefendant != null) {
+            Intent intent = new Intent(DefendantTracker.this, Defendant.class);
+            intent.putExtra("defId", selectedDefendant.getId());
+            startActivity(intent);
+        }
+
+
         marker.hideInfoWindow();
+    }
+
+    private FirebaseDefendantModel getDefendantPhoneDetails(String defId) {
+        if (defId == null)
+            return null;
+        FirebaseDefendantModel defDetail = null;
+        for (FirebaseDefendantModel d : firebaseDefList) {
+            if (d.getDefId() != null && d.getDefId().equalsIgnoreCase(defId)) {
+                defDetail = d;
+                break;
+
+            }
+
+        }
+        return defDetail;
     }
 }

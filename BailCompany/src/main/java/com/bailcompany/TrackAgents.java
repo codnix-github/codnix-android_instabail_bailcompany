@@ -11,6 +11,7 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlarmManager;
@@ -18,12 +19,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +39,7 @@ import com.bailcompany.custom.LocationAdapter;
 import com.bailcompany.custom.LocationImpl;
 import com.bailcompany.model.AgentModel;
 import com.bailcompany.model.BailRequestModel;
+import com.bailcompany.utils.Utility;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -44,6 +48,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -54,7 +59,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 @SuppressLint("InflateParams")
-public class TrackAgents extends CustomActivity {
+public class TrackAgents extends CustomActivity implements OnMapReadyCallback {
 
     /**
      * The map view.
@@ -147,6 +152,7 @@ public class TrackAgents extends CustomActivity {
         MapsInitializer.initialize(THIS);
         mMapView = (MapView) findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
+        mMapView.getMapAsync(this);
 
     }
 
@@ -309,6 +315,23 @@ public class TrackAgents extends CustomActivity {
         // }
         // });
     }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (mMap != null) {
+            if (ContextCompat.checkSelfPermission(THIS,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Utility.checkPermission(THIS);
+            } else {
+                mMap.setMyLocationEnabled(true);
+                setupMapMarkers();
+
+            }
+
+        }
+
+    }
+
 
     // public void call_activity() {
     // mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
@@ -445,7 +468,7 @@ public class TrackAgents extends CustomActivity {
         mMapView.onResume();
         com.bailcompany.utils.Log.e("updated location", agModel.getLatitude()
                 + "," + agModel.getLongitude());
-        mMap = mMapView.getMap();
+      //  mMap = mMapView.getMap();
         if (mMap != null) {
             mMap.setMyLocationEnabled(true);
             // mMap.setOnInfoWindowClickListener(this);

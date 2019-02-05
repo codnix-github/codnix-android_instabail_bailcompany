@@ -92,7 +92,7 @@
                     android:layout_marginRight="20dp"
                     android:drawablePadding="@dimen/pad_5dp"
                     android:gravity="right"
-                    android:text="test"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/txt_10sp" />
 

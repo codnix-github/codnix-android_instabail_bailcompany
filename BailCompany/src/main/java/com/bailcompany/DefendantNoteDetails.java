@@ -29,7 +29,6 @@ import com.bailcompany.utils.ImageSelector;
 import com.bailcompany.utils.ImageUtils;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
-import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -85,12 +84,25 @@ public class DefendantNoteDetails extends CustomActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for (final DefendantNotesModel eMod : arrDefNotesDtl) {
             View v = inflater.inflate(R.layout.row_defendant_note_details, null, false);
-            ((TextView) v.findViewById(R.id.tvNote)).setText(eMod.getNote());
 
             String mDate = Const.getFormatedDate("yyyy-MM-dd hh:mm", "MM/dd/yyyy hh:mm", eMod.getModifyOn()
                     .toString(), true);
 
-
+            String note = eMod.getNote();
+            if (note.contains("has acknowledged at ")) {
+                String date = note.substring(note.indexOf(" and will be attending ") - 19, note.indexOf(" and will be attending "));
+                if (date != null && !date.trim().equalsIgnoreCase("")) {
+                    String localdate = Const.getFormatedDate("yyyy-MM-dd hh:mm", "MM/dd/yyyy hh:mm", date.trim(), true);
+                    note = note.replace(" on " + date.trim() + " and", " on " + localdate + " and");
+                }
+            } else if (note.contains("has checked-in at ")) {
+                String date = note.substring(note.lastIndexOf(" on ") + 3);
+                if (date != null && !date.trim().equalsIgnoreCase("")) {
+                    String localdate = Const.getFormatedDate("yyyy-MM-dd hh:mm", "MM/dd/yyyy hh:mm", date.trim(), true);
+                    note = note.replace(" on " + date.trim(), " on " + localdate);
+                }
+            }
+            ((TextView) v.findViewById(R.id.tvNote)).setText(note);
 
             ((TextView) v.findViewById(R.id.tvNoteModifyOn)).setText(mDate);
 

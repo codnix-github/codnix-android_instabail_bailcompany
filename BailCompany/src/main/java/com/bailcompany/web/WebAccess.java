@@ -72,6 +72,7 @@ public class WebAccess {
     // private static final String FORGOT_PASS = "ForgotCompanyPassword";
     // public static final String GET_ALL_AGENT = "GetAllAgent";
     public static final String GET_ALL_AGENT = "get-all-agents";
+    public static final String CHECK_DEFENDANT_EXIST = "checkDefendantIsExist";
     public static final String GET_PAYMENT_INFO = "get-company-payment-method";
     public static final String GET_UPDATE_COMPANY_PAYMENT = "update-company-payment-method";
     final static public String ACCOUNT_PREFS_NAME = "prefs";
@@ -122,6 +123,7 @@ public class WebAccess {
     public static final String GET_REQUEST_DETAIL = "get-request-details";
     public static final String GET_DEFENDANT_LIST = "getAllDefendants";
     public static final String GET_DEFENDANT_DETAIL = "get-defendant-profile";
+    public static final String UPDATE_DEFENDANT_ACCOUNT_STATUS = "updateDefendantAccountStatus";
     public static final String GET_DEFENDANT_BOND_DETAIL = "getDefendantBondDetails";
     public static final String GET_COMPANY_EVENTS = "get-events";
     public static final String ADD_COMPANY_EVENTS = "save-event";

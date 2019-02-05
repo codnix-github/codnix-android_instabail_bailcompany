@@ -1,22 +1,26 @@
 package com.bailcompany.ui;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +90,7 @@ public class Defendant extends CustomActivity {
     // duration is ideal for subtle animations or animations that occur
     // very frequently.
     private int mShortAnimationDuration;
+    private Menu menu;
 
     private Context _activity;
 
@@ -277,7 +282,7 @@ public class Defendant extends CustomActivity {
     protected void setActionBar() {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(getString(R.string.title_activity_defendant_detail));
     }
 
@@ -285,9 +290,152 @@ public class Defendant extends CustomActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
             finish();
+        if (item.getItemId() == R.id.action_delete)
+            deleteDefendant();
         return super.onOptionsItemSelected(item);
 
     }
+
+    private void deleteDefendant() {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(THIS, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(THIS);
+        }
+        if (defModel.getStatus().equalsIgnoreCase("D")) {
+            builder.setTitle("Activate Defendant").setMessage("Are you sure you want to activate this defendant?");
+        } else {
+            builder.setTitle("Deactivate Defendant").setMessage("Are you sure you want to deactivate this defendant?");
+        }
+
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // continue
+                updateDefendantActivationStatus();
+            }
+        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // do nothing
+            }
+        })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_defendant, menu);
+        this.menu = menu;
+
+        // return true so that the menu pop up is opened
+        return true;
+    }
+
+
+    void updateDefendantActivationStatus() {
+        if (Utils.isOnline(_activity)) {
+            if (showProgressDialog) {
+                showProgressDialog("");
+            }
+            RequestParams param = new RequestParams();
+
+            param.put("TemporaryAccessCode",
+                    MainActivity.user.getTempAccessCode());
+            param.put("UserName", MainActivity.user.getUsername());
+            param.put("DefId", defId);
+            if (defModel.getStatus().equalsIgnoreCase("D"))
+                param.put("Status", "N");
+            else
+                param.put("Status", "D");
+
+            String url = WebAccess.MAIN_URL + WebAccess.UPDATE_DEFENDANT_ACCOUNT_STATUS;
+            client.setTimeout(getCallTimeout);
+            client.post(_activity, url, param,
+                    new AsyncHttpResponseHandler() {
+
+                        @Override
+                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                            if (showProgressDialog)
+                                dismissProgressDialog();
+                            Utils.showDialog(_activity,
+                                    R.string.err_unexpect);
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+
+                            if (showProgressDialog) {
+                                dismissProgressDialog();
+
+                            }
+                            try {
+                                String response2;
+
+                                response2 = new String(responseBody);
+                                JSONObject resObj;
+
+                                resObj = new JSONObject(response2);
+
+                                if (resObj != null) {
+                                    if (resObj.optString("status")
+                                            .equalsIgnoreCase("1")) {
+                                        MenuItem menu_action = menu.findItem(R.id.action_delete);
+
+                                        if (defModel.getStatus().equalsIgnoreCase("D")) {
+                                            menu_action.setTitle("Deactivate");
+                                            defModel.setStatus("N");
+                                        } else {
+                                            menu_action.setTitle("Activate");
+                                            defModel.setStatus("D");
+                                        }
+
+                                        Toast.makeText(
+                                                _activity,
+                                                resObj.optString("message"),
+                                                Toast.LENGTH_LONG).show();
+
+                                    } else if (resObj.optString("status")
+                                            .equalsIgnoreCase("3")) {
+                                        Toast.makeText(
+                                                _activity,
+                                                "Session was closed please login again",
+                                                Toast.LENGTH_LONG).show();
+                                        MainActivity.sp.edit().putBoolean(
+                                                "isFbLogin", false);
+                                        MainActivity.sp.edit()
+                                                .putString("user", null)
+                                                .commit();
+                                        startActivity(new Intent(_activity,
+                                                Launcher.class));
+                                    } else {
+
+                                        if (page == 0) {
+                                            Utils.showDialog(THIS,
+                                                    "Details not avaialble")
+                                                    .show();
+                                            adapter.notifyDataSetChanged();
+                                        } else {
+                                            if (page > 0)
+                                                page--;
+                                        }
+
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+
+                    });
+
+        } else
+            Utils.noInternetDialog(_activity);
+    }
+
 
     void geDefendantProfile() {
         if (Utils.isOnline(_activity)) {
@@ -464,6 +612,15 @@ public class Defendant extends CustomActivity {
                                             }
                                             tvDefLocation.setText(fullAddress);
                                             tvDefName.setText(defModel.getFirstName() + " " + defModel.getLastName());
+
+                                            MenuItem menu_action = menu.findItem(R.id.action_delete);
+                                            if (defModel.getStatus().equalsIgnoreCase("D")) {
+                                                menu_action.setTitle("Activate");
+
+                                            } else {
+                                                menu_action.setTitle("Deactivate");
+
+                                            }
 
                                         }
 
@@ -735,6 +892,31 @@ public class Defendant extends CustomActivity {
                                 .setText("Court Date:    " + Utils.getRequiredDateFormatGMT("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
 
                     }
+                    if (wMod.getStatus() != null && !wMod.getStatus().equalsIgnoreCase("")) {
+                        ((LinearLayout) v.findViewById(R.id.llBondStatus)).setVisibility(View.VISIBLE);
+                        String status = wMod.getStatus();
+
+                        if (status.equalsIgnoreCase("A")) {
+                            status = "Active";
+                            ((TextView) v.findViewById(R.id.tvBondStatus)).setBackgroundResource(R.drawable.round_text_active);
+                        } else if (status.equalsIgnoreCase("D")) {
+                            status = "Discharged";
+                            ((TextView) v.findViewById(R.id.tvBondStatus)).setBackgroundResource(R.drawable.round_text_warning);
+                        } else if (status.equalsIgnoreCase("F")) {
+                            status = "Forfeiture";
+                            ((TextView) v.findViewById(R.id.tvBondStatus)).setBackgroundResource(R.drawable.round_text_dangerous);
+
+                        } else {
+                            ((LinearLayout) v.findViewById(R.id.llBondStatus)).setVisibility(View.GONE);
+                        }
+
+                        ((TextView) v.findViewById(R.id.tvBondStatus))
+                                .setText(status);
+
+                    } else {
+                        ((TextView) v.findViewById(R.id.tvBondStatus)).setVisibility(View.GONE);
+                    }
+
                     llWarrantDetails.addView(v);
 
                 }
@@ -743,6 +925,36 @@ public class Defendant extends CustomActivity {
 
             ((TextView) convertView.findViewById(R.id.date)).setText(Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
                     "MM/dd/yyyy", bailReqList.get(position).getCreatedDate()));
+
+            TextView tvStatus = convertView.findViewById(R.id.tvstatus);
+
+            if (bailReqList.get(position).isIsAccept().equals("1")) {
+
+                if (bailReqList.get(position).getAgentId().equals(bailReqList.get(position).getSenderCompanyId())) {
+                    tvStatus.setText("Accepted(Self)");
+                } else
+                    tvStatus.setText("Agent Accepted");
+            }
+
+            if (bailReqList.get(position).getAgentArrivedTime() != null && !bailReqList.get(position).getAgentArrivedTime().equals("")) {
+
+                if (bailReqList.get(position).getAgentId().equals(bailReqList.get(position).getSenderCompanyId())) {
+                    tvStatus.setText("Arrived(Self)");
+                } else
+                    tvStatus.setText("Agent Arrived");
+            }
+
+
+            if (bailReqList.get(position).getIsComplete().equals("1")) {
+                tvStatus.setText("Completed");
+            }
+            if (bailReqList.get(position).getIsAbort().equals("1")) {
+                if (bailReqList.get(position).getIsCancel().equals("1")) {
+                    tvStatus.setText("Cancelled");
+                } else {
+                    tvStatus.setText("Aborted");
+                }
+            }
 
 
             int i = incomingRequestList.getLastVisiblePosition();
