@@ -105,6 +105,14 @@
             <LinearLayout
                 style="@style/linear_v"
                 android:padding="@dimen/pad_10dp">
+              <!--  <TextView
+                    android:id="@+id/tempdate"
+                    style="@style/bail_request"
+                    android:paddingLeft="@dimen/pad_5dp"
+                    android:text="dsfdsfds"
+                    android:textColor="@color/bail_rquest_text_color"
+                    android:textStyle="bold" />-->
+
 
                 <TextView
                     style="@style/bail_request"

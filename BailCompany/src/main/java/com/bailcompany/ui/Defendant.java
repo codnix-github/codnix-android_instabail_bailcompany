@@ -27,6 +27,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -75,6 +77,7 @@ public class Defendant extends CustomActivity {
     static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
     static int getCallTimeout = 50000;
     static Bitmap bmDefendant;
+    private static DefendantModel defModel;
     String defendantUrl, defendantBondUrl;
     boolean isSender, IsBailRequest;
     ListView incomingRequestList;
@@ -84,7 +87,6 @@ public class Defendant extends CustomActivity {
     CircleImageView defProfile;
     TextView tvDefName, tvDefLocation;
     String defId = "";
-    private DefendantModel defModel;
     private boolean showProgressDialog = true;
     // The system "short" animation time duration, in milliseconds. This
     // duration is ideal for subtle animations or animations that occur
@@ -228,6 +230,14 @@ public class Defendant extends CustomActivity {
                 }
             }
         });
+        findViewById(R.id.llSendNotification).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationDialog.newInstance().show(getFragmentManager(), "dialog");
+            }
+        });
+
+
         ImageView ivCallDefendant = (ImageView) findViewById(R.id.ivCallDefendant);
         ivCallDefendant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,9 +302,13 @@ public class Defendant extends CustomActivity {
             finish();
         if (item.getItemId() == R.id.action_delete)
             deleteDefendant();
+        else if (item.getItemId() == R.id.action_request_checkin)
+            sendNotificationToDefendant("", 105);
+
         return super.onOptionsItemSelected(item);
 
     }
+
 
     private void deleteDefendant() {
         AlertDialog.Builder builder;
@@ -571,12 +585,14 @@ public class Defendant extends CustomActivity {
                                             if (defNoteDtl != null && defNoteDtl.length() > 0) {
                                                 for (int i = 0; i < defNoteDtl.length(); i++) {
                                                     DefendantNotesModel noteModel = new DefendantNotesModel();
-                                                    JSONObject empObj = defNoteDtl.getJSONObject(i);
-                                                    noteModel.setId(empObj.getString("Id"));
-                                                    noteModel.setDefId(empObj.getString("DefId"));
-                                                    noteModel.setNote(empObj.getString("Note"));
-                                                    noteModel.setStatus(empObj.getString("Status"));
-                                                    noteModel.setModifyOn(empObj.getString("ModifyOn"));
+                                                    JSONObject noteObj = defNoteDtl.getJSONObject(i);
+                                                    noteModel.setId(noteObj.getString("Id"));
+                                                    noteModel.setDefId(noteObj.getString("DefId"));
+                                                    noteModel.setNote(noteObj.getString("Note"));
+                                                    noteModel.setStatus(noteObj.getString("Status"));
+                                                    noteModel.setModifyOn(noteObj.getString("ModifyOn"));
+                                                    noteModel.setImage(noteObj.getString("Image"));
+
                                                     nodeDtl.add(noteModel);
 
                                                 }
@@ -778,7 +794,7 @@ public class Defendant extends CustomActivity {
             String key = data.getStringExtra(Const.RETURN_FLAG);
             if (key.equalsIgnoreCase(Const.BOND_DETAILS_UPDATED) || key.equalsIgnoreCase(Const.BOND_DOCUMENT_UPLOADED)) {
                 showProgressDialog = false;
-                getBondDetails();
+               // getBondDetails();
             } else if (key.equalsIgnoreCase(Const.DEFENDANT_BASIC_DETAILS_UPDATED)) {
                 showProgressDialog = false;
                 geDefendantProfile();
@@ -786,6 +802,94 @@ public class Defendant extends CustomActivity {
 
 
         }
+    }
+
+
+    public void sendNotificationToDefendant(String messsage, int type) {
+        if (Utils.isOnline(_activity)) {
+            if (showProgressDialog) {
+                showProgressDialog("");
+            }
+            RequestParams param = new RequestParams();
+            param.put("TemporaryAccessCode",
+                    MainActivity.user.getTempAccessCode());
+            param.put("UserName", MainActivity.user.getUsername());
+            param.put("DefId", defId);
+            param.put("Message", messsage);
+            param.put("Type", type);
+
+
+            String url = WebAccess.MAIN_URL + WebAccess.SEND_NOTIFICATION_TO_DEFENDANT;
+            client.setTimeout(getCallTimeout);
+            client.post(_activity, url, param,
+                    new AsyncHttpResponseHandler() {
+
+                        @Override
+                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                            if (showProgressDialog)
+                                dismissProgressDialog();
+                            Utils.showDialog(_activity,
+                                    R.string.err_unexpect);
+
+
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+
+                            if (showProgressDialog) {
+                                dismissProgressDialog();
+
+                            }
+                            try {
+                                String response2;
+
+                                response2 = new String(responseBody);
+                                JSONObject resObj;
+
+                                resObj = new JSONObject(response2);
+
+                                if (resObj != null) {
+                                    if (resObj.optString("status")
+                                            .equalsIgnoreCase("1")) {
+                                        Toast.makeText(
+                                                _activity,
+                                                resObj.optString("message"),
+                                                Toast.LENGTH_LONG).show();
+
+                                    } else if (resObj.optString("status")
+                                            .equalsIgnoreCase("3")) {
+                                        Toast.makeText(
+                                                _activity,
+                                                "Session was closed please login again",
+                                                Toast.LENGTH_LONG).show();
+                                        MainActivity.sp.edit().putBoolean(
+                                                "isFbLogin", false);
+                                        MainActivity.sp.edit()
+                                                .putString("user", null)
+                                                .commit();
+                                        startActivity(new Intent(_activity,
+                                                Launcher.class));
+                                    } else if (resObj.optString("status")
+                                            .equalsIgnoreCase("0")) {
+                                        Toast.makeText(
+                                                _activity,
+                                                resObj.optString("message"),
+                                                Toast.LENGTH_LONG).show();
+
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+
+                    });
+
+        } else
+            Utils.noInternetDialog(_activity);
+
     }
 
     public static class F1 extends DialogFragment {
@@ -830,6 +934,58 @@ public class Defendant extends CustomActivity {
         }
     }
 
+    public static class NotificationDialog extends DialogFragment {
+
+        public static NotificationDialog newInstance() {
+            NotificationDialog f1 = new NotificationDialog();
+         /*   f1.setStyle(DialogFragment.STYLE_NO_FRAME,
+                    android.R.style.Theme_DeviceDefault_Dialog);
+*/
+
+            return f1;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            // Remove the default background
+            getDialog().getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.WHITE));
+            getDialog().getWindow().setTitle("Send Notification to " + defModel.getFirstName() + " " + defModel.getLastName());
+
+            // Inflate the new view with margins and background
+            View v = inflater.inflate(R.layout.dialog_send_notification, container, true);
+
+            final EditText edtNotification = v.findViewById(R.id.edtNotification);
+            final CheckBox cbBatteryStatus = v.findViewById(R.id.cbBatteryStatus);
+            final CheckBox cbLocationStatus = v.findViewById(R.id.cbLocationStatus);
+            Button btnSendNotification = v.findViewById(R.id.btnSendNotification);
+            btnSendNotification.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (edtNotification.getText().toString().trim().equalsIgnoreCase("") && !cbBatteryStatus.isChecked() && !cbLocationStatus.isChecked()) {
+                        return;
+                    }
+                    int type = 104;  //normal message
+                    if (cbBatteryStatus.isChecked() && cbLocationStatus.isChecked()) {
+                        type = 103;
+                    } else if (cbBatteryStatus.isChecked()) {
+                        type = 101;
+                    } else if (cbLocationStatus.isChecked()) {
+                        type = 102;
+                    }
+
+                    ((Defendant) getActivity()).sendNotificationToDefendant(edtNotification.getText().toString().trim(), type);
+                    dismiss();
+                }
+            });
+
+            return v;
+        }
+    }
+
     @SuppressLint("InflateParams")
     private class DefendanrBondAdapter extends BaseAdapter {
         public DefendanrBondAdapter(Context context) {
@@ -862,14 +1018,14 @@ public class Defendant extends CustomActivity {
             LinearLayout lp = (LinearLayout) convertView.findViewById(R.id.lp);
             LinearLayout llWarrantDetails = (LinearLayout) convertView.findViewById(R.id.llWarrantDetails);
 
-            if (position % 2 == 0) {
+          /*  if (position % 2 == 0) {
                 lp.setBackgroundColor(Color.parseColor("#F1EFEF"));
                 llWarrantDetails.setBackgroundColor(Color.parseColor("#F1EFEF"));
             } else {
                 lp.setBackgroundColor(Color.WHITE);
                 llWarrantDetails.setBackgroundColor(Color.WHITE);
             }
-
+*/
 
             for (int i = 0; i < bailReqList.get(position).getWarrantList().size(); i++) {
                 WarrantModel wMod = bailReqList.get(position).getWarrantList().get(i);
@@ -889,7 +1045,10 @@ public class Defendant extends CustomActivity {
                     if (!wMod.getCourtDate().equalsIgnoreCase("")) {
                         ((LinearLayout) v.findViewById(R.id.llCourtDate)).setVisibility(View.VISIBLE);
                         ((TextView) v.findViewById(R.id.wrntCourtDate))
-                                .setText("Court Date:    " + Utils.getRequiredDateFormatGMT("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
+                                .setText("COURT DATE:    " + Utils.getRequiredDateFormat("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
+
+                      /*  ((TextView) v.findViewById(R.id.wrntCourtDate))
+                                .setText("COURT DATE:    " + wMod.getCourtDate());*/
 
                     }
                     if (wMod.getStatus() != null && !wMod.getStatus().equalsIgnoreCase("")) {
@@ -897,14 +1056,14 @@ public class Defendant extends CustomActivity {
                         String status = wMod.getStatus();
 
                         if (status.equalsIgnoreCase("A")) {
-                            status = "Active";
+                            status = "ACTIVE";
                             ((TextView) v.findViewById(R.id.tvBondStatus)).setBackgroundResource(R.drawable.round_text_active);
                         } else if (status.equalsIgnoreCase("D")) {
-                            status = "Discharged";
-                            ((TextView) v.findViewById(R.id.tvBondStatus)).setBackgroundResource(R.drawable.round_text_warning);
+                            status = "DISCHARGED";
+                            ((TextView) v.findViewById(R.id.tvBondStatus)).setBackgroundResource(R.drawable.round_text_active);
                         } else if (status.equalsIgnoreCase("F")) {
-                            status = "Forfeiture";
-                            ((TextView) v.findViewById(R.id.tvBondStatus)).setBackgroundResource(R.drawable.round_text_dangerous);
+                            status = "FORFEITURE";
+                            ((TextView) v.findViewById(R.id.tvBondStatus)).setBackgroundResource(R.drawable.round_text_active);
 
                         } else {
                             ((LinearLayout) v.findViewById(R.id.llBondStatus)).setVisibility(View.GONE);
@@ -923,7 +1082,7 @@ public class Defendant extends CustomActivity {
 
             }
 
-            ((TextView) convertView.findViewById(R.id.date)).setText(Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
+            ((TextView) convertView.findViewById(R.id.date)).setText("Posted Date: " + Utils.getRequiredDateFormatGMT("yyyy-MM-dd hh:mm:ss",
                     "MM/dd/yyyy", bailReqList.get(position).getCreatedDate()));
 
             TextView tvStatus = convertView.findViewById(R.id.tvstatus);

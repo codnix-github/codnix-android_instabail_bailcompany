@@ -449,7 +449,7 @@ public class DefendantBondDetails extends CustomActivity {
                     if (!wMod.getCourtDate().equalsIgnoreCase("")) {
                         ((LinearLayout) v.findViewById(R.id.llCourtDate)).setVisibility(View.VISIBLE);
                         ((TextView) v.findViewById(R.id.wrntCourtDate))
-                                .setText("Court Date:    " + Utils.getRequiredDateFormatGMT("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
+                                .setText("Court Date:    " + Utils.getRequiredDateFormat("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
 
                     }
 
@@ -518,7 +518,7 @@ public class DefendantBondDetails extends CustomActivity {
                         }
                     });
 
-                } else if (url.toLowerCase().endsWith("doc") || url.toLowerCase().endsWith("docx") ) {
+                } else if (url.toLowerCase().endsWith("doc") || url.toLowerCase().endsWith("docx")) {
 
                     Drawable res = getResources().getDrawable(R.drawable.docs);
                     ivPic.setImageDrawable(res);
@@ -532,8 +532,7 @@ public class DefendantBondDetails extends CustomActivity {
                             startActivity(i);
                         }
                     });
-                }
-                else if (url.toLowerCase().endsWith("pdf") ) {
+                } else if (url.toLowerCase().endsWith("pdf")) {
 
                     Drawable res = getResources().getDrawable(R.drawable.pdf);
                     ivPic.setImageDrawable(res);
@@ -547,8 +546,7 @@ public class DefendantBondDetails extends CustomActivity {
                             startActivity(i);
                         }
                     });
-                }
-                else if (url.toLowerCase().endsWith("zip") || url.toLowerCase().endsWith("rar") ) {
+                } else if (url.toLowerCase().endsWith("zip") || url.toLowerCase().endsWith("rar")) {
                     Drawable res = getResources().getDrawable(R.drawable.ic_zip);
                     ivPic.setImageDrawable(res);
                     ivPic.setOnClickListener(new OnClickListener() {
@@ -560,9 +558,7 @@ public class DefendantBondDetails extends CustomActivity {
                             startActivity(i);
                         }
                     });
-                }
-
-                else {
+                } else {
                     TextView tvDocument = (TextView) v.findViewById(R.id.tvDocument);
                     tvDocument.setText(url.substring(url.lastIndexOf("/") + 1));
                     ivPic.setVisibility(View.GONE);
@@ -853,98 +849,130 @@ public class DefendantBondDetails extends CustomActivity {
     }
 
     public void updateWarrantDetails() {
-        if (Utils.isOnline(_activity)) {
-            showProgressDialog("");
-            RequestParams param = getWarrantParametersData();
-            String url = WebAccess.MAIN_URL + WebAccess.UPDATE_BOND_DETAILS;
-            client.setTimeout(getCallTimeout);
-            client.post(this, url, param, new AsyncHttpResponseHandler() {
 
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+        try {
 
 
-                    dismissProgressDialog();
-                    Utils.showDialog(DefendantBondDetails.this,
-                            R.string.err_unexpect);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-
-                    dismissProgressDialog();
-                    try {
-                        String response2;
-                        response2 = new String(responseBody);
-                        JSONObject resObj = new JSONObject(response2);
-                        if (resObj != null) {
-                            if (resObj.optString("status")
-                                    .equalsIgnoreCase("1")) {
+            if (Utils.isOnline(_activity)) {
 
 
-                                Toast.makeText(
-                                        DefendantBondDetails.this,
-                                        resObj.optString("message"),
-                                        Toast.LENGTH_SHORT).show();
+                showProgressDialog("");
+                RequestParams param = getWarrantParametersData();
+                String url = WebAccess.MAIN_URL + WebAccess.UPDATE_BOND_DETAILS;
+                client.setTimeout(getCallTimeout);
+                client.post(this, url, param, new AsyncHttpResponseHandler() {
 
-                                Intent intent = new Intent();
-                                intent.putExtra(Const.RETURN_FLAG, Const.BOND_DETAILS_UPDATED);
-                                setResult(RESULT_OK, intent);
-                                finish();
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
 
-                            } else if (resObj.optString("status")
-                                    .equalsIgnoreCase("3")) {
-                                Toast.makeText(
-                                        THIS,
-                                        "Session was closed please login again",
-                                        Toast.LENGTH_LONG).show();
-                                MainActivity.sp.edit().putBoolean("isFbLogin",
-                                        false);
-                                MainActivity.sp.edit().putString("user", null)
-                                        .commit();
-                                startActivity(new Intent(
-                                        DefendantBondDetails.this,
-                                        Launcher.class));
-                            }
-                        }
-                    } catch (JSONException e) {
+
+                        dismissProgressDialog();
                         Utils.showDialog(DefendantBondDetails.this,
                                 R.string.err_unexpect);
-                        e.printStackTrace();
                     }
-                }
 
-            });
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+
+                        dismissProgressDialog();
+                        try {
+                            String response2;
+                            response2 = new String(responseBody);
+                            JSONObject resObj = new JSONObject(response2);
+                            if (resObj != null) {
+                                if (resObj.optString("status")
+                                        .equalsIgnoreCase("1")) {
 
 
-        } else {
-            Utils.noInternetDialog(THIS);
+                                    Toast.makeText(
+                                            DefendantBondDetails.this,
+                                            resObj.optString("message"),
+                                            Toast.LENGTH_SHORT).show();
 
+                                    Intent intent = new Intent();
+                                    intent.putExtra(Const.RETURN_FLAG, Const.BOND_DETAILS_UPDATED);
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+
+                                } else if (resObj.optString("status")
+                                        .equalsIgnoreCase("3")) {
+                                    Toast.makeText(
+                                            THIS,
+                                            "Session was closed please login again",
+                                            Toast.LENGTH_LONG).show();
+                                    MainActivity.sp.edit().putBoolean("isFbLogin",
+                                            false);
+                                    MainActivity.sp.edit().putString("user", null)
+                                            .commit();
+                                    startActivity(new Intent(
+                                            DefendantBondDetails.this,
+                                            Launcher.class));
+                                }
+                                else if (resObj.optString("status")
+                                        .equalsIgnoreCase("0")) {
+
+                                    Utils.showDialog(DefendantBondDetails.this, resObj.optString("message"));
+
+
+                                }
+                                else
+                                {
+                                    Utils.showDialog(DefendantBondDetails.this,
+                                            R.string.err_unexpect);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            Utils.showDialog(DefendantBondDetails.this,
+                                    R.string.err_unexpect);
+                            e.printStackTrace();
+                        }
+                    }
+
+                });
+
+
+            } else {
+                Utils.noInternetDialog(THIS);
+
+            }
+        } catch (Exception e) {
+            Toast.makeText(
+                    THIS,
+                    e.getMessage(),
+                    Toast.LENGTH_LONG).show();
         }
     }
 
     public RequestParams getWarrantParametersData() {
-
-        PreFixesHolder holder = preFixesHolders.get(0);
         RequestParams param = new RequestParams();
-        param.put("TemporaryAccessCode", MainActivity.user.getTempAccessCode());
-        param.put("UserName", MainActivity.user.getUsername());
-        param.put("DefId", defId);
-        param.put("warrentId", selectedWarrentId);
-        param.put("BondRequestId", reqId);
-        param.put("prefix", holder.spinner.getSelectedItem().toString().trim());
-        param.put("serial", holder.serialET.getText().toString().trim());
-        param.put("caseno", holder.caseNoET.getText().toString().trim());
-        param.put("amount", holder.edtAmout.getText().toString().trim());
-        param.put("warrentnote", holder.edtNote.getText().toString().trim());
-        param.put("courtdate", "");
-        param.put("township", holder.edtTownship.getText().toString().trim());
-        param.put("bondstatus", "A");
-        if (holder.spinnerStatus.getSelectedItemPosition() != 0)
-            param.put("bondstatus", holder.spinnerStatus.getSelectedItem().toString().trim());
-        Log.d("CourtDateSize", "" + warrantCourtDatesHolders.size());
-        for (int i = 0; i < warrantCourtDatesHolders.size(); i++) {
-            param.put("courtdate[" + i + "]", warrantCourtDatesHolders.get(i).edtCourtDate.getText().toString());
+        try {
+            PreFixesHolder holder = preFixesHolders.get(0);
+
+            param.put("TemporaryAccessCode", MainActivity.user.getTempAccessCode());
+            param.put("UserName", MainActivity.user.getUsername());
+            param.put("DefId", defId);
+            param.put("warrentId", selectedWarrentId);
+            param.put("BondRequestId", reqId);
+            param.put("prefix", holder.spinner.getSelectedItem().toString().trim());
+            param.put("serial", holder.serialET.getText().toString().trim());
+            param.put("caseno", holder.caseNoET.getText().toString().trim());
+            param.put("amount", holder.edtAmout.getText().toString().trim());
+            param.put("warrentnote", holder.edtNote.getText().toString().trim());
+            param.put("courtdate", "");
+            param.put("township", holder.edtTownship.getText().toString().trim());
+            param.put("bondstatus", "A");
+            if (holder.spinnerStatus.getSelectedItemPosition() != 0)
+                param.put("bondstatus", holder.spinnerStatus.getSelectedItem().toString().trim());
+
+            for (int i = 0; i < warrantCourtDatesHolders.size(); i++) {
+                param.put("courtdate[" + i + "]", warrantCourtDatesHolders.get(i).edtCourtDate.getText().toString());
+            }
+        }catch (Exception e){
+            Toast.makeText(
+                    THIS,
+                    e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
 
         return param;
@@ -1355,7 +1383,7 @@ public class DefendantBondDetails extends CustomActivity {
                     path = FilePath.getPath(THIS, uri);
 
                 }
-              
+
                 if (path != null) {
                     Toast.makeText(getApplicationContext(), "Path=" + path, Toast.LENGTH_SHORT).show();
                     if (!imgPathList.isEmpty()) {

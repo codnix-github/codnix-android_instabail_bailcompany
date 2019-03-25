@@ -138,6 +138,8 @@
     <string name="indem_lname">Indemnitor Last Name</string>
     <string name="no_signer">Number of Cosigner</string>
     <string name="loc_def">Location of Defendant</string>
+    <string name="street_address_def">Street Address</string>
+
     <string name="loc_def_lka">Location of Defendant or LKA</string>
     <string name="entr_warr">Enter Warrant</string>
     <string name="pay_in">Pay-In Method</string>
@@ -348,11 +350,11 @@
     <string name="title_activity_defendant_employment_detail">Defendant Employment Details</string>
     <string name="title_activity_defendant_vehicle_detail">Defendant Vehicle Details</string>
     <string name="title_activity_defendant_notes_detail">Defendant Notes</string>
+    <string name="title_activity_notification_list">Notifications</string>
     <string name="title_activity_select_defendant">Select Defendant</string>
     <string name="btn_add_emplyment_details">Add Employment Details</string>
     <string name="btn_add_vehicle_details">Add Vehicle Details</string>
     <string name="btn_add_notes_details">Add Note</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="subscribe_package">How will you use Insta-Bail?</string>
     <string name="pick">Pick Your Package</string>
@@ -365,6 +367,7 @@
     <string name="action_filter">Filter</string>
     <string name="action_delete">Delete</string>
     <string name="action_deactivate">Deactivate</string>
+    <string name="action_request_checkin">Request Check-In</string>
     <string name="title_activity_history_request_list">HistoryRequestList</string>
     <string name="title_activity_history_request_detail">HistoryRequestDetail</string>
     <string name="title_activity_bad_debt_detail">BadDebtDetail</string>

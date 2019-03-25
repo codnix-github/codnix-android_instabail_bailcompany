@@ -196,7 +196,7 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
 
                                         if (page == 0) {
                                             Utils.showDialog(getActivity(),
-                                                    "Details not avaialble")
+                                                    "Details not available")
                                                     .show();
                                             mAdapter.notifyDataSetChanged();
                                         } else {
@@ -249,7 +249,7 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
     }
 
 
-    public void openDialog1(final String defId) {
+    public void openDialog(final DefendantModel def) {
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_defendant_login_details);
 
@@ -264,7 +264,7 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
 
         btnShareLoginDetail = (ImageView) dialog.findViewById(R.id.btnShareLoginDetail);
 
-        DefendantModel defModel = getDefendantDetailById(defId);
+        DefendantModel defModel = getDefendantDetailById(def.getId());
 
         if (!defModel.getDefUserId().equalsIgnoreCase("")) {
 
@@ -274,6 +274,7 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
             edtPassword.setText(defModel.getPassword());
             btnSaveLoginDetails.setText("Update");
         } else {
+            defUserId="0";
             edtUserName.setText(defModel.getFirstName().toLowerCase() + "" + defModel.getId());
             edtPassword.setText("123456");
             btnShareLoginDetail.setVisibility(View.GONE);
@@ -284,7 +285,7 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
                 //uploadDocuments();
 
 
-                addUpdateLoginDetail(edtUserName.getText().toString(), edtUserName.getText().toString(), defId, edtPassword.getText().toString(), defUserId);
+                addUpdateLoginDetail(edtUserName.getText().toString(), edtUserName.getText().toString(), def.getId(), edtPassword.getText().toString(), defUserId);
 
             }
         });
@@ -298,6 +299,7 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
                 shareBody += "UserName : " + edtUserName.getText().toString() + "\n";
                 shareBody += "Password : " + edtPassword.getText().toString() + "\n\n\n";
                 shareBody += "Download App from the link below, if you dont already have it downloaded.\n\n";
+                shareBody += "*you must accept all permissions and for iPhone if prompted accept ALWAYS USE (not just while using app) \n\n\n";
                 shareBody += "ANDROID: https://play.google.com/store/apps/details?id=com.baildefendant \n\n";
                 shareBody += "IPHONE: https://itunes.apple.com/us/app/Insta-bail-defendant/id1381227797?ls=1&mt=8";
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
@@ -341,6 +343,7 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
                             // dismissProgressDialog();
                             Utils.showDialog(getActivity(),
                                     R.string.err_unexpect);
+                            btnSaveLoginDetails.revertAnimation();
 
                         }
 
@@ -432,14 +435,11 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
         return defDetail;
     }
 
-    @Override
-    public void onContactSelected(DefendantModel contact) {
 
-    }
 
     @Override
     public void onLoginButtonClick(DefendantModel def) {
-        openDialog1(def.getId());
+        openDialog(def);
 
     }
 

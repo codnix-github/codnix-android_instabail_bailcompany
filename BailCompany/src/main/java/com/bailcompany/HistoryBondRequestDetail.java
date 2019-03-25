@@ -494,6 +494,7 @@ public class HistoryBondRequestDetail extends CustomActivity {
                 } else {
                     Utils.showDialog(HistoryBondRequestDetail.this,
                             "No detail found").show();
+                    finish();
                 }
             }
 

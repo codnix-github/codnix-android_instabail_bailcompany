@@ -39,6 +39,7 @@ public class Const {
         public  static final String SELF_ASSIGNED = "Self Assigned";
         public  static final String TRACK_AGENT = "Track Agent";
         public  static final String TRANSFER_BOND = "Transfer Bond";
+        public  static final String NOTIFICATIONS = "Notifications";
         public  static final String INCOMING_TRANSFER_BOND_REQUEST = "Incoming Transfer Bond Request";
         public  static final String REFFER_BAIL = "Refer Bail";
         public  static final  String INCOMING_REFFER_BAIL = "Incoming Bail Referral";

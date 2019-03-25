@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by ravi on 16/11/17.
+ * Created by codnix on 16/11/17.
  */
 
 public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdapter.MyViewHolder>
@@ -78,6 +78,15 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
                 holder.btnLoginDetail.setBackground(ContextCompat.getDrawable(context, R.drawable.btn_self_assign_small));
             }
         }
+
+        holder.btnLoginDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onLoginButtonClick(defDetail);
+            }
+        });
+
+
 
         if (mReturn)
             holder.btnLoginDetail.setVisibility(View.GONE);
@@ -129,7 +138,7 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
     }
 
     public interface DefendantClickListner {
-        void onContactSelected(DefendantModel contact);
+
 
         void onLoginButtonClick(DefendantModel contact);
     }
@@ -156,19 +165,14 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
             rlDefendantList = (RelativeLayout) view.findViewById(R.id.rlDefendantList);
             btnLoginDetail = (Button) view.findViewById(R.id.btnLoginDetail);
             id = "";
-            rlDefendantList.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onContactSelected(defendantListFiltered.get(getAdapterPosition()));
-                }
-            });
-            btnLoginDetail.setOnClickListener(new View.OnClickListener() {
+
+         /*   btnLoginDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onLoginButtonClick(defendantListFiltered.get(getAdapterPosition()));
                 }
             });
-
+*/
             rlDefendantList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

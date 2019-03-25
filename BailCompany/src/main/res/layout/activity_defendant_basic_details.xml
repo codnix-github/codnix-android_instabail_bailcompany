@@ -84,8 +84,7 @@
                     android:id="@+id/edtAddress"
                     style="@style/style_get_ch"
                     android:layout_weight="1"
-
-                    android:hint="@string/loc_def"
+                    android:hint="@string/street_address_def"
                     android:textSize="@dimen/txt_14sp" />
 
             </LinearLayout>

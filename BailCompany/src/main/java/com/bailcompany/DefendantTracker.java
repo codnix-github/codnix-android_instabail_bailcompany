@@ -214,7 +214,7 @@ public class DefendantTracker extends CustomActivity implements OnMapReadyCallba
                 R.layout.row_custom_marker, null);
 
         ((TextView) convertView2.findViewById(R.id.title)).setText(""
-                + fDefModel.getDefName());
+                + defModel.getFirstName() + " " + defModel.getLastName());
 
         if (bitmap != null)
             ((ImageView) convertView2.findViewById(R.id.snippet)).setImageBitmap(bitmap);
@@ -324,7 +324,7 @@ public class DefendantTracker extends CustomActivity implements OnMapReadyCallba
 
         Marker m = markers.get(fDefModel.getDefId());
         if (m != null) {
-           // Log.d("Marker Move", "yes=" + fDefModel.getDefName());
+            // Log.d("Marker Move", "yes=" + fDefModel.getDefName());
             final LatLng position = new LatLng(Double.parseDouble(fDefModel.getLat()), Double.parseDouble(fDefModel.getLng()));
             m.setPosition(position);
         }

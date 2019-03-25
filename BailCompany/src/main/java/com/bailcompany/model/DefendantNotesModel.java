@@ -13,6 +13,7 @@ public class DefendantNotesModel implements Serializable {
 	private String Note;
 	private String Status;
 	private String ModifyOn;
+	private String Image;
 
 	public String getId() {
 		return Id;
@@ -52,5 +53,13 @@ public class DefendantNotesModel implements Serializable {
 
 	public void setModifyOn(String modifyOn) {
 		ModifyOn = modifyOn;
+	}
+
+	public String getImage() {
+		return Image;
+	}
+
+	public void setImage(String image) {
+		Image = image;
 	}
 }

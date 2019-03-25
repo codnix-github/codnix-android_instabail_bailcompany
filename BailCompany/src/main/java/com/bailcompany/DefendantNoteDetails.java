@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bailcompany.custom.CustomActivity;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.model.DefendantNotesModel;
+import com.bailcompany.tools.ImageZoomDialog;
 import com.bailcompany.utils.Commons;
 import com.bailcompany.utils.Const;
 import com.bailcompany.utils.FilePath;
@@ -29,6 +30,7 @@ import com.bailcompany.utils.ImageSelector;
 import com.bailcompany.utils.ImageUtils;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -101,7 +103,31 @@ public class DefendantNoteDetails extends CustomActivity {
                     String localdate = Const.getFormatedDate("yyyy-MM-dd hh:mm", "MM/dd/yyyy hh:mm", date.trim(), true);
                     note = note.replace(" on " + date.trim(), " on " + localdate);
                 }
+
+
             }
+            final String notenew = note;
+
+            ImageView ivCheckedInImage = v.findViewById(R.id.ivCheckedInImage);
+            if (eMod.getImage() != null && !eMod.getImage().trim().equalsIgnoreCase("")) {
+                ivCheckedInImage.setVisibility(View.VISIBLE);
+
+                Glide.with(THIS).load(WebAccess.PHOTO + eMod.getImage()).placeholder(R.drawable.default_profile_image)
+
+                        .error(R.drawable.default_profile_image).into(ivCheckedInImage);
+                ivCheckedInImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final ImageZoomDialog mAlert = new ImageZoomDialog(THIS, WebAccess.PHOTO + eMod.getImage());
+                        mAlert.setTitle(notenew);
+
+                        mAlert.show();
+                    }
+                });
+            } else {
+                ivCheckedInImage.setVisibility(View.GONE);
+            }
+
             ((TextView) v.findViewById(R.id.tvNote)).setText(note);
 
             ((TextView) v.findViewById(R.id.tvNoteModifyOn)).setText(mDate);

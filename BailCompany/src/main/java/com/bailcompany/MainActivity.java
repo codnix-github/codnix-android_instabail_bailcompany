@@ -56,6 +56,7 @@ import com.bailcompany.ui.IncomingRequest;
 import com.bailcompany.ui.InstantChat;
 import com.bailcompany.ui.InstantGroupChat;
 import com.bailcompany.ui.LeftNavAdapter;
+import com.bailcompany.ui.NotificationListActivity;
 import com.bailcompany.ui.ReferBail;
 import com.bailcompany.ui.SelfAssigned;
 import com.bailcompany.ui.ShowAllOnMap;
@@ -383,7 +384,7 @@ public class MainActivity extends CustomActivity {
                     adp.notifyDataSetChanged();
                 }
                 drawerLayout.closeDrawers();
-                Log.d("Argument=", "" + arg2);
+               // Log.d("Argument=", "" + arg2);
                 launchNext(menuItems.get(arg2 - 1).getIndex(), menuItems.get(arg2 - 1));
             }
         });
@@ -397,6 +398,11 @@ public class MainActivity extends CustomActivity {
                 R.drawable.ic_agent_selected, 2));
         menuItems.add(new Feed(Const.Menu.TRACK_AGENT, null, R.drawable.ic_tracking_normal,
                 R.drawable.ic_tracking_selected, 3));
+
+        menuItems.add(new Feed(Const.Menu.NOTIFICATIONS, null, R.drawable.notification_gray,
+                R.drawable.ic_notification_selected, 19));
+
+
         if (!Const.Menu.SHOW_LIMTED_MENU) {
             menuItems.add(new Feed(Const.Menu.TRANSFER_BOND, null, R.drawable.ic_transfer_normal,
                     R.drawable.ic_transfer_selected, 4));
@@ -537,6 +543,12 @@ public class MainActivity extends CustomActivity {
             case 12:
                 f = new DefendantList();
                 title = getString(R.string.defendants);
+
+                break;
+            case 19:
+                f = new NotificationListActivity();
+                title = getString(R.string.title_activity_notification_list);
+
                 break;
             case 13:
                 f = new BailCalendar();
@@ -682,19 +694,19 @@ public class MainActivity extends CustomActivity {
         return true;
     }
 
-	/* Called whenever we call invalidateOptionsMenu() */
+    /* Called whenever we call invalidateOptionsMenu() */
     /*
      * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
-	 */
+     *
+     * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+     */
 
     /* Called whenever we call invalidateOptionsMenu() */
     /*
      * (non-Javadoc)
-	 *
-	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
-	 */
+     *
+     * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);

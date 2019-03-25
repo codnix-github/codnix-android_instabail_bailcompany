@@ -73,6 +73,7 @@ public class WebAccess {
     // public static final String GET_ALL_AGENT = "GetAllAgent";
     public static final String GET_ALL_AGENT = "get-all-agents";
     public static final String CHECK_DEFENDANT_EXIST = "checkDefendantIsExist";
+    public static final String SEND_NOTIFICATION_TO_DEFENDANT = "SendNotificationToDefendant";
     public static final String GET_PAYMENT_INFO = "get-company-payment-method";
     public static final String GET_UPDATE_COMPANY_PAYMENT = "update-company-payment-method";
     final static public String ACCOUNT_PREFS_NAME = "prefs";
@@ -119,9 +120,10 @@ public class WebAccess {
     public static final String GET_AGENT_LOCATION = "get-agent-location";
     public static final String FORGOT_PASSWORD = "forgot-password";
     public static final String PHOTO = "http://web.instabailapp.com/";
-    ;
+    public static final String GET_NOTIFICATION_LIST = "getNotificationsById";
     public static final String GET_REQUEST_DETAIL = "get-request-details";
     public static final String GET_DEFENDANT_LIST = "getAllDefendants";
+
     public static final String GET_DEFENDANT_DETAIL = "get-defendant-profile";
     public static final String UPDATE_DEFENDANT_ACCOUNT_STATUS = "updateDefendantAccountStatus";
     public static final String GET_DEFENDANT_BOND_DETAIL = "getDefendantBondDetails";
@@ -1123,7 +1125,7 @@ public class WebAccess {
                 if (dObj.has("DefId"))
                     mod.setDefId(dObj.getString("DefId"));
                 else
-                    mod.setDefId(dObj.getString(""));
+                    mod.setDefId("");
 
                 if (HistoryRequestList.IsBailRequest
                         || TrackAgents.IsBailRequest) {
@@ -1243,10 +1245,26 @@ public class WebAccess {
                 mod.setSentRequestTime(dObj.getString("SentRequestTime"));//
 
 
-                mod.setAgentAcceptedTime(dObj.getString("AgentAcceptedTime"));//
-                mod.setAgentArrivedTime(dObj.getString("AgentArrivedTime"));//
-                mod.setRequestCompletionTime(dObj.getString("RequestCompletionTime"));//
-                mod.setRequestAbortedTime(dObj.getString("RequestAbortedTime"));//
+                if (dObj.has("AgentAcceptedTime")) {
+                    mod.setAgentAcceptedTime(dObj.getString("AgentAcceptedTime"));//
+                } else {
+                    mod.setAgentAcceptedTime("");//
+                }
+
+                if (dObj.has("AgentArrivedTime"))
+                    mod.setAgentArrivedTime(dObj.getString("AgentArrivedTime"));//
+                else
+                    mod.setAgentArrivedTime("");//
+
+                if (dObj.has("RequestCompletionTime"))
+                    mod.setRequestCompletionTime(dObj.getString("RequestCompletionTime"));//
+                else
+                    mod.setRequestCompletionTime("");//
+                if (dObj.has("RequestAbortedTime"))
+                    mod.setRequestAbortedTime(dObj.getString("RequestAbortedTime"));//
+                else
+                    mod.setRequestAbortedTime("");//
+
 
 
                 JSONArray wArr = dObj.getJSONArray("WarrantList");
