@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bailcompany.R;
 import com.bailcompany.model.Feed;
 import com.bailcompany.utils.Const;
+import com.bailcompany.utils.PreferenceUtil;
 import com.bailcompany.web.WebAccess;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class LeftNavAdapter extends BaseAdapter {
     /**
      * The items.
      */
+    PreferenceUtil pref;
+
     private ArrayList<Feed> items;
 
     /**
@@ -49,6 +52,7 @@ public class LeftNavAdapter extends BaseAdapter {
     public LeftNavAdapter(Context context, ArrayList<Feed> items) {
         this.context = context;
         this.items = items;
+        pref = new PreferenceUtil(this.context);
     }
 
     /*
@@ -106,6 +110,23 @@ public class LeftNavAdapter extends BaseAdapter {
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }
+        if (f.getTitle().equalsIgnoreCase(Const.Menu.NOTIFICATIONS)) {
+            if (pref.getUnreadNotificationCount() > 0) {
+
+                //show badge
+                TextView tvBadge = (TextView) convertView
+                        .findViewById(R.id.tvBadge);
+                tvBadge.setVisibility(View.VISIBLE);
+                tvBadge.setText("" + pref.getUnreadNotificationCount());
+
+            } else {
+                //hide badge
+                TextView tvBadge = (TextView) convertView
+                        .findViewById(R.id.tvBadge);
+                tvBadge.setVisibility(View.GONE);
+            }
+        }
+
         if (f.getTitle().equalsIgnoreCase(Const.Menu.INCOMING_REFFER_BAIL)) {
             if (WebAccess.referBailBadge) {
                 ImageView badges = (ImageView) convertView

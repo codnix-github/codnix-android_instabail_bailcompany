@@ -19,7 +19,7 @@
             android:id="@+id/rv_defendant_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/btnTrackDefendant"
+          android:layout_marginBottom="@dimen/pad_60dp"
             android:layout_alignStart="@+id/btnTrackDefendant"
             android:scrollbars="vertical" />
 
@@ -30,11 +30,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/pad_2dp"
-            android:background="@drawable/btn_signin_yellow"
+            android:layout_margin="@dimen/pad_10dp"
+            android:background="@drawable/button_rounded_primary"
             android:drawableLeft="@drawable/ic_place"
+            android:drawableTint="@color/white"
             android:text="Track Defendants"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 

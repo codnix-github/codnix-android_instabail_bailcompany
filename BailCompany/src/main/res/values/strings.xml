@@ -400,7 +400,7 @@
     <string name="cosigner_doc">Cosigner Photo</string>
     <string name="defendant_doc">Defendant Photo</string>
 
-    <string name="title_defendant_login_Detail">Login detail</string>
+    <string name="title_defendant_login_Detail">Login Details</string>
 
     <!-- Date messages -->
     <string name="_ago" formatted="false">%s ago</string>

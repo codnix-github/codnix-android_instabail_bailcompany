@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -255,17 +254,21 @@ public class NotificationListActivity extends CustomFragment implements Notifica
 
     }
 
-
     @Override
     public void onNotificationClick(NotificationModel notDetails) {
-
-
         String type = notDetails.getType();
+        if (type.equalsIgnoreCase("106") || type.equalsIgnoreCase("107") || type.equalsIgnoreCase("108") || type.equalsIgnoreCase("109") || type.equalsIgnoreCase("111")) {
+            if (type.equalsIgnoreCase("111")) {
+                if (notDetails.getSenderId().equalsIgnoreCase("0")) {
+                    //when there is notification for multiple defendants offline
+                }
+            } else {
+                Intent intent = new Intent(THIS, Defendant.class);
+                intent.putExtra("defId", notDetails.getSenderId());
+                THIS.startActivity(intent);
+            }
+        } else if (type.equalsIgnoreCase("110")) { // 110- when there is notification for more that 2 defendants
 
-        if (type.equalsIgnoreCase("106") || type.equalsIgnoreCase("107") || type.equalsIgnoreCase("108")) {
-            Intent intent = new Intent(THIS, Defendant.class);
-            intent.putExtra("defId", notDetails.getSenderId());
-            THIS.startActivity(intent);
         } else {
             getBailRequestDetail(notDetails.getRequestId());
         }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#56b2ba</color>
+    <color name="colorPrimaryDark">#41959C</color>
+
     <color name="theme_black">#393939</color>
-
     <drawable name="theme_black">#393939</drawable>
-
     <color name="theme_yellow">#FFDC00</color>
-
     <drawable name="theme_yellow">#FFDC00</drawable>
-
     <color name="bg_complete">#F4F4F4</color>
     <color name="green">#58c246</color>
     <color name="subcription_text">#383838</color>
@@ -49,8 +49,6 @@
     <color name="bail_request_font_normal">#939393</color>
 
 
-
-
     <!--Defendant Profile 1-->
     <color name="color_facebook">#3b5998</color>
     <color name="color_google">#ab4242</color>
@@ -74,7 +72,6 @@
     <color name="calendarHeaderColor">#ffdc00</color>
     <color name="agendaCurrentDayTextColor">#ffdc00</color>
     <color name="calendarPastDayTextColor">#646464</color>
-
 
 
 </resources>

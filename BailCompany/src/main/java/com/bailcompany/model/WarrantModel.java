@@ -11,7 +11,7 @@ public class WarrantModel implements Serializable {
     private static final long serialVersionUID = 1L;
     int id;
     String Township, Amount, case_no, PowerNo, Notes, AmountReceived;
-    String CourtDate, Status;
+    String CourtDate, Status,LatestCourtDate;
     ArrayList<CourtDateModel> courtDates;
 
     public WarrantModel() {
@@ -22,6 +22,7 @@ public class WarrantModel implements Serializable {
         this.PowerNo = "";
         this.Notes = "";
         this.CourtDate = "";
+        this.LatestCourtDate="";
         this.courtDates = null;
     }
 
@@ -83,6 +84,14 @@ public class WarrantModel implements Serializable {
 
     public void setCourtDate(String courtDate) {
         CourtDate = courtDate;
+    }
+
+    public String getLatestCourtDate() {
+        return LatestCourtDate;
+    }
+
+    public void setLatestCourtDate(String latestCourtDate) {
+        LatestCourtDate = latestCourtDate;
     }
 
     public String getNotes() {

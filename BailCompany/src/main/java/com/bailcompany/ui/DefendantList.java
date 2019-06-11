@@ -165,6 +165,9 @@ public class DefendantList extends CustomFragment implements DefendantListAdapte
                                                 objDef.setUserName(defObject.getString("UserEmail"));
                                                 objDef.setPassword(defObject.getString("UserPassword"));
                                                 objDef.setDefUserId(defObject.getString("DefUserId"));
+                                                objDef.setLastAvailableTime(defObject.getString("LastAvailableTime"));
+
+
 
                                                 defList.add(objDef);
                                             }

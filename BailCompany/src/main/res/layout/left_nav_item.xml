@@ -6,18 +6,42 @@
 
     <TextView
         android:id="@+id/txt_lbl"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="25dp"
-
         android:gravity="center_vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp"
         android:text="@string/app_name"
-        android:textColor="@color/white"
+        android:textColor="@color/bail_request_font_normal"
         android:textSize="18sp"></TextView>
+
+    <TextView
+        android:id="@+id/tvBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:background="@drawable/badge"
+        android:gravity="center"
+        android:minWidth="17sp"
+        android:elevation="5dp"
+        android:outlineProvider="none"
+        android:minHeight="17sp"
+        android:padding="2dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="1dp"
+        android:scaleType="fitStart"
+        android:layout_marginRight="@dimen/pad_5dp"
+        android:text="1"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:visibility="gone" />
 
 
     <ImageView

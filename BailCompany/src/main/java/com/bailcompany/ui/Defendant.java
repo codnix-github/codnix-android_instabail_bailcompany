@@ -794,7 +794,7 @@ public class Defendant extends CustomActivity {
             String key = data.getStringExtra(Const.RETURN_FLAG);
             if (key.equalsIgnoreCase(Const.BOND_DETAILS_UPDATED) || key.equalsIgnoreCase(Const.BOND_DOCUMENT_UPLOADED)) {
                 showProgressDialog = false;
-               // getBondDetails();
+                // getBondDetails();
             } else if (key.equalsIgnoreCase(Const.DEFENDANT_BASIC_DETAILS_UPDATED)) {
                 showProgressDialog = false;
                 geDefendantProfile();
@@ -1042,15 +1042,24 @@ public class Defendant extends CustomActivity {
                     ((TextView) v.findViewById(R.id.wrntPowerNum))
                             .setText("PowerNo:    " + wMod.getPowerNo());
 
-                    if (!wMod.getCourtDate().equalsIgnoreCase("")) {
+                  /*  if (!wMod.getCourtDate().equalsIgnoreCase("")) {
                         ((LinearLayout) v.findViewById(R.id.llCourtDate)).setVisibility(View.VISIBLE);
                         ((TextView) v.findViewById(R.id.wrntCourtDate))
                                 .setText("COURT DATE:    " + Utils.getRequiredDateFormat("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
 
-                      /*  ((TextView) v.findViewById(R.id.wrntCourtDate))
-                                .setText("COURT DATE:    " + wMod.getCourtDate());*/
+                      *//*  ((TextView) v.findViewById(R.id.wrntCourtDate))
+                                .setText("COURT DATE:    " + wMod.getCourtDate());*//*
 
                     }
+*/
+                    if (!wMod.getLatestCourtDate().equalsIgnoreCase("")) {
+                        ((LinearLayout) v.findViewById(R.id.llCourtDate)).setVisibility(View.VISIBLE);
+                        ((TextView) v.findViewById(R.id.wrntCourtDate))
+                                .setText("Court Date:    " + Utils.getRequiredDateFormat("yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy hh:mm", wMod.getLatestCourtDate()));
+
+
+                    }
+
                     if (wMod.getStatus() != null && !wMod.getStatus().equalsIgnoreCase("")) {
                         ((LinearLayout) v.findViewById(R.id.llBondStatus)).setVisibility(View.VISIBLE);
                         String status = wMod.getStatus();

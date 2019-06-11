@@ -988,6 +988,10 @@ public class WebAccess {
                             wMod.setAmount(wObj.optString("Amount"));
                             wMod.setTownship(wObj.optString("Township"));
                             wMod.setCourtDate(wObj.optString("CourtDate"));
+                            if (wObj.has("latestCourtDate")) {
+                                wMod.setLatestCourtDate(wObj.optString("latestCourtDate"));
+                            }
+
                             wMod.setNotes(wObj.optString("Notes"));
                             wMod.setStatus(wObj.optString("Status"));
 
@@ -1060,9 +1064,9 @@ public class WebAccess {
                 }
                 mod.setBondDocuments(bondDocumentList);
 
-                Log.d("BCosigner=", "" + mod.getBondDocuments().getCosignerPhoto().size());
-                Log.d("BDef=", "" + mod.getBondDocuments().getDefendantPhoto().size());
-                Log.d("BOther=", "" + mod.getBondDocuments().getOtherDocuments().size());
+               // Log.d("BCosigner=", "" + mod.getBondDocuments().getCosignerPhoto().size());
+               // Log.d("BDef=", "" + mod.getBondDocuments().getDefendantPhoto().size());
+               // Log.d("BOther=", "" + mod.getBondDocuments().getOtherDocuments().size());
 
                 JSONArray iArr = dObj.getJSONArray("IndemnitorsList");
                 ArrayList<IndemnitorModel> iList = new ArrayList<IndemnitorModel>();

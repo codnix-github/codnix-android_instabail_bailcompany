@@ -40,6 +40,7 @@ public class DefendantModel implements Serializable {
 	private String UserName;
 	private String Password;
 	private String DefUserId;
+	private String LastAvailableTime;
 
 	private ArrayList<DefendantEmploymentModel> EmploymentDtl;
 	private ArrayList<DefendantVehicleModel> VehicleDtl;
@@ -275,6 +276,14 @@ public class DefendantModel implements Serializable {
 
 	public void setStateName(String stateName) {
 		StateName = stateName;
+	}
+
+	public String getLastAvailableTime() {
+		return LastAvailableTime;
+	}
+
+	public void setLastAvailableTime(String lastAvailableTime) {
+		LastAvailableTime = lastAvailableTime;
 	}
 
 	public ArrayList<DefendantEmploymentModel> getEmploymentDtl() {

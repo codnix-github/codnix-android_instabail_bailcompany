@@ -94,6 +94,28 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/llButtonAddEditCourtDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/pad_5dp"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="@color/gray"
+                android:padding="5dp"
+                android:text="EDIT"
+                android:textColor="#ffffff"
+                android:textSize="14dp" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </LinearLayout>

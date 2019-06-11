@@ -295,8 +295,6 @@ public class DefendantTracker extends CustomActivity implements OnMapReadyCallba
                 TextView tvTitle = ((TextView) myContentsView.findViewById(R.id.tvName));
                 tvTitle.setText(selectedDefendant.getFirstName() + " " + selectedDefendant.getLastName());
                 TextView tvLastUpdated = ((TextView) myContentsView.findViewById(R.id.tvLastUpdated));
-
-
                 tvLastUpdated.setText("Last Updated : " + Dates.formatDate(getApplicationContext(), inputDateFormat.parseDateTime(defPhoneDetails.getDateTime())));
             } catch (Exception e) {
                 e.printStackTrace();

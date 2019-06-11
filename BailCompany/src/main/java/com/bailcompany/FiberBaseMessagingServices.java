@@ -16,12 +16,14 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
+import com.bailcompany.events.NotificationReceived;
+import com.bailcompany.utils.PreferenceUtil;
 import com.bailcompany.web.WebAccess;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,11 +33,9 @@ import java.util.Random;
 
 public class FiberBaseMessagingServices extends FirebaseMessagingService {
 
-    private NotificationManager notificationManager;
-
     private static final String ADMIN_CHANNEL_ID = "admin_channel";
-
     private static final String TAG = "FirebaseMsgServices";
+    private NotificationManager notificationManager;
 
     static void updateMyActivity(Context context, String message) {
 
@@ -55,7 +55,7 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
 
         // You can also include some extra data.
         final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-        intent.putExtra("token",refreshedToken);
+        intent.putExtra("token", refreshedToken);
 
         broadcastManager.sendBroadcast(intent);
 
@@ -114,7 +114,7 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
                     final String message = messageObj.optString("Message");
                     WebAccess.type = messageObj.getString("Type");
                     if (WebAccess.type != null) {
-                        if (WebAccess.type.equalsIgnoreCase("6")) {
+                       if (WebAccess.type.equalsIgnoreCase("6")) {
                             prefs = getSharedPreferences("MyPreferences",
                                     Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
@@ -193,33 +193,6 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     *
-     * @param messageBody FCM message body received.
-     */
-    private void sendNotification(String title, String messageBody, String type) {
-        Intent intent = null;
-        intent = new Intent(this, MainActivity.class).putExtra("type", type);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-
-        notificationBuilder.setAutoCancel(true).setDefaults(Notification.DEFAULT_ALL).setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.logo).setTicker("PEL Smart AC").setContentTitle(title)
-                .setDefaults(Notification.DEFAULT_LIGHTS).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.logo))
-                .setContentText(messageBody)
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}).setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-    }
 
     void sentFugitiveTag() {
         SharedPreferences prefs = getSharedPreferences("MyPreferences",
@@ -298,6 +271,10 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
 
     public void showNotifications(String message) {
 
+        PreferenceUtil pref = new PreferenceUtil(getApplicationContext());
+        pref.setUnreadNotificationCount(1);
+        EventBus.getDefault().post(new NotificationReceived.NotificationReceivedEvent(message, WebAccess.type));
+
         notificationManager = (NotificationManager) getApplicationContext()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -307,9 +284,7 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         Intent notificationIntent = null;
 
         if (WebAccess.loginUser) {
-
             notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-
         } else {
             notificationIntent = new Intent(getApplicationContext(), Login.class);
         }
@@ -320,10 +295,12 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
                 notificationIntent, 0);
 
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder( getApplicationContext(), ADMIN_CHANNEL_ID)
+                new NotificationCompat.Builder(getApplicationContext(), ADMIN_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("InstaBail")
-                        .setContentText(message)
+                        //.setContentText(message)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(message))
                         .setAutoCancel(true)
                         .setVibrate(new long[]{0, 500, 1000})
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -342,6 +319,7 @@ public class FiberBaseMessagingServices extends FirebaseMessagingService {
         notificationManager.notify(notificationId, notificationBuilder.build());
 
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setupChannels() {
         if (notificationManager != null) {

@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bailcompany.custom.CustomActivity;
+import com.bailcompany.events.NotificationReceived;
 import com.bailcompany.model.AgentModel;
 import com.bailcompany.model.BailRequestModel;
 import com.bailcompany.model.Feed;
@@ -67,10 +68,15 @@ import com.bailcompany.utils.ImageLoader.ImageLoadedListener;
 import com.bailcompany.utils.ImageUtils;
 import com.bailcompany.utils.Methods;
 import com.bailcompany.utils.ObjectSerializer;
+import com.bailcompany.utils.PreferenceUtil;
 import com.bailcompany.utils.StaticData;
 import com.bailcompany.utils.Utility;
 import com.bailcompany.utils.Utils;
 import com.bailcompany.web.WebAccess;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,6 +103,7 @@ public class MainActivity extends CustomActivity {
     public static BailRequestModel bailReqModel;
     public static ArrayList<AgentModel> agentList = new ArrayList<AgentModel>();
     private static boolean isOnce;
+    PreferenceUtil notificationPref;
     /**
      * ListView for left side drawer.
      */
@@ -140,6 +147,8 @@ public class MainActivity extends CustomActivity {
         }
     };
 
+
+
     /*
      * (non-Javadoc)
      *
@@ -156,6 +165,7 @@ public class MainActivity extends CustomActivity {
         WebAccess.type = null;
 
         sp = PreferenceManager.getDefaultSharedPreferences(THIS);
+        notificationPref = new PreferenceUtil(THIS);
         prefs = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         WebAccess.referBailBadge = prefs.getBoolean("referrel", false);
         WebAccess.tranferBondBadge = prefs.getBoolean("bond", false);
@@ -546,6 +556,8 @@ public class MainActivity extends CustomActivity {
 
                 break;
             case 19:
+                notificationPref.resetNotificationCount();
+                adp.notifyDataSetChanged();
                 f = new NotificationListActivity();
                 title = getString(R.string.title_activity_notification_list);
 
@@ -625,6 +637,23 @@ public class MainActivity extends CustomActivity {
                 });
         setupDrawer();
         // launchNext(-1);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNotificationReceivedEvent(NotificationReceived.NotificationReceivedEvent event) {
+       adp.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     private void setupContainer2() {

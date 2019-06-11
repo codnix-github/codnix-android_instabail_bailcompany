@@ -446,12 +446,29 @@ public class DefendantBondDetails extends CustomActivity {
                             .setText("CaseNo:   " + wMod.getCase_no());
                     ((TextView) v.findViewById(R.id.wrntPowerNum))
                             .setText("PowerNo:    " + wMod.getPowerNo());
-                    if (!wMod.getCourtDate().equalsIgnoreCase("")) {
+
+                    if (wMod.getPowerNo() != null && !wMod.getPowerNo().equalsIgnoreCase("")) {
+                        v.findViewById(R.id.llButtonAddEditCourtDate).setVisibility(View.VISIBLE);
+
+                    } else {
+                        v.findViewById(R.id.llButtonAddEditCourtDate).setVisibility(View.GONE);
+                    }
+
+
+                  /*  if (!wMod.getCourtDate().equalsIgnoreCase("")) {
                         ((LinearLayout) v.findViewById(R.id.llCourtDate)).setVisibility(View.VISIBLE);
                         ((TextView) v.findViewById(R.id.wrntCourtDate))
                                 .setText("Court Date:    " + Utils.getRequiredDateFormat("yyyy-MM-dd", "MM/dd/yyyy", wMod.getCourtDate()));
 
+                    }*/
+                    if (!wMod.getLatestCourtDate().equalsIgnoreCase("")) {
+                        ((LinearLayout) v.findViewById(R.id.llCourtDate)).setVisibility(View.VISIBLE);
+                        ((TextView) v.findViewById(R.id.wrntCourtDate))
+                                .setText("Court Date:    " + Utils.getRequiredDateFormat("yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy hh:mm", wMod.getLatestCourtDate()));
+
+
                     }
+
 
                     llWarrant.addView(v);
                 }

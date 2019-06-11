@@ -20,8 +20,13 @@ import com.bailcompany.R;
 import com.bailcompany.model.DefendantModel;
 import com.bailcompany.ui.Defendant;
 import com.bailcompany.utils.Const;
+import com.bailcompany.utils.Dates;
 import com.bailcompany.web.WebAccess;
 import com.bumptech.glide.Glide;
+
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +41,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdapter.MyViewHolder>
         implements Filterable {
+    DateTimeFormatter inputDateFormat;
     private Context context;
     private List<DefendantModel> defendantList;
     private List<DefendantModel> defendantListFiltered;
@@ -48,6 +54,7 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
         this.defendantList = contactList;
         mReturn = returnresult;
         this.defendantListFiltered = contactList;
+        inputDateFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").withZone(DateTimeZone.UTC);
     }
 
     @Override
@@ -62,17 +69,35 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final DefendantModel defDetail = defendantListFiltered.get(position);
         holder.tvName.setText(defDetail.getFirstName() + " " + defDetail.getLastName());
-        if (defDetail.getDOB() != null && !defDetail.getDOB().trim().equalsIgnoreCase(""))
-            holder.tvBirthdate.setText("DOB: " + Const.getFormatedDate("yyyy-MM-dd", "MM/dd/yyyy", defDetail.getDOB()
-                    .toString(), false));
+        if (defDetail.getDOB() != null && !defDetail.getDOB().trim().equalsIgnoreCase("")) {
+            String formattedDate = Const.getFormatedDate("yyyy-MM-dd", "MM/dd/yyyy", defDetail.getDOB()
+                    .toString(), false);
+            if (formattedDate != null && !formattedDate.trim().equalsIgnoreCase(""))
+                holder.tvBirthdate.setText("DOB: " + formattedDate);
+        }
         if (defDetail.getSSN() != null && !defDetail.getSSN().trim().equalsIgnoreCase(""))
             holder.tvSSN.setText("SSN: " + defDetail.getSSN());
         //Log.d("Path=", WebAccess.PHOTO + mFilteredList.get(i).getPhoto());
         final String url = WebAccess.PHOTO + defDetail.getPhoto();
+        holder.ivTimeAlert.setVisibility(View.GONE);
+        //tvLastUpdated
         if (!mReturn) {
             if (!defDetail.getDefUserId().equalsIgnoreCase("")) {
                 holder.tvUserName.setText("User Name : " + defDetail.getUserName());
-                holder.btnLoginDetail.setBackground(ContextCompat.getDrawable(context, R.drawable.more_btn));
+                // holder.btnLoginDetail.setBackground(ContextCompat.getDrawable(context, R.drawable.button_rounded_primary));
+                holder.btnLoginDetail.setBackgroundResource(R.drawable.button_rounded_primary);
+                //   holder.tvLastUpdated.setText("Last updated "+defDetail.getLastAvailableTime());
+                if (defDetail.getLastAvailableTime() != null && !defDetail.getLastAvailableTime().trim().equalsIgnoreCase("")) {
+                    holder.tvLastUpdated.setText("Last updated : " + Dates.formatDate(context, inputDateFormat.parseDateTime(defDetail.getLastAvailableTime())));
+                    int diff = Dates.getDifferentFromCurrentTime(inputDateFormat.parseDateTime(defDetail.getLastAvailableTime()), Dates.UNIT_MINUTE);
+                    if (diff > 30) {
+                        holder.ivTimeAlert.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.ivTimeAlert.setVisibility(View.GONE);
+                    }
+                }
+
+
             } else {
                 holder.tvUserName.setText("");
                 holder.btnLoginDetail.setBackground(ContextCompat.getDrawable(context, R.drawable.btn_self_assign_small));
@@ -85,7 +110,6 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
                 listener.onLoginButtonClick(defDetail);
             }
         });
-
 
 
         if (mReturn)
@@ -146,9 +170,9 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, phone;
         public ImageView thumbnail;
-
+        ImageView ivTimeAlert;
         private String id;
-        private TextView tvName, tvBirthdate, tvSSN, tvUserName;
+        private TextView tvName, tvBirthdate, tvSSN, tvUserName, tvLastUpdated;
         private Button btnLoginDetail;
         private CircleImageView ivProfilePic;
         private RelativeLayout rlDefendantList;
@@ -160,10 +184,12 @@ public class DefendantListAdapter extends RecyclerView.Adapter<DefendantListAdap
             tvName = (TextView) view.findViewById(R.id.tvName);
             tvSSN = (TextView) view.findViewById(R.id.tvSSN);
             tvUserName = (TextView) view.findViewById(R.id.tvUserName);
+            tvLastUpdated = (TextView) view.findViewById(R.id.tvLastUpdated);
             tvBirthdate = (TextView) view.findViewById(R.id.tvBirthdate);
             ivProfilePic = (CircleImageView) view.findViewById(R.id.ivProfilePic);
             rlDefendantList = (RelativeLayout) view.findViewById(R.id.rlDefendantList);
             btnLoginDetail = (Button) view.findViewById(R.id.btnLoginDetail);
+            ivTimeAlert = (ImageView) view.findViewById(R.id.ivTimeAlert);
             id = "";
 
          /*   btnLoginDetail.setOnClickListener(new View.OnClickListener() {
